@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -135,7 +136,7 @@ func (c *Client) NewRequest(ctx context.Context, method, path string, body inter
 		req = req.WithContext(ctx)
 	}
 
-	req.Header.Add("Content-Type", mediaType)
+	req.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", mediaType, charset))
 	req.Header.Add("Accept", mediaType)
 	req.Header.Add("User-Agent", c.UserAgent)
 	return req, nil

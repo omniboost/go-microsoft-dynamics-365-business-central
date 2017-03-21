@@ -4,6 +4,9 @@ package multivers
 
 import (
 	"context"
+	"net/url"
+
+	"github.com/gorilla/schema"
 )
 
 const (
@@ -47,10 +50,15 @@ func NewProductInfoListGetParams() *ProductInfoListGetParams {
 }
 
 type ProductInfoListGetParams struct {
-	ProductID      string `url:"productId"`
-	ShortName      string `url:"shortName"`
-	Description    string `url:"description"`
-	ProductGroupID string `url:"productGroupId"`
+	ProductID      string `schema:"productId"`
+	ShortName      string `schema:"shortName"`
+	Description    string `schema:"description"`
+	ProductGroupID string `schema:"productGroupId"`
+}
+
+func (p *ProductInfoListGetParams) FromQueryParams(queryParams url.Values) error {
+	decoder := schema.NewDecoder()
+	return decoder.Decode(p, queryParams)
 }
 
 func NewProductInfoListGetResponse() *ProductInfoListGetResponse {

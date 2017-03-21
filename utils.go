@@ -3,14 +3,17 @@ package multivers
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/aodin/date"
-	"github.com/google/go-querystring/query"
+	"github.com/gorilla/schema"
 )
 
 func addQueryParamsToRequest(requestParams interface{}, req *http.Request, skipEmpty bool) error {
-	params, err := query.Values(requestParams)
+	params := url.Values{}
+	encoder := schema.NewEncoder()
+	err := encoder.Encode(requestParams, params)
 	if err != nil {
 		return err
 	}
@@ -33,6 +36,11 @@ func addQueryParamsToRequest(requestParams interface{}, req *http.Request, skipE
 
 type DateNLNL struct {
 	date.Date
+}
+
+func NewDateNLNL(year int, month time.Month, day int) DateNLNL {
+	d := date.New(year, month, day)
+	return DateNLNL{Date: d}
 }
 
 // func (d *Date) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
