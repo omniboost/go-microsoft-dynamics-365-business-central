@@ -48,6 +48,12 @@ func NewDateNLNL(year int, month time.Month, day int) DateNLNL {
 // 	return e.EncodeElement(t.Format("20060102"), start)
 // }
 
+func (d *DateNLNL) MarshalJSON() ([]byte, error) {
+	layout := "2-1-2006"
+	fmtDate := d.Date.Format(layout)
+	return json.Marshal(fmtDate)
+}
+
 func (d *DateNLNL) UnmarshalJSON(text []byte) (err error) {
 	var value string
 	err = json.Unmarshal(text, &value)

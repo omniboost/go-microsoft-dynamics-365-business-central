@@ -451,16 +451,16 @@
 
 ## CustomerInvoiceInfoList
 
-- [ ] [GET api/{database}/CustomerInvoiceInfoList/ByFiscalYear/{fiscalYear}/{invoiceState}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-ByFiscalYear-fiscalYear-invoiceState)
-- [ ] [GET api/{database}/CustomerInvoiceInfoList/ByFiscalYear/{fiscalYear}/{invoiceState}?id={id}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-ByFiscalYear-fiscalYear-invoiceState_id)
+- [x] [GET api/{database}/CustomerInvoiceInfoList/ByFiscalYear/{fiscalYear}/{invoiceState}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-ByFiscalYear-fiscalYear-invoiceState)
+- [x] [GET api/{database}/CustomerInvoiceInfoList/ByFiscalYear/{fiscalYear}/{invoiceState}?id={id}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-ByFiscalYear-fiscalYear-invoiceState_id)
 - [ ] [GET api/{database}/CustomerInvoiceInfoList/ByFiscalYear/{fiscalYear}/{id}?invoiceState={invoiceState}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-ByFiscalYear-fiscalYear-id_invoiceState)
 - [ ] [GET api/{database}/CustomerInvoiceInfoList/ByFiscalYear/{fiscalYear}/{id}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-ByFiscalYear-fiscalYear-id)
 - [ ] [GET api/{database}/CustomerInvoiceInfoList/OpenInvoices/{id}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-OpenInvoices-id)
 - [ ] [GET api/{database}/CustomerInvoiceInfoList/{Id}/{startDate}/{endDate}?invoiceState={invoiceState}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-Id-startDate-endDate_invoiceState)
 - [ ] [GET api/{database}/CustomerInvoiceInfoList/{id}/{invoiceState}?startDate={startDate}&endDate={endDate}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-id-invoiceState_startDate_endDate)
-- [ ] [GET api/{database}/CustomerInvoiceInfoList/{id}?startDate={startDate}&endDate={endDate}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-id_startDate_endDate)
-- [ ] [GET api/{database}/CustomerInvoiceInfoList/{Id}?invoiceState={invoiceState}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-Id_invoiceState)
-- [ ] [GET api/{database}/CustomerInvoiceInfoList/{Id}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-Id)
+- [x] [GET api/{database}/CustomerInvoiceInfoList/{id}?startDate={startDate}&endDate={endDate}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-id_startDate_endDate)
+- [x] [GET api/{database}/CustomerInvoiceInfoList/{Id}?invoiceState={invoiceState}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-Id_invoiceState)
+- [x] [GET api/{database}/CustomerInvoiceInfoList/{Id}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoiceInfoList-Id)
 
 ## CustomerInvoiceStatistics
 
