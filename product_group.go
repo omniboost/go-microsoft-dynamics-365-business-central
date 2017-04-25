@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	ProductGroupPath = "/api/%s/ProductGroup/%d.json"
+	ProductGroupPath = "/api/%s/ProductGroup/%s.json"
 )
 
 func NewProductGroupService(client *Client) *ProductGroupService {
@@ -19,7 +19,7 @@ type ProductGroupService struct {
 	Client *Client
 }
 
-func (s *ProductGroupService) Get(database string, productGroupID int, ctx context.Context) (*ProductGroupGetResponse, error) {
+func (s *ProductGroupService) Get(database string, productGroupID string, ctx context.Context) (*ProductGroupGetResponse, error) {
 	method := "GET"
 	responseBody := NewProductGroupGetResponse()
 	path := fmt.Sprintf(ProductGroupPath, database, productGroupID)
@@ -45,6 +45,6 @@ type ProductGroup struct {
 	Messages                   []Message `json:"messages"`
 	CanChange                  bool      `json:"canChange"`
 	Description                string    `json:"description"`
-	ProductGroupID             string    `json:"productGroupId"`
+	ProductGroupID             string       `json:"productGroupId"`
 	ProjectSurchargePercentage float64   `json:"projectSurchargePercentage"`
 }
