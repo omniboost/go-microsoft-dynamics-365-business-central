@@ -3,7 +3,7 @@
 ## Administration
 
 - [ ] [DELETE api/Administration/{administrationId}](https://api.online.unit4.nl/V19/Help/Api/DELETE-api-Administration-administrationId)
-- [ ] [GET api/Administration/{administrationId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-Administration-administrationId)
+- [x] [GET api/Administration/{administrationId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-Administration-administrationId)
 - [ ] [POST api/Administration](https://api.online.unit4.nl/V19/Help/Api/POST-api-Administration)
 - [ ] [PUT api/Administration/{administrationId}](https://api.online.unit4.nl/V19/Help/Api/PUT-api-Administration-administrationId)
 
@@ -18,7 +18,7 @@
 
 ## AdministrationGroupList
 
-- [ ] [GET api/AdministrationGroupList](https://api.online.unit4.nl/V19/Help/Api/GET-api-AdministrationGroupList)
+- [x] [GET api/AdministrationGroupList](https://api.online.unit4.nl/V19/Help/Api/GET-api-AdministrationGroupList)
 
 ## AdministrationGroupNVL
 
@@ -31,8 +31,8 @@
 
 ## AdministrationInfoList
 
-- [ ] [GET api/AdministrationInfoList?groupId={groupId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-AdministrationInfoList_groupId)
-- [ ] [GET api/AdministrationInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-AdministrationInfoList)
+- [x] [GET api/AdministrationInfoList?groupId={groupId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-AdministrationInfoList_groupId)
+- [x] [GET api/AdministrationInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-AdministrationInfoList)
 
 ## AdministrationNVL
 
@@ -1036,13 +1036,13 @@
 ## ProductGroup
 
 - [ ] [DELETE api/{database}/ProductGroup/{productGroupId}](https://api.online.unit4.nl/V19/Help/Api/DELETE-api-database-ProductGroup-productGroupId)
-- [ ] [GET api/{database}/ProductGroup/{productGroupId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductGroup-productGroupId)
+- [x] [GET api/{database}/ProductGroup/{productGroupId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductGroup-productGroupId)
 - [ ] [POST api/{database}/ProductGroup](https://api.online.unit4.nl/V19/Help/Api/POST-api-database-ProductGroup)
 - [ ] [PUT api/{database}/ProductGroup/{productGroupId}](https://api.online.unit4.nl/V19/Help/Api/PUT-api-database-ProductGroup-productGroupId)
 
 ## ProductGroupNVL
 
-- [ ] [GET api/{database}/ProductGroupNVL](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductGroupNVL)
+- [x] [GET api/{database}/ProductGroupNVL](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductGroupNVL)
 
 ## ProductGroupRelationInfo
 
@@ -1054,12 +1054,12 @@
 
 ## ProductInfoList
 
-- [ ] [GET api/{database}/ProductInfoList?productId={productId}&shortName={shortName}&description={description}&productGroupId={productGroupId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductInfoList_productId_shortName_description_productGroupId)
-- [ ] [GET api/{database}/ProductInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductInfoList)
+- [x] [GET api/{database}/ProductInfoList?productId={productId}&shortName={shortName}&description={description}&productGroupId={productGroupId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductInfoList_productId_shortName_description_productGroupId)
+- [x] [GET api/{database}/ProductInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductInfoList)
 
 ## ProductNVL
 
-- [ ] [GET api/{database}/ProductNVL](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductNVL)
+- [x] [GET api/{database}/ProductNVL](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProductNVL)
 
 ## ProductTypeNVL
 
@@ -1079,7 +1079,7 @@
 
 ## ProjectEntryTypeNVL
 
-- [ ] [GET api/{database}/ProjectEntryTypeNVL](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProjectEntryTypeNVL)
+- [x] [GET api/{database}/ProjectEntryTypeNVL](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-ProjectEntryTypeNVL)
 
 ## ProjectGroupNVL
 
@@ -1471,11 +1471,11 @@
 
 ## VatCodeInfo
 
-- [ ] [GET api/{database}/VatCodeInfo/{vatCode}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-VatCodeInfo-vatCode)
+- [x] [GET api/{database}/VatCodeInfo/{vatCode}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-VatCodeInfo-vatCode)
 
 ## VatCodeInfoList
 
-- [ ] [GET api/{database}/VatCodeInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-VatCodeInfoList)
+- [x] [GET api/{database}/VatCodeInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-VatCodeInfoList)
 
 ## VatCodeNVL
 
