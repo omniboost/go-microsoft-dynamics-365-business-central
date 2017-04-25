@@ -53,6 +53,7 @@ type Client struct {
 	ProductGroupNVL         *ProductGroupNVLService
 	ProductGroup            *ProductGroupService
 	CustomerInvoiceInfoList *CustomerInvoiceInfoListService
+	CustomerInvoice         *CustomerInvoiceService
 }
 
 // RequestCompletionCallback defines the type of the request callback function
@@ -87,6 +88,7 @@ func NewClient(httpClient *http.Client, baseURL *url.URL) *Client {
 	c.ProductGroupNVL = NewProductGroupNVLService(c)
 	c.ProductGroup = NewProductGroupService(c)
 	c.CustomerInvoiceInfoList = NewCustomerInvoiceInfoListService(c)
+	c.CustomerInvoice = NewCustomerInvoiceService(c)
 
 	// Commands
 

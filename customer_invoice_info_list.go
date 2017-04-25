@@ -103,52 +103,52 @@ func (s *CustomerInvoiceInfoListService) NewByIDGetResponse() *CustomerInvoiceIn
 type CustomerInvoiceInfoListByIDGetResponse []CustomerInvoiceInfo
 
 type CustomerInvoiceInfo struct {
-	City                      string                `json:"city"`
-	ContactPerson             string                `json:"contactPerson"`
-	CreditSqueezeRemaining    float64               `json:"creditSqueezeRemaining"`
-	CreditSqueezeRemainingCur float64               `json:"creditSqueezeRemainingCur"`
-	CurrencyDescription       string                `json:"currencyDescription"`
-	CurrencyID                string                `json:"currencyId"`
-	CurrentExchangeRate       float64               `json:"currentExchangeRate"`
-	CustomerID                string                `json:"customerId"`
-	CustomerInvoiceLines      []CustomerInvoiceLine `json:"customerInvoiceLines"`
-	CustomerName              string                `json:"customerName"`
-	DaysOld                   int                   `json:"daysOld"`
-	DunForPayment             bool                  `json:"dunForPayment"`
-	ExchangeRate              float64               `json:"exchangeRate"`
-	FiscalYear                int                   `json:"fiscalYear"`
-	InvoiceAmount             float64               `json:"invoiceAmount"`
-	InvoicieAmountCur         float64               `json:"invoiceAmountCur"`
-	InvoiceBalance            float64               `json:"invoiceBalance"`
-	InvoiceBalanceCur         float64               `json:"invoiceBalanceCur"`
-	InvoiceDate               DateNLNL              `json:"invoiceDate"`
-	InvoiceExpirationDate     DateNLNL              `json:"invoiceExpirationDate"`
-	InvoiceID                 string                `json:"invoiceId"`
-	InvoiceReference          string                `json:"invoiceReference"`
-	IsAdvance                 bool                  `json:"isAdvance"`
-	Name                      string                `json:"name"`
-	PaymentConditionID        string                `json:"paymentConditionId"`
-	PaymentDate               DateNLNL              `json:"paymentDate"`
-	PaymentReference          string                `json:"paymentReference"`
-	PhoneNumber               string                `json:"phoneNumber"`
-	RebateExpirationDate      DateNLNL              `json:"rebateExpirationDate"`
-	RebateRemaining           float64               `json:"rebateRemaining"`
-	RebateRemainingCur        float64               `json:"rebateRemainingCur"`
-	ReminderCount             float64               `json:"reminderCount"`
-	SettledAmount             float64               `json:"settledAmount"`
-	SettledAmountCur          float64               `json:"settledAmountCur"`
-	Shortname                 string                `json:"shortName"`
-	State                     InvoiceState          `json:"state"`
-	Street                    string                `json:"street"`
-	TurnoverAmount            float64               `json:"turnoverAmount"`
-	VatAmount                 float64               `json:"vatAmount"`
-	VatAmountCur              float64               `json:"vatAmountCur"`
-	ZipCode                   string                `json:"zipCode"`
+	City                      string                    `json:"city"`
+	ContactPerson             string                    `json:"contactPerson"`
+	CreditSqueezeRemaining    float64                   `json:"creditSqueezeRemaining"`
+	CreditSqueezeRemainingCur float64                   `json:"creditSqueezeRemainingCur"`
+	CurrencyDescription       string                    `json:"currencyDescription"`
+	CurrencyID                string                    `json:"currencyId"`
+	CurrentExchangeRate       float64                   `json:"currentExchangeRate"`
+	CustomerID                string                    `json:"customerId"`
+	CustomerInvoiceLines      []CustomerInvoiceInfoLine `json:"customerInvoiceLines"`
+	CustomerName              string                    `json:"customerName"`
+	DaysOld                   int                       `json:"daysOld"`
+	DunForPayment             bool                      `json:"dunForPayment"`
+	ExchangeRate              float64                   `json:"exchangeRate"`
+	FiscalYear                int                       `json:"fiscalYear"`
+	InvoiceAmount             float64                   `json:"invoiceAmount"`
+	InvoicieAmountCur         float64                   `json:"invoiceAmountCur"`
+	InvoiceBalance            float64                   `json:"invoiceBalance"`
+	InvoiceBalanceCur         float64                   `json:"invoiceBalanceCur"`
+	InvoiceDate               DateNLNL                  `json:"invoiceDate"`
+	InvoiceExpirationDate     DateNLNL                  `json:"invoiceExpirationDate"`
+	InvoiceID                 string                    `json:"invoiceId"`
+	InvoiceReference          string                    `json:"invoiceReference"`
+	IsAdvance                 bool                      `json:"isAdvance"`
+	Name                      string                    `json:"name"`
+	PaymentConditionID        string                    `json:"paymentConditionId"`
+	PaymentDate               DateNLNL                  `json:"paymentDate"`
+	PaymentReference          string                    `json:"paymentReference"`
+	PhoneNumber               string                    `json:"phoneNumber"`
+	RebateExpirationDate      DateNLNL                  `json:"rebateExpirationDate"`
+	RebateRemaining           float64                   `json:"rebateRemaining"`
+	RebateRemainingCur        float64                   `json:"rebateRemainingCur"`
+	ReminderCount             float64                   `json:"reminderCount"`
+	SettledAmount             float64                   `json:"settledAmount"`
+	SettledAmountCur          float64                   `json:"settledAmountCur"`
+	Shortname                 string                    `json:"shortName"`
+	State                     InvoiceState              `json:"state"`
+	Street                    string                    `json:"street"`
+	TurnoverAmount            float64                   `json:"turnoverAmount"`
+	VatAmount                 float64                   `json:"vatAmount"`
+	VatAmountCur              float64                   `json:"vatAmountCur"`
+	ZipCode                   string                    `json:"zipCode"`
 }
 
 type InvoiceState int
 
-type CustomerInvoiceLine struct {
+type CustomerInvoiceInfoLine struct {
 	Amount        float64 `json:"amount"`
 	AmountCur     float64 `json:"amountCur"`
 	Description   string  `json:"description"`

@@ -440,7 +440,7 @@
 ## CustomerInvoice
 
 - [ ] [DELETE api/{database}/CustomerInvoice/{invoiceId}](https://api.online.unit4.nl/V19/Help/Api/DELETE-api-database-CustomerInvoice-invoiceId)
-- [ ] [GET api/{database}/CustomerInvoice/{invoiceId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoice-invoiceId)
+- [x] [GET api/{database}/CustomerInvoice/{invoiceId}](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInvoice-invoiceId)
 - [ ] [POST api/{database}/CustomerInvoice](https://api.online.unit4.nl/V19/Help/Api/POST-api-database-CustomerInvoice)
 - [ ] [PUT api/{database}/CustomerInvoice/{invoiceId}](https://api.online.unit4.nl/V19/Help/Api/PUT-api-database-CustomerInvoice-invoiceId)
 
