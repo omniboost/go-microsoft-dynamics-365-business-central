@@ -11,7 +11,7 @@ type ProductInfo struct {
 	Description        string   `json:"description"`
 	ProductGroupID     string   `json:"productGroupId"`
 	ProjectSurcharge   float64  `json:"projectSurcharge"`
-	PriceInclVat       float64  `json:priceInclVat`
+	PriceInclVat       float64  `json:"priceInclVat"`
 	ProductID          string   `json:"productId"`
 	TechnicalStock     float64  `json:"technicalStock"`
 	LastUpdate         DateNLNL `json:"lastUpdate"`
