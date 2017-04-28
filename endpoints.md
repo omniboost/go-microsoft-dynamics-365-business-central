@@ -435,7 +435,7 @@
 
 ## CustomerInfoList
 
-- [ ] [GET api/{database}/CustomerInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInfoList)
+- [x] [GET api/{database}/CustomerInfoList](https://api.online.unit4.nl/V19/Help/Api/GET-api-database-CustomerInfoList)
 
 ## CustomerInvoice
 

@@ -43,11 +43,6 @@ func NewDateNLNL(year int, month time.Month, day int) DateNLNL {
 	return DateNLNL{Date: d}
 }
 
-// func (d *Date) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-// 	t := time.Time(*d)
-// 	return e.EncodeElement(t.Format("20060102"), start)
-// }
-
 func (d *DateNLNL) MarshalJSON() ([]byte, error) {
 	layout := "2-1-2006"
 	fmtDate := d.Date.Format(layout)
@@ -69,5 +64,32 @@ func (d *DateNLNL) UnmarshalJSON(text []byte) (err error) {
 	layout := "2-1-2006"
 	time, err := time.Parse(layout, value)
 	d.Date = date.FromTime(time)
+	return err
+}
+
+type Time struct {
+	time.Time
+}
+
+func (t *Time) MarshalJSON() ([]byte, error) {
+	layout := "2006-01-02T15:04:05"
+	fmtTime := t.Time.Format(layout)
+	return json.Marshal(fmtTime)
+}
+
+func (t *Time) UnmarshalJSON(text []byte) (err error) {
+	var value string
+	err = json.Unmarshal(text, &value)
+	if err != nil {
+		return err
+	}
+
+	if value == "" {
+		return nil
+	}
+
+	layout := "2006-01-02T15:04:05"
+	parsedTime, err := time.Parse(layout, value)
+	*t = Time{Time: parsedTime}
 	return err
 }
