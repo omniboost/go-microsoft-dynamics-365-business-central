@@ -54,6 +54,7 @@ type Client struct {
 	ProductGroup            *ProductGroupService
 	CustomerInvoiceInfoList *CustomerInvoiceInfoListService
 	CustomerInvoice         *CustomerInvoiceService
+	FinTrans                *FinTransService
 }
 
 // RequestCompletionCallback defines the type of the request callback function
@@ -89,6 +90,7 @@ func NewClient(httpClient *http.Client, baseURL *url.URL) *Client {
 	c.ProductGroup = NewProductGroupService(c)
 	c.CustomerInvoiceInfoList = NewCustomerInvoiceInfoListService(c)
 	c.CustomerInvoice = NewCustomerInvoiceService(c)
+	c.FinTrans = NewFinTransService(c)
 
 	// Commands
 
