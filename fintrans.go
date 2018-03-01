@@ -63,7 +63,7 @@ type FinTransEntry struct {
 	CostUnitIDRequired         bool    `json:"costUnitIdRequired"`         //false,
 	CreditAmount               float64 `json:"creditAmount"`               //100.00,
 	DebitAmount                float64 `json:"debitAmount"`                //0.0,
-	Desciption                 string  `json:"description"`                //"Test Basicentry",
+	Description                string  `json:"description"`                //"Test Basicentry",
 	Document                   string  `json:"document"`                   //"",
 	NonDeductibleVatPercentage float64 `json:"nondeductibleVatPercentage"` // 0.0,
 	Quantity                   float64 `json:"quantity"`                   // 0.0,
