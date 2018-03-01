@@ -49,8 +49,10 @@ type FinTrans struct {
 	TransactionDate    string          `json:"transactionDate"`
 	Description        string          `json:"description"`
 	Document           string          `json:"document"`
-	FinTransEntries    []FinTransEntry `json:"finTransEntries"`
+	FinTransEntries    FinTransEntries `json:"finTransEntries"`
 }
+
+type FinTransEntries []FinTransEntry
 
 type FinTransEntry struct {
 	Type                       string  `json:"$type"`                      // "UNIT4.Multivers.API.BL.Financial.Edit.BasicEntryProxy, UNIT4.Multivers.API.Web.WebApi.Model",
