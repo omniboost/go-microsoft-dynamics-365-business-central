@@ -4,130 +4,159 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"strings"
+	"sync"
+	"text/template"
 
-	"golang.org/x/oauth2"
+	"github.com/omniboost/go-fortnox/utils"
 )
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-multivers/" + libraryVersion
+	userAgent      = "go-unit4-multivers/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
-	apiPrefix      = "/api"
 )
 
-// Client manages communication with Unit4 Multivers API
+var (
+	BaseURL = url.URL{
+		Scheme: "https",
+		Host:   "api.online.unit4.nl",
+		Path:   "/V22",
+	}
+)
+
+// NewClient returns a new Exact Globe Client client
+func NewClient(httpClient *http.Client, administration string) *Client {
+	if httpClient == nil {
+		httpClient = http.DefaultClient
+	}
+
+	client := &Client{}
+
+	client.SetHTTPClient(httpClient)
+	client.SetAdministration(administration)
+	client.SetBaseURL(BaseURL)
+	client.SetDebug(false)
+	client.SetUserAgent(userAgent)
+	client.SetMediaType(mediaType)
+	client.SetCharset(charset)
+
+	return client
+}
+
+// Client manages communication with Exact Globe Client
 type Client struct {
-	// SOAP client used to communicate with the API.
-	client *http.Client
+	// HTTP client used to communicate with the Client.
+	http *http.Client
 
-	// Url pointing to base Unit4 Multivers API
-	BaseURL *url.URL
+	debug   bool
+	baseURL url.URL
 
-	// Debugging flag
-	Debug bool
+	// credentials
+	administration string
 
 	// User agent for client
-	UserAgent string
+	userAgent string
 
-	// Optional function called after every successful request made to the DO APIs
+	mediaType             string
+	charset               string
+	disallowUnknownFields bool
+
+	// Optional function called after every successful request made to the DO Clients
 	onRequestCompleted RequestCompletionCallback
-
-	// General data
-	Administration          *AdministrationService
-	AdministrationInfoList  *AdministrationInfoListService
-	AdministrationGroupList *AdministrationGroupListService
-
-	// Administration data
-	ProductInfoList         *ProductInfoListService
-	ProductTypeNVL          *ProductTypeNVLService
-	ProjectEntryTypeNVL     *ProjectEntryTypeNVLService
-	VatCodeInfo             *VatCodeInfoService
-	VatCodeInfoList         *VatCodeInfoListService
-	ProductGroupNVL         *ProductGroupNVLService
-	ProductGroup            *ProductGroupService
-	CustomerInvoiceInfoList *CustomerInvoiceInfoListService
-	CustomerInvoice         *CustomerInvoiceService
-	FinTrans                *FinTransService
-	JournalInfo             *JournalInfoService
-	CustomerInfoList        *CustomerInfoListService
 }
 
 // RequestCompletionCallback defines the type of the request callback function
 type RequestCompletionCallback func(*http.Request, *http.Response)
 
-// NewClient returns a new Unit4 Multivers API client
-func NewClient(httpClient *http.Client, baseURL *url.URL) *Client {
-	if httpClient == nil {
-		httpClient = http.DefaultClient
-	}
+func (c *Client) SetHTTPClient(client *http.Client) {
+	c.http = client
+}
 
-	c := &Client{
-		client:    httpClient,
-		BaseURL:   nil,
-		UserAgent: userAgent,
-		Debug:     false,
-	}
-
-	c.SetBaseURL(baseURL)
-
-	// General data
-	c.Administration = NewAdministrationService(c)
-	c.AdministrationInfoList = NewAdministrationInfoListService(c)
-	c.AdministrationGroupList = NewAdministrationGroupListService(c)
-
-	// Administration data
-	c.ProductInfoList = NewProductInfoListService(c)
-	c.ProductTypeNVL = NewProductTypeNVLService(c)
-	c.ProjectEntryTypeNVL = NewProjectEntryTypeNVLService(c)
-	c.VatCodeInfo = NewVatCodeInfoService(c)
-	c.VatCodeInfoList = NewVatCodeInfoListService(c)
-	c.ProductGroupNVL = NewProductGroupNVLService(c)
-	c.ProductGroup = NewProductGroupService(c)
-	c.CustomerInvoiceInfoList = NewCustomerInvoiceInfoListService(c)
-	c.CustomerInvoice = NewCustomerInvoiceService(c)
-	c.FinTrans = NewFinTransService(c)
-	c.JournalInfo = NewJournalInfoService(c)
-	c.CustomerInfoList = NewCustomerInfoListService(c)
-
-	// Commands
-
-	// Documents
-
-	return c
+func (c Client) Debug() bool {
+	return c.debug
 }
 
 func (c *Client) SetDebug(debug bool) {
-	c.Debug = debug
+	c.debug = debug
 }
 
-func (c *Client) SetSandbox(sandbox bool) {
-	if sandbox == true {
-		// u, _ := url.ParseRequestURI(companies.SandboxEndpoint)
-		// c.Companies.Endpoint = u
-	} else {
-		// u, _ := url.ParseRequestURI(companies.Endpoint)
-		// c.Companies.Endpoint = u
+func (c Client) Administration() string {
+	return c.administration
+}
+
+func (c *Client) SetAdministration(administration string) {
+	c.administration = administration
+}
+
+func (c Client) BaseURL() url.URL {
+	return c.baseURL
+}
+
+func (c *Client) SetBaseURL(baseURL url.URL) {
+	c.baseURL = baseURL
+}
+
+func (c *Client) SetMediaType(mediaType string) {
+	c.mediaType = mediaType
+}
+
+func (c Client) MediaType() string {
+	return mediaType
+}
+
+func (c *Client) SetCharset(charset string) {
+	c.charset = charset
+}
+
+func (c Client) Charset() string {
+	return charset
+}
+
+func (c *Client) SetUserAgent(userAgent string) {
+	c.userAgent = userAgent
+}
+
+func (c Client) UserAgent() string {
+	return userAgent
+}
+
+func (c *Client) SetDisallowUnknownFields(disallowUnknownFields bool) {
+	c.disallowUnknownFields = disallowUnknownFields
+}
+
+func (c *Client) GetEndpointURL(path string, pathParams PathParams) url.URL {
+	clientURL := c.BaseURL()
+	clientURL.Path = clientURL.Path + path
+
+	tmpl, err := template.New("administration").Parse(clientURL.Path)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	buf := new(bytes.Buffer)
+	params := pathParams.Params()
+	params["administration_id"] = c.Administration()
+	err = tmpl.Execute(buf, params)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	clientURL.Path = buf.String()
+	return clientURL
 }
 
-func (c *Client) SetBaseURL(baseURL *url.URL) {
-	// These are not registered in the oauth library by default
-	oauth2.RegisterBrokenAuthHeaderProvider(baseURL.String())
-
-	// set base url for use in http client
-	c.BaseURL = baseURL
-}
-
-func (c *Client) NewRequest(ctx context.Context, method, path string, body interface{}) (*http.Request, error) {
-	u := c.GetEndpoint(path)
-
+func (c *Client) NewRequest(ctx context.Context, method string, URL url.URL, body interface{}) (*http.Request, error) {
+	// convert body struct to json
 	buf := new(bytes.Buffer)
 	if body != nil {
 		err := json.NewEncoder(buf).Encode(body)
@@ -136,7 +165,14 @@ func (c *Client) NewRequest(ctx context.Context, method, path string, body inter
 		}
 	}
 
-	req, err := http.NewRequest(method, u.String(), buf)
+	// create new http request
+	req, err := http.NewRequest(method, URL.String(), buf)
+	if err != nil {
+		return nil, err
+	}
+
+	values := url.Values{}
+	err = utils.AddURLValuesToRequest(values, req, true)
 	if err != nil {
 		return nil, err
 	}
@@ -146,33 +182,24 @@ func (c *Client) NewRequest(ctx context.Context, method, path string, body inter
 		req = req.WithContext(ctx)
 	}
 
-	req.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", mediaType, charset))
-	req.Header.Add("Accept", mediaType)
-	req.Header.Add("User-Agent", c.UserAgent)
+	// set other headers
+	req.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
+	req.Header.Add("Accept", c.MediaType())
+	req.Header.Add("User-Agent", c.UserAgent())
+
 	return req, nil
 }
 
-func (c *Client) GetEndpoint(path string) *url.URL {
-	basePath := strings.TrimSuffix(c.BaseURL.Path, "/")
-	if !strings.HasPrefix(path, "/") {
-		path = "/" + path
-	}
-
-	u := *c.BaseURL
-	u.Path = basePath + path
-	return &u
-}
-
-// Do sends an API request and returns the API response. The API response is XML decoded and stored in the value
-// pointed to by v, or returned as an error if an API error has occurred. If v implements the io.Writer interface,
+// Do sends an Client request and returns the Client response. The Client response is json decoded and stored in the value
+// pointed to by v, or returned as an error if an Client error has occurred. If v implements the io.Writer interface,
 // the raw response will be written to v, without attempting to decode it.
 func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response, error) {
-	if c.Debug == true {
+	if c.debug == true {
 		dump, _ := httputil.DumpRequestOut(req, true)
 		log.Println(string(dump))
 	}
 
-	httpResp, err := c.client.Do(req)
+	httpResp, err := c.http.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -188,7 +215,7 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 		}
 	}()
 
-	if c.Debug == true {
+	if c.debug == true {
 		dump, _ := httputil.DumpResponse(httpResp, true)
 		log.Println(string(dump))
 	}
@@ -201,6 +228,10 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 
 	// check the provided interface parameter
 	if httpResp == nil {
+		return httpResp, nil
+	}
+
+	if responseBody == nil {
 		return httpResp, err
 	}
 
@@ -211,6 +242,161 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 	// }
 
 	// try to decode body into interface parameter
-	err = json.NewDecoder(httpResp.Body).Decode(responseBody)
-	return httpResp, err
+	if responseBody == nil {
+		return httpResp, nil
+	}
+
+	err = c.Unmarshal(httpResp.Body, &responseBody)
+	if err != nil {
+		return httpResp, err
+	}
+
+	// if len(errorResponse.Messages) > 0 {
+	// 	return httpResp, errorResponse
+	// }
+
+	return httpResp, nil
+}
+
+func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
+	if len(vv) == 0 {
+		return nil
+	}
+
+	wg := sync.WaitGroup{}
+	wg.Add(len(vv))
+	errs := []error{}
+	writers := make([]io.Writer, len(vv))
+
+	for i, v := range vv {
+		pr, pw := io.Pipe()
+		writers[i] = pw
+
+		go func(i int, v interface{}, pr *io.PipeReader, pw *io.PipeWriter) {
+			dec := json.NewDecoder(pr)
+			if c.disallowUnknownFields {
+				dec.DisallowUnknownFields()
+			}
+
+			err := dec.Decode(v)
+			if err != nil {
+				errs = append(errs, err)
+			}
+
+			// mark routine as done
+			wg.Done()
+
+			// Drain reader
+			io.Copy(ioutil.Discard, pr)
+
+			// close reader
+			// pr.CloseWithError(err)
+			pr.Close()
+		}(i, v, pr, pw)
+	}
+
+	// copy the data in a multiwriter
+	mw := io.MultiWriter(writers...)
+	_, err := io.Copy(mw, r)
+	if err != nil {
+		return err
+	}
+
+	wg.Wait()
+	if len(errs) == len(vv) {
+		// Everything errored
+		msgs := make([]string, len(errs))
+		for i, e := range errs {
+			msgs[i] = fmt.Sprint(e)
+		}
+		return errors.New(strings.Join(msgs, ", "))
+	}
+	return nil
+}
+
+// CheckResponse checks the Client response for errors, and returns them if
+// present. A response is considered an error if it has a status code outside
+// the 200 range. Client error responses are expected to have either no response
+// body, or a json response body that maps to ErrorResponse. Any other response
+// body will be silently ignored.
+func CheckResponse(r *http.Response) error {
+	errorResponse := &ErrorResponse{Response: r}
+
+	// Don't check content-lenght: a created response, for example, has no body
+	// if r.Header.Get("Content-Length") == "0" {
+	// 	errorResponse.Errors.Message = r.Status
+	// 	return errorResponse
+	// }
+
+	if c := r.StatusCode; c >= 200 && c <= 299 {
+		return nil
+	}
+
+	// read data and copy it back
+	data, err := ioutil.ReadAll(r.Body)
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
+	if err != nil {
+		return errorResponse
+	}
+
+	err = checkContentType(r)
+	if err != nil {
+		errorResponse.ErrorInformation = err
+		return errorResponse
+	}
+
+	if len(data) == 0 {
+		return errorResponse
+	}
+
+	// convert json to struct
+	dest := struct {
+		ErrorInformation ErrorInformation
+	}{}
+	err = json.Unmarshal(data, &dest)
+	if err != nil {
+		errorResponse.ErrorInformation = err
+		return errorResponse
+	}
+	errorResponse.ErrorInformation = dest.ErrorInformation
+
+	return errorResponse
+}
+
+type ErrorResponse struct {
+	// HTTP response that caused this error
+	Response *http.Response `json:"-"`
+
+	ErrorInformation error `json:"ErrorInformation"`
+}
+
+func (r ErrorResponse) Error() string {
+	if r.ErrorInformation == nil {
+		return ""
+	}
+	return r.ErrorInformation.Error()
+}
+
+type ErrorInformation struct {
+	Err     int    `json:"error"`
+	Message string `json:"message"`
+	Code    int    `json:"code"`
+}
+
+func (e ErrorInformation) Error() string {
+	return fmt.Sprintf("%d: %s", e.Code, e.Message)
+}
+
+func checkContentType(response *http.Response) error {
+	header := response.Header.Get("Content-Type")
+	contentType := strings.Split(header, ";")[0]
+	if contentType != mediaType {
+		return fmt.Errorf("Expected Content-Type \"%s\", got \"%s\"", mediaType, contentType)
+	}
+
+	return nil
+}
+
+type PathParams interface {
+	Params() map[string]string
 }
