@@ -321,51 +321,39 @@ func CheckResponse(r *http.Response) error {
 
 	err = checkContentType(r)
 	if err != nil {
-		errorResponse.ErrorInformation = err
+		errorResponse.Message = err.Error()
 		return errorResponse
 	}
 
 	if r.ContentLength == 0 {
-		errorResponse.ErrorInformation = errors.New("response body is empty")
+		errorResponse.Message = "response body is empty"
 		return errorResponse
 	}
 
 	// convert json to struct
-	dest := struct {
-		ErrorInformation ErrorInformation
-	}{}
-	err = json.Unmarshal(data, &dest)
+	err = json.Unmarshal(data, &errorResponse)
 	if err != nil {
-		errorResponse.ErrorInformation = err
+		errorResponse.Message = err.Error()
 		return errorResponse
 	}
-	errorResponse.ErrorInformation = dest.ErrorInformation
 
 	return errorResponse
 }
 
 type ErrorResponse struct {
 	// HTTP response that caused this error
-	Response *http.Response `json:"-"`
+	Response *http.Response
 
-	ErrorInformation error `json:"ErrorInformation"`
+	// HTTP status code
+	Code int
+
+	// Fault message
+	Message string `json:"Message"`
 }
 
-func (r ErrorResponse) Error() string {
-	if r.ErrorInformation == nil {
-		return ""
-	}
-	return r.ErrorInformation.Error()
-}
-
-type ErrorInformation struct {
-	Err     int    `json:"error"`
-	Message string `json:"message"`
-	Code    int    `json:"code"`
-}
-
-func (e ErrorInformation) Error() string {
-	return fmt.Sprintf("%d: %s", e.Code, e.Message)
+func (r *ErrorResponse) Error() string {
+	return fmt.Sprintf("%v %v: %d (%v)",
+		r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
 }
 
 func checkContentType(response *http.Response) error {

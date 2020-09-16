@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-func TestAdministrationGet(t *testing.T) {
-	req := client.NewFinTransGetRequest()
+func TestJournalInfoListGet(t *testing.T) {
+	req := client.NewJournalInfoListGetRequest()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

@@ -6,8 +6,10 @@ import (
 	"testing"
 )
 
-func TestAdministrationGet(t *testing.T) {
+func TestFinTransGet(t *testing.T) {
 	req := client.NewFinTransGetRequest()
+	req.PathParams().Year = 2020
+	req.PathParams().JournalID = "M"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
