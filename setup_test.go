@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	multivers "github.com/tim-online/go-unit4-multivers"
+	multivers "github.com/omniboost/go-unit4-multivers"
 	"golang.org/x/oauth2"
 )
 

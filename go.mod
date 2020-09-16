@@ -1,4 +1,4 @@
-module github.com/tim-online/go-unit4-multivers
+module github.com/omniboost/go-unit4-multivers
 
 go 1.15
 

@@ -13,7 +13,6 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strings"
-	"sync"
 	"text/template"
 
 	"github.com/omniboost/go-fortnox/utils"
@@ -263,46 +262,26 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 		return nil
 	}
 
-	wg := sync.WaitGroup{}
-	wg.Add(len(vv))
-	errs := []error{}
-	writers := make([]io.Writer, len(vv))
-
-	for i, v := range vv {
-		pr, pw := io.Pipe()
-		writers[i] = pw
-
-		go func(i int, v interface{}, pr *io.PipeReader, pw *io.PipeWriter) {
-			dec := json.NewDecoder(pr)
-			if c.disallowUnknownFields {
-				dec.DisallowUnknownFields()
-			}
-
-			err := dec.Decode(v)
-			if err != nil {
-				errs = append(errs, err)
-			}
-
-			// mark routine as done
-			wg.Done()
-
-			// Drain reader
-			io.Copy(ioutil.Discard, pr)
-
-			// close reader
-			// pr.CloseWithError(err)
-			pr.Close()
-		}(i, v, pr, pw)
-	}
-
-	// copy the data in a multiwriter
-	mw := io.MultiWriter(writers...)
-	_, err := io.Copy(mw, r)
+	b, err := ioutil.ReadAll(r)
 	if err != nil {
 		return err
 	}
 
-	wg.Wait()
+	errs := []error{}
+	for _, v := range vv {
+		r := bytes.NewReader(b)
+		dec := json.NewDecoder(r)
+		if c.disallowUnknownFields {
+			dec.DisallowUnknownFields()
+		}
+
+		err := dec.Decode(v)
+		if err != nil {
+			errs = append(errs, err)
+		}
+
+	}
+
 	if len(errs) == len(vv) {
 		// Everything errored
 		msgs := make([]string, len(errs))
@@ -311,6 +290,7 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 		}
 		return errors.New(strings.Join(msgs, ", "))
 	}
+
 	return nil
 }
 
@@ -345,7 +325,8 @@ func CheckResponse(r *http.Response) error {
 		return errorResponse
 	}
 
-	if len(data) == 0 {
+	if r.ContentLength == 0 {
+		errorResponse.ErrorInformation = errors.New("response body is empty")
 		return errorResponse
 	}
 
