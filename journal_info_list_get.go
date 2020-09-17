@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/omniboost/go-unit4-multivers/odata"
 	"github.com/omniboost/go-unit4-multivers/utils"
 )
 
@@ -30,20 +31,22 @@ type JournalInfoListGetRequest struct {
 }
 
 func (r JournalInfoListGetRequest) NewJournalInfoListGetQueryParams() *JournalInfoListGetQueryParams {
-	// selectFields, _ := utils.Fields(&Customer{})
+	fields, _ := utils.Fields(&JournalInfoListGetRequest{})
 	return &JournalInfoListGetQueryParams{
-		// Select: odata.NewSelect(selectFields),
-		// Filter: odata.NewFilter(),
-		// Top:    odata.NewTop(),
-		// Skip:   odata.NewSkip(),
+		Select:  odata.NewSelect(fields),
+		Filter:  odata.NewFilter(),
+		Top:     odata.NewTop(),
+		Skip:    odata.NewSkip(),
+		OrderBy: odata.NewOrderBy(fields),
 	}
 }
 
 type JournalInfoListGetQueryParams struct {
-	// Select *odata.Select `schema:"$select,omitempty"`
-	// Filter *odata.Filter `schema:"$filter,omitempty"`
-	// Top    *odata.Top    `schema:"$top,omitempty"`
-	// Skip   *odata.Skip   `schema:"$skip,omitempty"`
+	Select  *odata.Select  `schema:"$select,omitempty"`
+	Filter  *odata.Filter  `schema:"$filter,omitempty"`
+	Top     *odata.Top     `schema:"$top,omitempty"`
+	Skip    *odata.Skip    `schema:"$skip,omitempty"`
+	OrderBy *odata.OrderBy `schema:"$orderBy,omitempty"`
 }
 
 func (p JournalInfoListGetQueryParams) ToURLValues() (url.Values, error) {

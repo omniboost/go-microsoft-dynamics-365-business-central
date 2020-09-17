@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -15,7 +14,9 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/hashicorp/go-multierror"
 	"github.com/omniboost/go-fortnox/utils"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -321,21 +322,25 @@ func CheckResponse(r *http.Response) error {
 
 	err = checkContentType(r)
 	if err != nil {
-		errorResponse.Message = err.Error()
+		errorResponse.Err = errors.WithStack(err)
 		return errorResponse
 	}
 
 	if r.ContentLength == 0 {
-		errorResponse.Message = "response body is empty"
+		errorResponse.Err = errors.New("response body is empty")
 		return errorResponse
 	}
 
+	messages := struct {
+		Messages Messages `json:"messages"`
+	}{}
 	// convert json to struct
-	err = json.Unmarshal(data, &errorResponse)
+	err = json.Unmarshal(data, &messages)
 	if err != nil {
-		errorResponse.Message = err.Error()
+		errorResponse.Err = errors.WithStack(err)
 		return errorResponse
 	}
+	errorResponse.Err = messages.Messages
 
 	return errorResponse
 }
@@ -348,12 +353,36 @@ type ErrorResponse struct {
 	Code int
 
 	// Fault message
-	Message string `json:"Message"`
+	Err error
+}
+
+type Messages []Message
+
+func (mm Messages) Error() string {
+	var errs *multierror.Error
+	for _, m := range mm {
+		errs = multierror.Append(errs, m)
+	}
+
+	if errs == nil {
+		return ""
+	}
+	return errs.Error()
+}
+
+type Message struct {
+	ExceptionID string `json:"exceptionId"`
+	Message     string `json:"Message"`
+	MessageType string `json:"messageType"`
+	Path        string `json:"path"`
+}
+
+func (m Message) Error() string {
+	return fmt.Sprintf("%s", m.Message)
 }
 
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d (%v)",
-		r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
+	return r.Err.Error()
 }
 
 func checkContentType(response *http.Response) error {
