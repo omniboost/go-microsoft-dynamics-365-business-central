@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 	"log"
 	"testing"
-
-	multivers "github.com/omniboost/go-unit4-multivers"
 )
 
-func TestFinTransPost(t *testing.T) {
-	req := client.NewFinTransPostRequest()
-	req.SetRequestBody(multivers.FinTransPostRequestBody{})
+func TestCustomerInvoiceGet(t *testing.T) {
+	req := client.NewCustomerInvoiceGetRequest()
+	req.PathParams().InvoiceID = 2020002
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

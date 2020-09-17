@@ -4,13 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"testing"
-
-	multivers "github.com/omniboost/go-unit4-multivers"
 )
 
-func TestFinTransPost(t *testing.T) {
-	req := client.NewFinTransPostRequest()
-	req.SetRequestBody(multivers.FinTransPostRequestBody{})
+func TestJournalInfoGet(t *testing.T) {
+	req := client.NewJournalInfoGetRequest()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

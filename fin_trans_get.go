@@ -168,7 +168,7 @@ type FinTransGetResponseBody struct {
 }
 
 func (r *FinTransGetRequest) URL() url.URL {
-	return r.client.GetEndpointURL("/api/{{.administration_id}}/FinTrans/{{.year}}/{{.journal_id}}/7", r.PathParams())
+	return r.client.GetEndpointURL("/api/{{.administration_id}}/FinTrans/{{.year}}/{{.journal_id}}/2", r.PathParams())
 }
 
 func (r *FinTransGetRequest) Do() (FinTransGetResponseBody, error) {

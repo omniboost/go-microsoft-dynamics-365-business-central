@@ -11,7 +11,7 @@ import (
 	null "gopkg.in/guregu/null.v3"
 
 	"github.com/gorilla/schema"
-	"github.com/omniboost/go-sageone-za/odata"
+	"github.com/omniboost/go-unit4-multivers/odata"
 )
 
 type SchemaMarshaler interface {
@@ -63,6 +63,7 @@ func AddURLValuesToRequest(params url.Values, req *http.Request, skipEmpty bool)
 
 	// force $ in query parameters
 	req.URL.RawQuery = strings.Replace(req.URL.RawQuery, "%24", "$", -1)
+	// req.URL.RawQuery = strings.Replace(req.URL.RawQuery, "+", "%20", -1)
 	return nil
 }
 

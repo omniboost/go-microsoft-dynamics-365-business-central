@@ -18,9 +18,9 @@ type OrderBy struct {
 }
 
 func (o *OrderBy) Add(field string, order string) bool {
-	if !o.IsAllowed(field) {
-		return false
-	}
+	// if !o.IsAllowed(field) {
+	// 	return false
+	// }
 
 	o.Values[field] = order
 	return true
@@ -45,4 +45,8 @@ func (o *OrderBy) MarshalSchema() string {
 		pairs = append(pairs, pair)
 	}
 	return strings.Join(pairs, ",")
+}
+
+func (o OrderBy) IsZero() bool {
+	return len(o.Values) == 0
 }

@@ -8,32 +8,32 @@ import (
 	"github.com/omniboost/go-unit4-multivers/utils"
 )
 
-func (c *Client) NewJournalInfoListGetRequest() JournalInfoListGetRequest {
-	r := JournalInfoListGetRequest{
+func (c *Client) NewJournalInfoGetRequest() JournalInfoGetRequest {
+	r := JournalInfoGetRequest{
 		client:  c,
 		method:  http.MethodGet,
 		headers: http.Header{},
 	}
 
-	r.queryParams = r.NewJournalInfoListGetQueryParams()
-	r.pathParams = r.NewJournalInfoListGetPathParams()
-	r.requestBody = r.NewJournalInfoListGetRequestBody()
+	r.queryParams = r.NewJournalInfoGetQueryParams()
+	r.pathParams = r.NewJournalInfoGetPathParams()
+	r.requestBody = r.NewJournalInfoGetRequestBody()
 	return r
 }
 
-type JournalInfoListGetRequest struct {
+type JournalInfoGetRequest struct {
 	client      *Client
-	queryParams *JournalInfoListGetQueryParams
-	pathParams  *JournalInfoListGetPathParams
+	queryParams *JournalInfoGetQueryParams
+	pathParams  *JournalInfoGetPathParams
 	method      string
 	headers     http.Header
-	requestBody JournalInfoListGetRequestBody
+	requestBody JournalInfoGetRequestBody
 }
 
-func (r JournalInfoListGetRequest) NewJournalInfoListGetQueryParams() *JournalInfoListGetQueryParams {
-	body := JournalInfoListGetResponseBody{{}}
+func (r JournalInfoGetRequest) NewJournalInfoGetQueryParams() *JournalInfoGetQueryParams {
+	body := JournalInfoGetResponseBody{{}}
 	fields, _ := utils.Fields(body[0])
-	return &JournalInfoListGetQueryParams{
+	return &JournalInfoGetQueryParams{
 		Select:  odata.NewSelect(fields),
 		Filter:  odata.NewFilter(),
 		Top:     odata.NewTop(),
@@ -42,15 +42,17 @@ func (r JournalInfoListGetRequest) NewJournalInfoListGetQueryParams() *JournalIn
 	}
 }
 
-type JournalInfoListGetQueryParams struct {
+type JournalInfoGetQueryParams struct {
 	Select  *odata.Select  `schema:"$select,omitempty"`
 	Filter  *odata.Filter  `schema:"$filter,omitempty"`
 	Top     *odata.Top     `schema:"$top,omitempty"`
 	Skip    *odata.Skip    `schema:"$skip,omitempty"`
 	OrderBy *odata.OrderBy `schema:"$orderby,omitempty"`
+
+	FiscalYear int `schema:"fiscalYear,omitempty"`
 }
 
-func (p JournalInfoListGetQueryParams) ToURLValues() (url.Values, error) {
+func (p JournalInfoGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	params := url.Values{}
 
@@ -62,52 +64,55 @@ func (p JournalInfoListGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *JournalInfoListGetRequest) QueryParams() *JournalInfoListGetQueryParams {
+func (r *JournalInfoGetRequest) QueryParams() *JournalInfoGetQueryParams {
 	return r.queryParams
 }
 
-func (r JournalInfoListGetRequest) NewJournalInfoListGetPathParams() *JournalInfoListGetPathParams {
-	return &JournalInfoListGetPathParams{}
+func (r JournalInfoGetRequest) NewJournalInfoGetPathParams() *JournalInfoGetPathParams {
+	return &JournalInfoGetPathParams{}
 }
 
-type JournalInfoListGetPathParams struct {
+type JournalInfoGetPathParams struct {
+	JournalID string
 }
 
-func (p *JournalInfoListGetPathParams) Params() map[string]string {
-	return map[string]string{}
+func (p *JournalInfoGetPathParams) Params() map[string]string {
+	return map[string]string{
+		"journal_id": p.JournalID,
+	}
 }
 
-func (r *JournalInfoListGetRequest) PathParams() *JournalInfoListGetPathParams {
+func (r *JournalInfoGetRequest) PathParams() *JournalInfoGetPathParams {
 	return r.pathParams
 }
 
-func (r *JournalInfoListGetRequest) SetMethod(method string) {
+func (r *JournalInfoGetRequest) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *JournalInfoListGetRequest) Method() string {
+func (r *JournalInfoGetRequest) Method() string {
 	return r.method
 }
 
-func (r JournalInfoListGetRequest) NewJournalInfoListGetRequestBody() JournalInfoListGetRequestBody {
-	return JournalInfoListGetRequestBody{}
+func (r JournalInfoGetRequest) NewJournalInfoGetRequestBody() JournalInfoGetRequestBody {
+	return JournalInfoGetRequestBody{}
 }
 
-type JournalInfoListGetRequestBody struct{}
+type JournalInfoGetRequestBody struct{}
 
-func (r *JournalInfoListGetRequest) RequestBody() *JournalInfoListGetRequestBody {
+func (r *JournalInfoGetRequest) RequestBody() *JournalInfoGetRequestBody {
 	return &r.requestBody
 }
 
-func (r *JournalInfoListGetRequest) SetRequestBody(body JournalInfoListGetRequestBody) {
+func (r *JournalInfoGetRequest) SetRequestBody(body JournalInfoGetRequestBody) {
 	r.requestBody = body
 }
 
-func (r *JournalInfoListGetRequest) NewResponseBody() *JournalInfoListGetResponseBody {
-	return &JournalInfoListGetResponseBody{}
+func (r *JournalInfoGetRequest) NewResponseBody() *JournalInfoGetResponseBody {
+	return &JournalInfoGetResponseBody{}
 }
 
-type JournalInfoListGetResponseBody []struct {
+type JournalInfoGetResponseBody []struct {
 	AccountID                     string      `json:"accountId"`
 	AmendmentBalance              float64     `json:"amendmentBalance"`
 	BankAccountID                 string      `json:"bankAccountId"`
@@ -130,11 +135,11 @@ type JournalInfoListGetResponseBody []struct {
 	StartBalance                  float64     `json:"startBalance"`
 }
 
-func (r *JournalInfoListGetRequest) URL() url.URL {
-	return r.client.GetEndpointURL("/api/{{.administration_id}}/JournalInfoList", r.PathParams())
+func (r *JournalInfoGetRequest) URL() url.URL {
+	return r.client.GetEndpointURL("/api/{{.administration_id}}/JournalInfo/{{.journal_id}}", r.PathParams())
 }
 
-func (r *JournalInfoListGetRequest) Do() (JournalInfoListGetResponseBody, error) {
+func (r *JournalInfoGetRequest) Do() (JournalInfoGetResponseBody, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r.Method(), r.URL(), nil)
 	if err != nil {

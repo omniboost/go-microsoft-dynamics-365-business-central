@@ -31,7 +31,7 @@ type FinTransEntry struct {
 	TransactionDate            string          `json:"transactionDate,omitempty"`            // "28-2-2018",
 	VATAmount                  decimal.Decimal `json:"vatAmount,omitempty"`                  // 17.36,
 	VATChanged                 bool            `json:"vatChanged,omitempty"`                 // false,
-	VATCodeID                  int             `json:"vatCodeId,omitempty"`                  // 2,
+	VATCodeID                  *int            `json:"vatCodeId"`                            // 2,
 	VATIncluded                bool            `json:"vatIncluded,omitempty"`                // true,
 	VATScenarioID              int             `json:"vatScenarioId,omitempty"`              // 6,
 	VATType                    int             `json:"vatType,omitempty"`                    // 0

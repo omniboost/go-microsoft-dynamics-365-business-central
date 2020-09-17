@@ -19,9 +19,9 @@ func (s *Select) Add(key string) bool {
 	allowed := []string{}
 
 	for _, k := range keys {
-		if !s.IsAllowed(k) {
-			return false
-		}
+		// if !s.IsAllowed(k) {
+		// 	return false
+		// }
 		allowed = append(allowed, k)
 	}
 
