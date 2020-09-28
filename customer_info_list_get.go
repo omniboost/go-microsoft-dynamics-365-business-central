@@ -105,66 +105,7 @@ func (r *CustomerInfoListGetRequest) NewResponseBody() *CustomerInfoListGetRespo
 	return &CustomerInfoListGetResponseBody{}
 }
 
-type CustomerInfoListGetResponseBody []struct {
-	AccountManagerID                    string      `json:"accountManagerId"`
-	ApplyOrderSurcharge                 bool        `json:"applyOrderSurcharge"`
-	BusinessNumber                      string      `json:"businessNumber"`
-	ChargeVatTypeID                     int         `json:"chargeVatTypeId"`
-	City                                string      `json:"city"`
-	CocCity                             string      `json:"cocCity"`
-	CocDate                             string      `json:"cocDate"`
-	CocRegistration                     string      `json:"cocRegistration"`
-	CollectiveInvoiceSystemID           string      `json:"collectiveInvoiceSystemId"`
-	CombineInvoicesForElectronicBanking bool        `json:"combineInvoicesForElectronicBanking"`
-	ContactPerson                       string      `json:"contactPerson"`
-	CountryID                           string      `json:"countryId"`
-	CreditLimit                         float64     `json:"creditLimit"`
-	CreditSqueezeID                     string      `json:"creditSqueezeId"`
-	CurrencyID                          string      `json:"currencyId"`
-	CustomerGroupID                     int         `json:"customerGroupId"`
-	CustomerID                          string      `json:"customerId"`
-	CustomerOrganizationID              int         `json:"customerOrganizationId"`
-	CustomerStateID                     string      `json:"customerStateId"`
-	DateChanged                         string      `json:"dateChanged"`
-	DateCreated                         string      `json:"dateCreated"`
-	DeliveryConditionID                 string      `json:"deliveryConditionId"`
-	DiscountPercentage                  float64     `json:"discountPercentage"`
-	Email                               string      `json:"email"`
-	Fax                                 string      `json:"fax"`
-	GovernmentDigitalID                 string      `json:"governmentDigitalId"`
-	Homepage                            string      `json:"homepage"`
-	IncludeVatOnOrderByDefault          bool        `json:"includeVatOnOrderByDefault"`
-	IntrastatGoodsCodeID                int         `json:"intrastatGoodsCodeId"`
-	IntrastatGoodsDistributionID        interface{} `json:"intrastatGoodsDistributionId"`
-	IntrastatStatSystemID               interface{} `json:"intrastatStatSystemId"`
-	IntrastatTrafficRegionID            interface{} `json:"intrastatTrafficRegionId"`
-	IntrastatTransactionTypeID          string      `json:"intrastatTransactionTypeId"`
-	IntrastatTransportTypeID            interface{} `json:"intrastatTransportTypeId"`
-	InvoiceOnBehalfOfMembers            bool        `json:"invoiceOnBehalfOfMembers"`
-	IsDunForPayment                     bool        `json:"isDunForPayment"`
-	IsInFactoring                       bool        `json:"isInFactoring"`
-	IsPaymentRefRequired                bool        `json:"isPaymentRefRequired"`
-	IsPurchaseOrganization              bool        `json:"isPurchaseOrganization"`
-	LanguageID                          string      `json:"languageId"`
-	MobilePhone                         string      `json:"mobilePhone"`
-	Name                                string      `json:"name"`
-	OrganizationID                      int         `json:"organizationId"`
-	PaymentConditionID                  string      `json:"paymentConditionId"`
-	PricelistID                         string      `json:"pricelistId"`
-	PrintPurchaseDetails                bool        `json:"printPurchaseDetails"`
-	PurchaseOrganizationID              string      `json:"purchaseOrganizationId"`
-	PurchaseOrganizationMemberID        string      `json:"purchaseOrganizationMemberId"`
-	RevenueAccountID                    string      `json:"revenueAccountId"`
-	ShortName                           string      `json:"shortName"`
-	Street1                             string      `json:"street1"`
-	Street2                             string      `json:"street2"`
-	Telephone                           string      `json:"telephone"`
-	UsesUBLInvoice                      bool        `json:"usesUBLInvoice"`
-	VatNumber                           string      `json:"vatNumber"`
-	VatScenarioID                       interface{} `json:"vatScenarioId"`
-	VatVerificationDate                 string      `json:"vatVerificationDate"`
-	ZipCode                             string      `json:"zipCode"`
-}
+type CustomerInfoListGetResponseBody []Customer
 
 func (r *CustomerInfoListGetRequest) URL() url.URL {
 	return r.client.GetEndpointURL("/api/{{.administration_id}}/CustomerInfoList", r.PathParams())

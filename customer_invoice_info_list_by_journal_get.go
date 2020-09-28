@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strconv"
 
+	"github.com/omniboost/go-unit4-multivers/odata"
 	"github.com/omniboost/go-unit4-multivers/utils"
 )
 
@@ -31,20 +32,21 @@ type CustomerInvoiceInfoListByJournalGetRequest struct {
 }
 
 func (r CustomerInvoiceInfoListByJournalGetRequest) NewCustomerInvoiceInfoListByJournalGetQueryParams() *CustomerInvoiceInfoListByJournalGetQueryParams {
-	// selectFields, _ := utils.Fields(&Customer{})
+	body := CustomerInvoiceInfoListByJournalGetResponseBody{{}}
+	fields, _ := utils.Fields(body[0])
 	return &CustomerInvoiceInfoListByJournalGetQueryParams{
-		// Select: odata.NewSelect(selectFields),
-		// Filter: odata.NewFilter(),
-		// Top:    odata.NewTop(),
-		// Skip:   odata.NewSkip(),
+		Select: odata.NewSelect(fields),
+		Filter: odata.NewFilter(),
+		Top:    odata.NewTop(),
+		Skip:   odata.NewSkip(),
 	}
 }
 
 type CustomerInvoiceInfoListByJournalGetQueryParams struct {
-	// Select *odata.Select `schema:"$select,omitempty"`
-	// Filter *odata.Filter `schema:"$filter,omitempty"`
-	// Top    *odata.Top    `schema:"$top,omitempty"`
-	// Skip   *odata.Skip   `schema:"$skip,omitempty"`
+	Select *odata.Select `schema:"$select,omitempty"`
+	Filter *odata.Filter `schema:"$filter,omitempty"`
+	Top    *odata.Top    `schema:"$top,omitempty"`
+	Skip   *odata.Skip   `schema:"$skip,omitempty"`
 }
 
 func (p CustomerInvoiceInfoListByJournalGetQueryParams) ToURLValues() (url.Values, error) {
@@ -111,60 +113,7 @@ func (r *CustomerInvoiceInfoListByJournalGetRequest) NewResponseBody() *Customer
 	return &CustomerInvoiceInfoListByJournalGetResponseBody{}
 }
 
-type CustomerInvoiceInfoListByJournalGetResponseBody []struct {
-	City                      string  `json:"city"`
-	ContactPerson             string  `json:"contactPerson"`
-	CreditSqueezeRemaining    float64 `json:"creditSqueezeRemaining"`
-	CreditSqueezeRemainingCur float64 `json:"creditSqueezeRemainingCur"`
-	CurrencyDescription       string  `json:"currencyDescription"`
-	CurrencyID                string  `json:"currencyId"`
-	CurrentExchangeRate       float64 `json:"currentExchangeRate"`
-	CustomerID                string  `json:"customerId"`
-	CustomerInvoiceLines      []struct {
-		Amount        float64 `json:"amount"`
-		AmountCur     float64 `json:"amountCur"`
-		Description   string  `json:"description"`
-		Permanence    bool    `json:"permanence"`
-		VatCodeID     int     `json:"vatCodeId"`
-		VatPercentage float64 `json:"vatPercentage"`
-	} `json:"customerInvoiceLines"`
-	CustomerName          string        `json:"customerName"`
-	DaysOld               int           `json:"daysOld"`
-	DunForPayment         bool          `json:"dunForPayment"`
-	ExchangeRate          float64       `json:"exchangeRate"`
-	FiscalYear            int           `json:"fiscalYear"`
-	InvoiceAmount         float64       `json:"invoiceAmount"`
-	InvoiceAmountCur      float64       `json:"invoiceAmountCur"`
-	InvoiceBalance        float64       `json:"invoiceBalance"`
-	InvoiceBalanceCur     float64       `json:"invoiceBalanceCur"`
-	InvoiceDate           string        `json:"invoiceDate"`
-	InvoiceExpirationDate string        `json:"invoiceExpirationDate"`
-	InvoiceID             string        `json:"invoiceId"`
-	InvoiceReference      string        `json:"invoiceReference"`
-	IsAdvance             bool          `json:"isAdvance"`
-	JournalID             string        `json:"journalId"`
-	Name                  string        `json:"name"`
-	PaymentConditionID    string        `json:"paymentConditionId"`
-	PaymentDate           string        `json:"paymentDate"`
-	PaymentReference      string        `json:"paymentReference"`
-	Payments              []interface{} `json:"payments"`
-	PhoneNumber           string        `json:"phoneNumber"`
-	RebateAmount          float64       `json:"rebateAmount"`
-	RebateAmountCur       float64       `json:"rebateAmountCur"`
-	RebateExpirationDate  string        `json:"rebateExpirationDate"`
-	RebateRemaining       float64       `json:"rebateRemaining"`
-	RebateRemainingCur    float64       `json:"rebateRemainingCur"`
-	ReminderCount         int           `json:"reminderCount"`
-	SettledAmount         float64       `json:"settledAmount"`
-	SettledAmountCur      float64       `json:"settledAmountCur"`
-	ShortName             string        `json:"shortName"`
-	State                 int           `json:"state"`
-	Street                string        `json:"street"`
-	TurnoverAmount        float64       `json:"turnoverAmount"`
-	VatAmount             float64       `json:"vatAmount"`
-	VatAmountCur          float64       `json:"vatAmountCur"`
-	ZipCode               string        `json:"zipCode"`
-}
+type CustomerInvoiceInfoListByJournalGetResponseBody []CustomerInvoice
 
 func (r *CustomerInvoiceInfoListByJournalGetRequest) URL() url.URL {
 	return r.client.GetEndpointURL("/api/{{.administration_id}}/CustomerInvoiceInfoList/ByJournal/{{.fiscal_year}}/{{.journal_id}}//{{.invoice_state}}", r.PathParams())
