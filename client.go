@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"text/template"
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
@@ -158,20 +159,20 @@ func (c *Client) GetEndpointURL(path string, pathParams PathParams) url.URL {
 	clientURL := c.BaseURL()
 	clientURL.Path = clientURL.Path + path
 
-	// tmpl, err := template.New("administration").Parse(clientURL.Path)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	tmpl, err := template.New("path").Parse(clientURL.Path)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// buf := new(bytes.Buffer)
-	// params := pathParams.Params()
+	buf := new(bytes.Buffer)
+	params := pathParams.Params()
 	// params["administration_id"] = c.Administration()
-	// err = tmpl.Execute(buf, params)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	err = tmpl.Execute(buf, params)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// clientURL.Path = buf.String()
+	clientURL.Path = buf.String()
 	return clientURL
 }
 

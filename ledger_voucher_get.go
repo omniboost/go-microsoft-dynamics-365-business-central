@@ -118,10 +118,16 @@ type LedgerVoucherGetResponseBody struct {
 			ID  int    `json:"id"`
 			URL string `json:"url"`
 		} `json:"voucherType"`
-		ReverseVoucher interface{}   `json:"reverseVoucher"`
-		Postings       []interface{} `json:"postings"`
-		Document       interface{}   `json:"document"`
-		Attachment     struct {
+		ReverseVoucher interface{} `json:"reverseVoucher"`
+		Postings       []struct {
+			ID  int    `json:"id"`
+			URL string `json:"url"`
+		} `json:"postings"`
+		Document struct {
+			ID  int    `json:"id"`
+			URL string `json:"url"`
+		} `json:"document"`
+		Attachment struct {
 			ID  int    `json:"id"`
 			URL string `json:"url"`
 		} `json:"attachment"`
