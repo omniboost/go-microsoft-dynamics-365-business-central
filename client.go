@@ -1,4 +1,4 @@
-package multivers
+package tripletex
 
 import (
 	"bytes"
@@ -11,17 +11,16 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strconv"
 	"strings"
-	"text/template"
 
 	"github.com/hashicorp/go-multierror"
-	"github.com/omniboost/go-fortnox/utils"
 	"github.com/pkg/errors"
 )
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-unit4-multivers/" + libraryVersion
+	userAgent      = "go-tripletex/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
 )
@@ -29,13 +28,13 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "api.online.unit4.nl",
-		Path:   "/V22",
+		Host:   "tripletex.no",
+		Path:   "/v2",
 	}
 )
 
 // NewClient returns a new Exact Globe Client client
-func NewClient(httpClient *http.Client, administration string) *Client {
+func NewClient(httpClient *http.Client, consumerToken string, employeeToken string) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -43,7 +42,8 @@ func NewClient(httpClient *http.Client, administration string) *Client {
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetAdministration(administration)
+	client.SetConsumerToken(consumerToken)
+	client.SetEmployeeToken(employeeToken)
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -62,7 +62,11 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	administration string
+	consumerToken string
+	employeeToken string
+
+	companyID int
+	token     string
 
 	// User agent for client
 	userAgent string
@@ -90,12 +94,28 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) Administration() string {
-	return c.administration
+func (c Client) ConsumerToken() string {
+	return c.consumerToken
 }
 
-func (c *Client) SetAdministration(administration string) {
-	c.administration = administration
+func (c *Client) SetConsumerToken(consumerToken string) {
+	c.consumerToken = consumerToken
+}
+
+func (c Client) EmployeeToken() string {
+	return c.employeeToken
+}
+
+func (c *Client) SetEmployeeToken(employeeToken string) {
+	c.employeeToken = employeeToken
+}
+
+func (c Client) CompanyID() int {
+	return c.companyID
+}
+
+func (c *Client) SetCompanyID(companyID int) {
+	c.companyID = companyID
 }
 
 func (c Client) BaseURL() url.URL {
@@ -138,20 +158,20 @@ func (c *Client) GetEndpointURL(path string, pathParams PathParams) url.URL {
 	clientURL := c.BaseURL()
 	clientURL.Path = clientURL.Path + path
 
-	tmpl, err := template.New("administration").Parse(clientURL.Path)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// tmpl, err := template.New("administration").Parse(clientURL.Path)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	buf := new(bytes.Buffer)
-	params := pathParams.Params()
-	params["administration_id"] = c.Administration()
-	err = tmpl.Execute(buf, params)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// buf := new(bytes.Buffer)
+	// params := pathParams.Params()
+	// params["administration_id"] = c.Administration()
+	// err = tmpl.Execute(buf, params)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	clientURL.Path = buf.String()
+	// clientURL.Path = buf.String()
 	return clientURL
 }
 
@@ -171,15 +191,19 @@ func (c *Client) NewRequest(ctx context.Context, method string, URL url.URL, bod
 		return nil, err
 	}
 
-	values := url.Values{}
-	err = utils.AddURLValuesToRequest(values, req, true)
-	if err != nil {
-		return nil, err
-	}
+	// values := url.Values{}
+	// err = utils.AddURLValuesToRequest(values, req, true)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	// optionally pass along context
 	if ctx != nil {
 		req = req.WithContext(ctx)
+	}
+
+	if c.token != "" {
+		req.SetBasicAuth(strconv.Itoa(c.companyID), c.token)
 	}
 
 	// set other headers
@@ -293,6 +317,17 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	}
 
 	return nil
+}
+
+func (c *Client) NewToken() (string, error) {
+	req := c.NewTokenSessionCreateRequest()
+	resp, err := req.Do()
+	if err != nil {
+		return "", err
+	}
+
+	return resp.Value.Token, nil
+
 }
 
 // CheckResponse checks the Client response for errors, and returns them if
