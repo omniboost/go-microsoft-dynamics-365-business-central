@@ -100,36 +100,11 @@ func (r *LedgerAccountGetRequest) NewResponseBody() *LedgerAccountGetResponseBod
 }
 
 type LedgerAccountGetResponseBody struct {
-	FullResultSize int    `json:"fullResultSize"`
-	From           int    `json:"from"`
-	Count          int    `json:"count"`
-	VersionDigest  string `json:"versionDigest"`
-	Values         []struct {
-		ID          int    `json:"id"`
-		Version     int    `json:"version"`
-		URL         string `json:"url"`
-		Number      int    `json:"number"`
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Type        string `json:"type"`
-		VatType     struct {
-			ID  int    `json:"id"`
-			URL string `json:"url"`
-		} `json:"vatType"`
-		VatLocked                      bool        `json:"vatLocked"`
-		Currency                       interface{} `json:"currency"`
-		IsCloseable                    bool        `json:"isCloseable"`
-		IsApplicableForSupplierInvoice bool        `json:"isApplicableForSupplierInvoice"`
-		RequireReconciliation          bool        `json:"requireReconciliation"`
-		IsInactive                     bool        `json:"isInactive"`
-		IsBankAccount                  bool        `json:"isBankAccount"`
-		IsInvoiceAccount               bool        `json:"isInvoiceAccount"`
-		BankAccountNumber              string      `json:"bankAccountNumber"`
-		BankAccountCountry             interface{} `json:"bankAccountCountry"`
-		BankName                       string      `json:"bankName"`
-		BankAccountIBAN                string      `json:"bankAccountIBAN"`
-		BankAccountSWIFT               string      `json:"bankAccountSWIFT"`
-	} `json:"values"`
+	FullResultSize int      `json:"fullResultSize"`
+	From           int      `json:"from"`
+	Count          int      `json:"count"`
+	VersionDigest  string   `json:"versionDigest"`
+	Values         Accounts `json:"values"`
 }
 
 func (r *LedgerAccountGetRequest) URL() url.URL {

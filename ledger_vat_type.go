@@ -7,41 +7,41 @@ import (
 	"github.com/omniboost/go-tripletex/utils"
 )
 
-func (c *Client) NewLedgerVatTypeRequest() LedgerVatTypeRequest {
-	r := LedgerVatTypeRequest{
+func (c *Client) NewLedgerVATTypeRequest() LedgerVATTypeRequest {
+	r := LedgerVATTypeRequest{
 		client:  c,
 		method:  http.MethodGet,
 		headers: http.Header{},
 	}
 
-	r.queryParams = r.NewLedgerVatTypeQueryParams()
-	r.pathParams = r.NewLedgerVatTypePathParams()
-	r.requestBody = r.NewLedgerVatTypeRequestBody()
+	r.queryParams = r.NewLedgerVATTypeQueryParams()
+	r.pathParams = r.NewLedgerVATTypePathParams()
+	r.requestBody = r.NewLedgerVATTypeRequestBody()
 	return r
 }
 
-type LedgerVatTypeRequest struct {
+type LedgerVATTypeRequest struct {
 	client      *Client
-	queryParams *LedgerVatTypeQueryParams
-	pathParams  *LedgerVatTypePathParams
+	queryParams *LedgerVATTypeQueryParams
+	pathParams  *LedgerVATTypePathParams
 	method      string
 	headers     http.Header
-	requestBody LedgerVatTypeRequestBody
+	requestBody LedgerVATTypeRequestBody
 }
 
-func (r LedgerVatTypeRequest) NewLedgerVatTypeQueryParams() *LedgerVatTypeQueryParams {
-	return &LedgerVatTypeQueryParams{
+func (r LedgerVATTypeRequest) NewLedgerVATTypeQueryParams() *LedgerVATTypeQueryParams {
+	return &LedgerVATTypeQueryParams{
 		From:  0,
 		Count: 1000,
 	}
 }
 
-type LedgerVatTypeQueryParams struct {
+type LedgerVATTypeQueryParams struct {
 	From  int `schema:"from"`
 	Count int `schema:"count"`
 }
 
-func (p LedgerVatTypeQueryParams) ToURLValues() (url.Values, error) {
+func (p LedgerVATTypeQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	params := url.Values{}
@@ -54,71 +54,64 @@ func (p LedgerVatTypeQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *LedgerVatTypeRequest) QueryParams() *LedgerVatTypeQueryParams {
+func (r *LedgerVATTypeRequest) QueryParams() *LedgerVATTypeQueryParams {
 	return r.queryParams
 }
 
-func (r LedgerVatTypeRequest) NewLedgerVatTypePathParams() *LedgerVatTypePathParams {
-	return &LedgerVatTypePathParams{}
+func (r LedgerVATTypeRequest) NewLedgerVATTypePathParams() *LedgerVATTypePathParams {
+	return &LedgerVATTypePathParams{}
 }
 
-type LedgerVatTypePathParams struct {
+type LedgerVATTypePathParams struct {
 }
 
-func (p *LedgerVatTypePathParams) Params() map[string]string {
+func (p *LedgerVATTypePathParams) Params() map[string]string {
 	return map[string]string{}
 }
 
-func (r *LedgerVatTypeRequest) PathParams() *LedgerVatTypePathParams {
+func (r *LedgerVATTypeRequest) PathParams() *LedgerVATTypePathParams {
 	return r.pathParams
 }
 
-func (r *LedgerVatTypeRequest) SetMethod(method string) {
+func (r *LedgerVATTypeRequest) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *LedgerVatTypeRequest) Method() string {
+func (r *LedgerVATTypeRequest) Method() string {
 	return r.method
 }
 
-func (r LedgerVatTypeRequest) NewLedgerVatTypeRequestBody() LedgerVatTypeRequestBody {
-	return LedgerVatTypeRequestBody{}
+func (r LedgerVATTypeRequest) NewLedgerVATTypeRequestBody() LedgerVATTypeRequestBody {
+	return LedgerVATTypeRequestBody{}
 }
 
-type LedgerVatTypeRequestBody struct{}
+type LedgerVATTypeRequestBody struct{}
 
-func (r *LedgerVatTypeRequest) RequestBody() *LedgerVatTypeRequestBody {
+func (r *LedgerVATTypeRequest) RequestBody() *LedgerVATTypeRequestBody {
 	return &r.requestBody
 }
 
-func (r *LedgerVatTypeRequest) SetRequestBody(body LedgerVatTypeRequestBody) {
+func (r *LedgerVATTypeRequest) SetRequestBody(body LedgerVATTypeRequestBody) {
 	r.requestBody = body
 }
 
-func (r *LedgerVatTypeRequest) NewResponseBody() *LedgerVatTypeResponseBody {
-	return &LedgerVatTypeResponseBody{}
+func (r *LedgerVATTypeRequest) NewResponseBody() *LedgerVATTypeResponseBody {
+	return &LedgerVATTypeResponseBody{}
 }
 
-type LedgerVatTypeResponseBody struct {
-	FullResultSize int    `json:"fullResultSize"`
-	From           int    `json:"from"`
-	Count          int    `json:"count"`
-	VersionDigest  string `json:"versionDigest"`
-	Values         []struct {
-		ID         int     `json:"id"`
-		Version    int     `json:"version"`
-		URL        string  `json:"url"`
-		Name       string  `json:"name"`
-		Number     string  `json:"number"`
-		Percentage float64 `json:"percentage"`
-	} `json:"values"`
+type LedgerVATTypeResponseBody struct {
+	FullResultSize int      `json:"fullResultSize"`
+	From           int      `json:"from"`
+	Count          int      `json:"count"`
+	VersionDigest  string   `json:"versionDigest"`
+	Values         VATTypes `json:"values"`
 }
 
-func (r *LedgerVatTypeRequest) URL() url.URL {
+func (r *LedgerVATTypeRequest) URL() url.URL {
 	return r.client.GetEndpointURL("/ledger/vatType", r.PathParams())
 }
 
-func (r *LedgerVatTypeRequest) Do() (LedgerVatTypeResponseBody, error) {
+func (r *LedgerVATTypeRequest) Do() (LedgerVATTypeResponseBody, error) {
 	// fetch a new token if it isn't set already
 	if r.client.token == "" {
 		var err error

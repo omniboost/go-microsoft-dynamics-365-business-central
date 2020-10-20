@@ -358,27 +358,24 @@ func CheckResponse(r *http.Response) error {
 
 	err = checkContentType(r)
 	if err != nil {
-		errorResponse.Err = errors.WithStack(err)
-		return errorResponse
+		return errors.WithStack(err)
 	}
 
 	if r.ContentLength == 0 {
-		errorResponse.Err = errors.New("response body is empty")
-		return errorResponse
+		return errors.New("response body is empty")
 	}
 
-	messages := struct {
-		Messages Messages `json:"messages"`
-	}{}
 	// convert json to struct
-	err = json.Unmarshal(data, &messages)
+	err = json.Unmarshal(data, &errorResponse)
 	if err != nil {
-		errorResponse.Err = errors.WithStack(err)
+		return errors.WithStack(err)
+	}
+
+	if errorResponse.Code != 0 {
 		return errorResponse
 	}
-	errorResponse.Err = messages.Messages
 
-	return errorResponse
+	return nil
 }
 
 type ErrorResponse struct {
@@ -386,39 +383,35 @@ type ErrorResponse struct {
 	Response *http.Response
 
 	// HTTP status code
-	Code int
-
-	// Fault message
-	Err error
+	Status             int                `json:"status"`
+	Code               int                `json:"code"`
+	Message            string             `json:"message"`
+	Link               string             `json:"link"`
+	DeveloperMessage   string             `json:"developerMessage"`
+	ValidationMessages ValidationMessages `json:"validationMessages"`
+	RequestID          string             `json:"requestId"`
 }
 
-type Messages []Message
+type ValidationMessages []ValidationMessage
 
-func (mm Messages) Error() string {
+type ValidationMessage struct {
+	Field   string `json:"field"`
+	Message string `json:"message"`
+	Path    string `json:"path"`
+	RootID  string `json:"rootId"`
+}
+
+func (r *ErrorResponse) Error() string {
 	var errs *multierror.Error
-	for _, m := range mm {
-		errs = multierror.Append(errs, m)
+	for _, m := range r.ValidationMessages {
+		e := errors.Errorf("%s: %s", m.Field, m.Message)
+		errs = multierror.Append(errs, e)
 	}
 
 	if errs == nil {
 		return ""
 	}
 	return errs.Error()
-}
-
-type Message struct {
-	ExceptionID string `json:"exceptionId"`
-	Message     string `json:"Message"`
-	MessageType string `json:"messageType"`
-	Path        string `json:"path"`
-}
-
-func (m Message) Error() string {
-	return fmt.Sprintf("%s", m.Message)
-}
-
-func (r *ErrorResponse) Error() string {
-	return r.Err.Error()
 }
 
 func checkContentType(response *http.Response) error {

@@ -6,9 +6,8 @@ import (
 	"testing"
 )
 
-func TestLedgerVatType(t *testing.T) {
-	req := client.NewLedgerVATTypeRequest()
-	// req.QueryParams().ExpirationDate = tripletex.Date{time.Now().AddDate(0, 0, 1)}
+func TestInvoicePost(t *testing.T) {
+	req := client.NewInvoicePostRequest()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

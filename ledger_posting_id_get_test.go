@@ -8,7 +8,7 @@ import (
 
 func TestLedgerPostingIDGet(t *testing.T) {
 	req := client.NewLedgerPostingIDGetRequest()
-	req.PathParams().ID = 599085840
+	req.PathParams().ID = 603915264
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

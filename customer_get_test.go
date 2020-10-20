@@ -6,10 +6,10 @@ import (
 	"testing"
 )
 
-func TestLedgerVoucherIDGet(t *testing.T) {
-	req := client.NewLedgerVoucherIDGetRequest()
-	req.PathParams().ID = 123576724
-	resp, err := req.Do()
+func TestCustomerGet(t *testing.T) {
+	req := client.NewCustomerGetRequest()
+	// req.QueryParams().Count = 1
+	resp, err := req.All()
 	if err != nil {
 		t.Error(err)
 	}
