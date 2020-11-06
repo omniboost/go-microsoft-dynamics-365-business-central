@@ -36,29 +36,29 @@ type Posting struct {
 type Accounts []Account
 
 type Account struct {
-	ID int `json:"id,omitempty"`
-	// Version                        int       `json:"version,omitempty"`
-	URL    string `json:"url"`
-	Number int    `json:"number"`
-	Name   string `json:"name"`
-	// Description                    string    `json:"description"`
-	// VatType                        VATType   `json:"vatType"`
-	// VatLocked                      bool      `json:"vatLocked"`
-	// Currency                       *Currency `json:"currency"`
-	// IsCloseable                    bool      `json:"isCloseable"`
-	// IsApplicableForSupplierInvoice bool      `json:"isApplicableForSupplierInvoice"`
-	// RequireReconciliation          bool      `json:"requireReconciliation"`
-	// IsInactive                     bool      `json:"isInactive"`
-	// IsBankAccount                  bool      `json:"isBankAccount"`
-	// IsInvoiceAccount               bool      `json:"isInvoiceAccount"`
-	// BankAccountNumber              string    `json:"bankAccountNumber"`
-	// BankAccountCountry             struct {
-	// 	ID      int `json:"id"`
-	// 	Version int `json:"version"`
-	// } `json:"bankAccountCountry"`
-	// BankName         string `json:"bankName"`
-	// BankAccountIBAN  string `json:"bankAccountIBAN"`
-	// BankAccountSWIFT string `json:"bankAccountSWIFT"`
+	ID                             int       `json:"id,omitempty"`
+	Version                        int       `json:"version,omitempty"`
+	URL                            string    `json:"url"`
+	Number                         int       `json:"number"`
+	Name                           string    `json:"name"`
+	Description                    string    `json:"description"`
+	VATType                        VATType   `json:"vatType"`
+	VATLocked                      bool      `json:"vatLocked"`
+	Currency                       *Currency `json:"currency"`
+	IsCloseable                    bool      `json:"isCloseable"`
+	IsApplicableForSupplierInvoice bool      `json:"isApplicableForSupplierInvoice"`
+	RequireReconciliation          bool      `json:"requireReconciliation"`
+	IsInactive                     bool      `json:"isInactive"`
+	IsBankAccount                  bool      `json:"isBankAccount"`
+	IsInvoiceAccount               bool      `json:"isInvoiceAccount"`
+	BankAccountNumber              string    `json:"bankAccountNumber"`
+	BankAccountCountry             struct {
+		ID      int `json:"id"`
+		Version int `json:"version"`
+	} `json:"bankAccountCountry"`
+	BankName         string `json:"bankName"`
+	BankAccountIBAN  string `json:"bankAccountIBAN"`
+	BankAccountSWIFT string `json:"bankAccountSWIFT"`
 }
 
 type Customers []Customer
