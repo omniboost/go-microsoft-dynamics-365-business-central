@@ -81,17 +81,7 @@ func (r InvoicePostRequest) NewInvoicePostRequestBody() InvoicePostRequestBody {
 	return InvoicePostRequestBody{}
 }
 
-type InvoicePostRequestBody struct {
-	ID          int          `json:"id,omitempty"`
-	Version     int          `json:"version,omitempty"`
-	Date        string       `json:"date"`
-	Description string       `json:"description"`
-	VoucherType *VoucherType `json:"voucherType,omitempty"`
-	Postings    Postings     `json:"postings"`
-	Document    *Document    `json:"document,omitempty"`
-	Attachment  *Attachment  `json:"attachment,omitempty"`
-	EDIDocument *EDIDocument `json:"ediDocument,omitempty"`
-}
+type InvoicePostRequestBody Invoice
 
 func (r *InvoicePostRequest) RequestBody() *InvoicePostRequestBody {
 	return &r.requestBody

@@ -526,11 +526,11 @@ type VATType struct {
 }
 
 type Currency struct {
-	// 		ID          int    `json:"id"`
-	// 		Version     int    `json:"version"`
-	// 		Code        string `json:"code"`
-	// 		Description string `json:"description"`
-	// 		Factor      int    `json:"factor"`
+	// ID          int    `json:"id,omitempty"`
+	// Version     int    `json:"version,omitempty"`
+	// Code        string `json:"code"`
+	// Description string `json:"description,omitempty"`
+	// Factor      int    `json:"factor,omitempty"`
 }
 
 type CloseGroup struct {
@@ -565,15 +565,15 @@ type Invoice struct {
 	InvoiceDate    string   `json:"invoiceDate"`
 	Customer       Customer `json:"customer"`
 	InvoiceDueDate string   `json:"invoiceDueDate"`
-	Kid            string   `json:"kid"`
+	KID            string   `json:"kid"`
 	Comment        string   `json:"comment"`
 	Orders         Orders   `json:"orders"`
 	Voucher        Voucher  `json:"voucher"`
-	Currency       Currency `json:"currency"`
-	InvoiceRemarks string   `json:"invoiceRemarks"`
-	PaymentTypeID  int      `json:"paymentTypeId"`
-	PaidAmount     int      `json:"paidAmount"`
-	EhfSendStatus  string   `json:"ehfSendStatus"`
+	// Currency       Currency `json:"currency"`
+	InvoiceRemarks string `json:"invoiceRemarks"`
+	PaymentTypeID  int    `json:"paymentTypeId"`
+	PaidAmount     int    `json:"paidAmount"`
+	EhfSendStatus  string `json:"ehfSendStatus,omitempty"`
 }
 
 type Voucher struct {
@@ -591,46 +591,46 @@ type Voucher struct {
 type Orders []Order
 
 type Order struct {
-	ID                 int      `json:"id"`
-	Version            int      `json:"version"`
-	URL                string   `json:"url"`
-	Customer           Customer `json:"customer"`
-	Contact            Contact  `json:"contact"`
-	Attn               Attn     `json:"attn"`
-	ReceiverEmail      string   `json:"receiverEmail"`
-	OverdueNoticeEmail string   `json:"overdueNoticeEmail"`
-	Number             string   `json:"number"`
-	Reference          string   `json:"reference"`
-	OurContact         Contact  `json:"ourContact"`
-	OurContactEmployee Contact  `json:"ourContactEmployee"`
-	Department         struct {
-		ID               int    `json:"id"`
-		Version          int    `json:"version"`
-		Name             string `json:"name"`
-		DepartmentNumber string `json:"departmentNumber"`
-	} `json:"department"`
-	OrderDate                                   string     `json:"orderDate"`
-	Project                                     Project    `json:"project"`
-	InvoiceComment                              string     `json:"invoiceComment"`
-	Currency                                    Currency   `json:"currency"`
-	InvoicesDueIn                               int        `json:"invoicesDueIn"`
-	InvoicesDueInType                           string     `json:"invoicesDueInType"`
-	IsShowOpenPostsOnInvoices                   bool       `json:"isShowOpenPostsOnInvoices"`
-	IsClosed                                    bool       `json:"isClosed"`
-	DeliveryDate                                string     `json:"deliveryDate"`
-	DeliveryAddress                             Address    `json:"deliveryAddress"`
-	DeliveryComment                             string     `json:"deliveryComment"`
-	IsPrioritizeAmountsIncludingVat             bool       `json:"isPrioritizeAmountsIncludingVat"`
-	OrderLineSorting                            string     `json:"orderLineSorting"`
-	OrderLines                                  OrderLines `json:"orderLines"`
-	IsSubscription                              bool       `json:"isSubscription"`
-	SubscriptionDuration                        int        `json:"subscriptionDuration"`
-	SubscriptionDurationType                    string     `json:"subscriptionDurationType"`
-	SubscriptionPeriodsOnInvoice                int        `json:"subscriptionPeriodsOnInvoice"`
-	SubscriptionInvoicingTimeInAdvanceOrArrears string     `json:"subscriptionInvoicingTimeInAdvanceOrArrears"`
-	SubscriptionInvoicingTime                   int        `json:"subscriptionInvoicingTime"`
-	SubscriptionInvoicingTimeType               string     `json:"subscriptionInvoicingTimeType"`
-	IsSubscriptionAutoInvoicing                 bool       `json:"isSubscriptionAutoInvoicing"`
+	// ID                 int      `json:"id"`
+	// Version            int      `json:"version"`
+	// URL                string   `json:"url"`
+	Customer Customer `json:"customer"`
+	// Contact            Contact  `json:"contact"`
+	// Attn               Attn     `json:"attn"`
+	ReceiverEmail      string `json:"receiverEmail"`
+	OverdueNoticeEmail string `json:"overdueNoticeEmail"`
+	Number             string `json:"number"`
+	Reference          string `json:"reference"`
+	// OurContact         Contact `json:"ourContact"`
+	// OurContactEmployee Contact `json:"ourContactEmployee"`
+	// Department         struct {
+	// 	ID               int    `json:"id"`
+	// 	Version          int    `json:"version"`
+	// 	Name             string `json:"name"`
+	// 	DepartmentNumber string `json:"departmentNumber"`
+	// } `json:"department"`
+	OrderDate string `json:"orderDate"`
+	// Project                                     Project    `json:"project"`
+	InvoiceComment string `json:"invoiceComment"`
+	// Currency       Currency `json:"currency"`
+	// InvoicesDueIn                               int        `json:"invoicesDueIn"`
+	// InvoicesDueInType                           string     `json:"invoicesDueInType"`
+	IsShowOpenPostsOnInvoices bool `json:"isShowOpenPostsOnInvoices"`
+	// IsClosed                                    bool       `json:"isClosed"`
+	DeliveryDate string `json:"deliveryDate"`
+	// DeliveryAddress                             Address    `json:"deliveryAddress"`
+	// DeliveryComment                             string     `json:"deliveryComment"`
+	// IsPrioritizeAmountsIncludingVat             bool       `json:"isPrioritizeAmountsIncludingVat"`
+	// OrderLineSorting                            string     `json:"orderLineSorting"`
+	OrderLines OrderLines `json:"orderLines"`
+	// IsSubscription                              bool       `json:"isSubscription"`
+	// SubscriptionDuration                        int        `json:"subscriptionDuration"`
+	// SubscriptionDurationType                    string     `json:"subscriptionDurationType"`
+	// SubscriptionPeriodsOnInvoice                int        `json:"subscriptionPeriodsOnInvoice"`
+	// SubscriptionInvoicingTimeInAdvanceOrArrears string     `json:"subscriptionInvoicingTimeInAdvanceOrArrears"`
+	// SubscriptionInvoicingTime                   int        `json:"subscriptionInvoicingTime"`
+	// SubscriptionInvoicingTimeType               string     `json:"subscriptionInvoicingTimeType"`
+	// IsSubscriptionAutoInvoicing                 bool       `json:"isSubscriptionAutoInvoicing"`
 }
 
 type Contact struct {
@@ -684,37 +684,39 @@ type Address struct {
 type OrderLines []OrderLine
 
 type OrderLine struct {
-	ID        int     `json:"id"`
-	Version   int     `json:"version"`
-	URL       string  `json:"url"`
-	Product   Product `json:"product"`
-	Inventory struct {
-		ID              int    `json:"id"`
-		Version         int    `json:"version"`
-		Name            string `json:"name"`
-		Number          string `json:"number"`
-		IsMainInventory bool   `json:"isMainInventory"`
-		IsInactive      bool   `json:"isInactive"`
-	} `json:"inventory"`
-	Description                   string   `json:"description"`
-	Count                         int      `json:"count"`
-	UnitCostCurrency              int      `json:"unitCostCurrency"`
-	UnitPriceExcludingVatCurrency int      `json:"unitPriceExcludingVatCurrency"`
-	Currency                      Currency `json:"currency"`
-	Markup                        int      `json:"markup"`
-	Discount                      int      `json:"discount"`
-	VATType                       VATType  `json:"vatType"`
-	UnitPriceIncludingVatCurrency int      `json:"unitPriceIncludingVatCurrency"`
-	IsSubscription                bool     `json:"isSubscription"`
-	SubscriptionPeriodStart       string   `json:"subscriptionPeriodStart"`
-	SubscriptionPeriodEnd         string   `json:"subscriptionPeriodEnd"`
-	OrderGroup                    struct {
-		ID        int    `json:"id"`
-		Version   int    `json:"version"`
-		Title     string `json:"title"`
-		Comment   string `json:"comment"`
-		SortIndex int    `json:"sortIndex"`
-	} `json:"orderGroup"`
+	ID int `json:"id"`
+	// Version int     `json:"version"`
+	// URL     string  `json:"url"`
+	Product Product `json:"product"`
+	// Inventory struct {
+	// 	ID              int    `json:"id"`
+	// 	Version         int    `json:"version"`
+	// 	Name            string `json:"name"`
+	// 	Number          string `json:"number"`
+	// 	IsMainInventory bool   `json:"isMainInventory"`
+	// 	IsInactive      bool   `json:"isInactive"`
+	// } `json:"inventory"`
+	Description                   string  `json:"description"`
+	Count                         int     `json:"count"`
+	UnitCostCurrency              int     `json:"unitCostCurrency"`
+	UnitPriceExcludingVATCurrency float64 `json:"unitPriceExcludingVatCurrency"`
+	// Currency                      Currency `json:"currency"`
+	// Markup                        int     `json:"markup"`
+	// Discount                      int     `json:"discount"`
+	VATType                       VATType `json:"vatType"`
+	UnitPriceIncludingVATCurrency float64 `json:"unitPriceIncludingVatCurrency"`
+	AmountExcludingVATCurrency    float64 `json:"amountExcludingVatCurrency"`
+	AmountIncludingVATCurrency    float64 `json:"amountIncludingVatCurrency"`
+	// IsSubscription                bool    `json:"isSubscription"`
+	// SubscriptionPeriodStart       string  `json:"subscriptionPeriodStart"`
+	// SubscriptionPeriodEnd         string  `json:"subscriptionPeriodEnd"`
+	// OrderGroup                    struct {
+	// 	ID        int    `json:"id"`
+	// 	Version   int    `json:"version"`
+	// 	Title     string `json:"title"`
+	// 	Comment   string `json:"comment"`
+	// 	SortIndex int    `json:"sortIndex"`
+	// } `json:"orderGroup"`
 }
 
 type AccountManager struct {
