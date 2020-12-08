@@ -1,9 +1,9 @@
-package tripletex
+package guestline
 
 import (
 	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"strconv"
+	"path"
 	"strings"
 	"text/template"
 
@@ -21,21 +21,21 @@ import (
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-tripletex/" + libraryVersion
-	mediaType      = "application/json"
+	userAgent      = "go-guestline/" + libraryVersion
+	mediaType      = "text/xml"
 	charset        = "utf-8"
 )
 
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "tripletex.no",
-		Path:   "/v2",
+		Host:   "pmsws.eu.guestline.net",
+		Path:   "/RLXSoapRouter",
 	}
 )
 
 // NewClient returns a new Exact Globe Client client
-func NewClient(httpClient *http.Client, consumerToken string, employeeToken string) *Client {
+func NewClient(httpClient *http.Client, siteID, interfaceID, operatorCode, password string) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -43,8 +43,10 @@ func NewClient(httpClient *http.Client, consumerToken string, employeeToken stri
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetConsumerToken(consumerToken)
-	client.SetEmployeeToken(employeeToken)
+	client.SetSiteID(siteID)
+	client.SetInterfaceID(interfaceID)
+	client.SetOperatorCode(operatorCode)
+	client.SetPassword(password)
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -63,18 +65,18 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	consumerToken string
-	employeeToken string
+	siteID       string
+	interfaceID  string
+	operatorCode string
+	password     string
 
-	companyID int
-	token     string
+	sessionID string
 
 	// User agent for client
 	userAgent string
 
-	mediaType             string
-	charset               string
-	disallowUnknownFields bool
+	mediaType string
+	charset   string
 
 	// Optional function called after every successful request made to the DO Clients
 	onRequestCompleted RequestCompletionCallback
@@ -95,28 +97,36 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) ConsumerToken() string {
-	return c.consumerToken
+func (c Client) SiteID() string {
+	return c.siteID
 }
 
-func (c *Client) SetConsumerToken(consumerToken string) {
-	c.consumerToken = consumerToken
+func (c *Client) SetSiteID(siteID string) {
+	c.siteID = siteID
 }
 
-func (c Client) EmployeeToken() string {
-	return c.employeeToken
+func (c Client) InterfaceID() string {
+	return c.interfaceID
 }
 
-func (c *Client) SetEmployeeToken(employeeToken string) {
-	c.employeeToken = employeeToken
+func (c *Client) SetInterfaceID(interfaceID string) {
+	c.interfaceID = interfaceID
 }
 
-func (c Client) CompanyID() int {
-	return c.companyID
+func (c Client) OperatorCode() string {
+	return c.operatorCode
 }
 
-func (c *Client) SetCompanyID(companyID int) {
-	c.companyID = companyID
+func (c *Client) SetOperatorCode(operatorCode string) {
+	c.operatorCode = operatorCode
+}
+
+func (c Client) Password() string {
+	return c.password
+}
+
+func (c *Client) SetPassword(password string) {
+	c.password = password
 }
 
 func (c Client) BaseURL() url.URL {
@@ -151,13 +161,22 @@ func (c Client) UserAgent() string {
 	return userAgent
 }
 
-func (c *Client) SetDisallowUnknownFields(disallowUnknownFields bool) {
-	c.disallowUnknownFields = disallowUnknownFields
-}
-
-func (c *Client) GetEndpointURL(path string, pathParams PathParams) url.URL {
+func (c *Client) GetEndpointURL(p string, pathParams PathParams) url.URL {
 	clientURL := c.BaseURL()
-	clientURL.Path = clientURL.Path + path
+
+	parsed, err := url.Parse(p)
+	if err != nil {
+		log.Fatal(err)
+	}
+	q := clientURL.Query()
+	for k, vv := range parsed.Query() {
+		for _, v := range vv {
+			q.Add(k, v)
+		}
+	}
+	clientURL.RawQuery = q.Encode()
+
+	clientURL.Path = path.Join(clientURL.Path, parsed.Path)
 
 	tmpl, err := template.New("path").Parse(clientURL.Path)
 	if err != nil {
@@ -176,18 +195,37 @@ func (c *Client) GetEndpointURL(path string, pathParams PathParams) url.URL {
 	return clientURL
 }
 
-func (c *Client) NewRequest(ctx context.Context, method string, URL url.URL, body interface{}) (*http.Request, error) {
-	// convert body struct to json
+func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, error) {
+	// convert body struct to xml
 	buf := new(bytes.Buffer)
-	if body != nil {
-		err := json.NewEncoder(buf).Encode(body)
+	if req.RequestBodyInterface() != nil {
+		soapRequest := RequestEnvelope{
+			Namespaces: []xml.Attr{
+				{Name: xml.Name{Space: "", Local: "xmlns:xsi"}, Value: "http://www.w3.org/2001/XMLSchema-instance"},
+				{Name: xml.Name{Space: "", Local: "xmlns:xsd"}, Value: "http://www.w3.org/2001/XMLSchema"},
+				{Name: xml.Name{Space: "", Local: "xmlns:soap"}, Value: "http://schemas.xmlsoap.org/soap/envelope/"},
+			},
+			// Header: Header{},
+			Body: Body{
+				ActionBody: req.RequestBodyInterface(),
+			},
+		}
+
+		enc := xml.NewEncoder(buf)
+		enc.Indent("", "  ")
+		err := enc.Encode(soapRequest)
+		if err != nil {
+			return nil, err
+		}
+
+		err = enc.Flush()
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	// create new http request
-	req, err := http.NewRequest(method, URL.String(), buf)
+	r, err := http.NewRequest(req.Method(), req.URL().String(), buf)
 	if err != nil {
 		return nil, err
 	}
@@ -200,25 +238,22 @@ func (c *Client) NewRequest(ctx context.Context, method string, URL url.URL, bod
 
 	// optionally pass along context
 	if ctx != nil {
-		req = req.WithContext(ctx)
-	}
-
-	if c.token != "" {
-		req.SetBasicAuth(strconv.Itoa(c.companyID), c.token)
+		r = r.WithContext(ctx)
 	}
 
 	// set other headers
-	req.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
-	req.Header.Add("Accept", c.MediaType())
-	req.Header.Add("User-Agent", c.UserAgent())
+	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
+	r.Header.Add("Accept", c.MediaType())
+	r.Header.Add("User-Agent", c.UserAgent())
+	// r.Header.Add("SOAPAction", fmt.Sprintf("http://tempuri.org/RLXSOAP19/RLXSOAP19/%s", req.SOAPAction()))
 
-	return req, nil
+	return r, nil
 }
 
-// Do sends an Client request and returns the Client response. The Client response is json decoded and stored in the value
+// Do sends an Client request and returns the Client response. The Client response is xml decoded and stored in the value
 // pointed to by v, or returned as an error if an Client error has occurred. If v implements the io.Writer interface,
 // the raw response will be written to v, without attempting to decode it.
-func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response, error) {
+func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error) {
 	if c.debug == true {
 		dump, _ := httputil.DumpRequestOut(req, true)
 		log.Println(string(dump))
@@ -256,22 +291,18 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 		return httpResp, nil
 	}
 
-	if responseBody == nil {
+	if body == nil {
 		return httpResp, err
 	}
 
-	// interface implements io.Writer: write Body to it
-	// if w, ok := response.Envelope.(io.Writer); ok {
-	// 	_, err := io.Copy(w, httpResp.Body)
-	// 	return httpResp, err
-	// }
-
-	// try to decode body into interface parameter
-	if responseBody == nil {
-		return httpResp, nil
+	soapResponse := ResponseEnvelope{
+		// Header: Header{},
+		Body: Body{
+			ActionBody: body,
+		},
 	}
 
-	err = c.Unmarshal(httpResp.Body, &responseBody)
+	err = c.Unmarshal(httpResp.Body, &soapResponse)
 	if err != nil {
 		return httpResp, err
 	}
@@ -296,11 +327,7 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	errs := []error{}
 	for _, v := range vv {
 		r := bytes.NewReader(b)
-		dec := json.NewDecoder(r)
-		if c.disallowUnknownFields {
-			dec.DisallowUnknownFields()
-		}
-
+		dec := xml.NewDecoder(r)
 		err := dec.Decode(v)
 		if err != nil {
 			errs = append(errs, err)
@@ -320,21 +347,34 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	return nil
 }
 
-func (c *Client) NewToken() (string, error) {
-	req := c.NewTokenSessionCreateRequest()
+func (c *Client) SessionID() (string, error) {
+	// fetch a new token if it isn't set already
+	if c.sessionID == "" {
+		var err error
+		c.sessionID, err = c.NewSessionID()
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return c.sessionID, nil
+}
+
+func (c *Client) NewSessionID() (string, error) {
+	req := c.NewLoginRequest()
 	resp, err := req.Do()
 	if err != nil {
 		return "", err
 	}
 
-	return resp.Value.Token, nil
+	return resp.SessionID, nil
 
 }
 
 // CheckResponse checks the Client response for errors, and returns them if
 // present. A response is considered an error if it has a status code outside
 // the 200 range. Client error responses are expected to have either no response
-// body, or a json response body that maps to ErrorResponse. Any other response
+// body, or a xml response body that maps to ErrorResponse. Any other response
 // body will be silently ignored.
 func CheckResponse(r *http.Response) error {
 	errorResponse := &ErrorResponse{Response: r}
@@ -365,8 +405,8 @@ func CheckResponse(r *http.Response) error {
 		return errors.New("response body is empty")
 	}
 
-	// convert json to struct
-	err = json.Unmarshal(data, &errorResponse)
+	// convert xml to struct
+	err = xml.Unmarshal(data, &errorResponse)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -422,8 +462,4 @@ func checkContentType(response *http.Response) error {
 	}
 
 	return nil
-}
-
-type PathParams interface {
-	Params() map[string]string
 }

@@ -1,4 +1,4 @@
-package tripletex
+package guestline
 
 type VoucherType struct {
 	ID      int    `json:"id"`

@@ -1,4 +1,4 @@
-module github.com/omniboost/go-tripletex
+module github.com/omniboost/go-guestline
 
 go 1.15
 

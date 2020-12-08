@@ -1,4 +1,4 @@
-package tripletex_test
+package guestline_test
 
 import (
 	"log"
@@ -6,19 +6,21 @@ import (
 	"os"
 	"testing"
 
-	tripletex "github.com/omniboost/go-tripletex"
+	guestline "github.com/omniboost/go-guestline"
 )
 
 var (
-	client *tripletex.Client
+	client *guestline.Client
 )
 
 func TestMain(m *testing.M) {
 	var err error
 
 	baseURLString := os.Getenv("BASE_URL")
-	consumerToken := os.Getenv("CONSUMER_TOKEN")
-	employeeToken := os.Getenv("EMPLOYEE_TOKEN")
+	siteID := os.Getenv("SITE_ID")
+	interfaceID := os.Getenv("INTERFACE_ID")
+	operatorCode := os.Getenv("OPERATOR_CODE")
+	password := os.Getenv("PASSWORD")
 	debug := os.Getenv("DEBUG")
 	var baseURL *url.URL
 
@@ -29,7 +31,7 @@ func TestMain(m *testing.M) {
 		}
 	}
 
-	client = tripletex.NewClient(nil, consumerToken, employeeToken)
+	client = guestline.NewClient(nil, siteID, interfaceID, operatorCode, password)
 	if debug != "" {
 		client.SetDebug(true)
 	}
@@ -38,6 +40,5 @@ func TestMain(m *testing.M) {
 		client.SetBaseURL(*baseURL)
 	}
 
-	client.SetDisallowUnknownFields(true)
 	m.Run()
 }

@@ -1,4 +1,4 @@
-package tripletex_test
+package guestline_test
 
 import (
 	"encoding/json"
@@ -7,8 +7,8 @@ import (
 )
 
 func TestTokenSessionCreate(t *testing.T) {
-	req := client.NewTokenSessionCreateRequest()
-	// req.QueryParams().ExpirationDate = tripletex.Date{time.Now().AddDate(0, 0, 1)}
+	req := client.NewLoginRequest()
+	// req.QueryParams().ExpirationDate = guestline.Date{time.Now().AddDate(0, 0, 1)}
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
