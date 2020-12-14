@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	guestline "github.com/omniboost/go-guestline"
+	guestline "github.com/omniboost/go-dkplus"
 )
 
 func TestGetDepartures(t *testing.T) {

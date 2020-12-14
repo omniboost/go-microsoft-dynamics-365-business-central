@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-guestline/utils"
+	"github.com/omniboost/go-dkplus/utils"
 )
 
 func (c *Client) NewLoginRequest() LoginRequest {

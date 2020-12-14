@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-guestline/utils"
+	"github.com/omniboost/go-dkplus/utils"
 )
 
 func (c *Client) NewGetArrivalsRequest() GetArrivalsRequest {
@@ -106,40 +106,7 @@ func (r *GetArrivalsRequest) NewResponseBody() *GetArrivalsResponseBody {
 type GetArrivalsResponseBody struct {
 	XMLName                 xml.Name       `xml:GetArrivalsResponse`
 	PmsintGetArrivalsResult ExceptionBlock `xml:"pmsint_GetArrivalsResult"`
-	GetArrivals             struct {
-		Arrivals struct {
-			CpmsintGetArrivalsArrivalItem []struct {
-				DepositPaid              string `xml:"DepositPaid"`
-				DepositDue               string `xml:"DepositDue"`
-				Infants                  string `xml:"Infants"`
-				Children                 string `xml:"Children"`
-				Adults                   string `xml:"Adults"`
-				RoomType                 string `xml:"RoomType"`
-				Package                  string `xml:"Package"`
-				Company                  string `xml:"Company"`
-				Notes                    string `xml:"Notes"`
-				BookRef                  string `xml:"BookRef"`
-				BookRefRoomRef           string `xml:"BookRefRoomRef"`
-				ETA                      string `xml:"ETA"`
-				Salutation               string `xml:"Salutation"`
-				Surname                  string `xml:"Surname"`
-				Forename                 string `xml:"Forename"`
-				RoomID                   string `xml:"RoomID"`
-				ProfileReference         string `xml:"ProfileReference"`
-				DepositOutstanding       string `xml:"DepositOutstanding"`
-				TotalNights              string `xml:"TotalNights"`
-				PrivateNotes             string `xml:"PrivateNotes"`
-				PublicNotes              string `xml:"PublicNotes"`
-				CustomNotes1             string `xml:"CustomNotes1"`
-				CustomNotes2             string `xml:"CustomNotes2"`
-				CustomNotes3             string `xml:"CustomNotes3"`
-				ExternalNotes            string `xml:"ExternalNotes"`
-				PreCalcChargesTotalGross string `xml:"PreCalcChargesTotalGross"`
-				PreCalcChargesTotalNett  string `xml:"PreCalcChargesTotalNett"`
-				Master                   string `xml:"Master"`
-			} `xml:"cpmsint_GetArrivals_ArrivalItem"`
-		} `xml:"Arrivals"`
-	} `xml:"GetArrivals"`
+	Arrivals                Arrivals       `xml:"GetArrivals>Arrivals>cpmsint_GetArrivals_ArrivalItem"`
 }
 
 func (r *GetArrivalsRequest) URL() *url.URL {
@@ -171,4 +138,37 @@ func (r *GetArrivalsRequest) Do() (GetArrivalsResponseBody, error) {
 	responseBody := r.NewResponseBody()
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
+}
+
+type Arrivals []Arrival
+
+type Arrival struct {
+	DepositPaid              string `xml:"DepositPaid"`
+	DepositDue               string `xml:"DepositDue"`
+	Infants                  string `xml:"Infants"`
+	Children                 string `xml:"Children"`
+	Adults                   string `xml:"Adults"`
+	RoomType                 string `xml:"RoomType"`
+	Package                  string `xml:"Package"`
+	Company                  string `xml:"Company"`
+	Notes                    string `xml:"Notes"`
+	BookRef                  string `xml:"BookRef"`
+	BookRefRoomRef           string `xml:"BookRefRoomRef"`
+	ETA                      string `xml:"ETA"`
+	Salutation               string `xml:"Salutation"`
+	Surname                  string `xml:"Surname"`
+	Forename                 string `xml:"Forename"`
+	RoomID                   string `xml:"RoomID"`
+	ProfileReference         string `xml:"ProfileReference"`
+	DepositOutstanding       string `xml:"DepositOutstanding"`
+	TotalNights              string `xml:"TotalNights"`
+	PrivateNotes             string `xml:"PrivateNotes"`
+	PublicNotes              string `xml:"PublicNotes"`
+	CustomNotes1             string `xml:"CustomNotes1"`
+	CustomNotes2             string `xml:"CustomNotes2"`
+	CustomNotes3             string `xml:"CustomNotes3"`
+	ExternalNotes            string `xml:"ExternalNotes"`
+	PreCalcChargesTotalGross string `xml:"PreCalcChargesTotalGross"`
+	PreCalcChargesTotalNett  string `xml:"PreCalcChargesTotalNett"`
+	Master                   string `xml:"Master"`
 }

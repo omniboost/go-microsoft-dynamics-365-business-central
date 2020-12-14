@@ -1,4 +1,4 @@
-module github.com/omniboost/go-guestline
+module github.com/omniboost/go-dkplus
 
 go 1.15
 

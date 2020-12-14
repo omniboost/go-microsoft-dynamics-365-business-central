@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-guestline/utils"
+	"github.com/omniboost/go-dkplus/utils"
 )
 
 func (c *Client) NewGetDeparturesRequest() GetDeparturesRequest {
@@ -106,37 +106,7 @@ func (r *GetDeparturesRequest) NewResponseBody() *GetDeparturesResponseBody {
 type GetDeparturesResponseBody struct {
 	XMLName                   xml.Name       `xml:GetDeparturesResponse`
 	PmsintGetDeparturesResult ExceptionBlock `xml:"pmsint_GetDeparturesResult"`
-	GetDepartures             struct {
-		Departures struct {
-			CpmsintGetDeparturesDepartureItem []struct {
-				DepositPaid    string `xml:"DepositPaid"`
-				DepositDue     string `xml:"DepositDue"`
-				Infants        string `xml:"Infants"`
-				Children       string `xml:"Children"`
-				Adults         string `xml:"Adults"`
-				RoomType       string `xml:"RoomType"`
-				Package        string `xml:"Package"`
-				Company        string `xml:"Company"`
-				Notes          string `xml:"Notes"`
-				BookRef        string `xml:"BookRef"`
-				BookRefRoomRef string `xml:"BookRefRoomRef"`
-				ETA            string `xml:"ETA"`
-				Salutation     string `xml:"Salutation"`
-				Surname        string `xml:"Surname"`
-				Forename       string `xml:"Forename"`
-				RoomID         string `xml:"RoomID"`
-				ETD            string `xml:"ETD"`
-				PrivateNotes   string `xml:"PrivateNotes"`
-				PublicNotes    string `xml:"PublicNotes"`
-				CustomNotes1   string `xml:"CustomNotes1"`
-				CustomNotes2   string `xml:"CustomNotes2"`
-				CustomNotes3   string `xml:"CustomNotes3"`
-				ExternalNotes  string `xml:"ExternalNotes"`
-				RoomBalance    string `xml:"RoomBalance"`
-				Master         string `xml:"Master"`
-			} `xml:"cpmsint_GetDepartures_DepartureItem"`
-		} `xml:"Departures"`
-	} `xml:"GetDepartures"`
+	Departures                Departures     `xml:"GetDepartures>Departures>cpmsint_GetDepartures_DepartureItem"`
 }
 
 func (r *GetDeparturesRequest) URL() *url.URL {
@@ -168,4 +138,34 @@ func (r *GetDeparturesRequest) Do() (GetDeparturesResponseBody, error) {
 	responseBody := r.NewResponseBody()
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
+}
+
+type Departures []Departure
+
+type Departure struct {
+	DepositPaid    string `xml:"DepositPaid"`
+	DepositDue     string `xml:"DepositDue"`
+	Infants        string `xml:"Infants"`
+	Children       string `xml:"Children"`
+	Adults         string `xml:"Adults"`
+	RoomType       string `xml:"RoomType"`
+	Package        string `xml:"Package"`
+	Company        string `xml:"Company"`
+	Notes          string `xml:"Notes"`
+	BookRef        string `xml:"BookRef"`
+	BookRefRoomRef string `xml:"BookRefRoomRef"`
+	ETA            string `xml:"ETA"`
+	Salutation     string `xml:"Salutation"`
+	Surname        string `xml:"Surname"`
+	Forename       string `xml:"Forename"`
+	RoomID         string `xml:"RoomID"`
+	ETD            string `xml:"ETD"`
+	PrivateNotes   string `xml:"PrivateNotes"`
+	PublicNotes    string `xml:"PublicNotes"`
+	CustomNotes1   string `xml:"CustomNotes1"`
+	CustomNotes2   string `xml:"CustomNotes2"`
+	CustomNotes3   string `xml:"CustomNotes3"`
+	ExternalNotes  string `xml:"ExternalNotes"`
+	RoomBalance    string `xml:"RoomBalance"`
+	Master         string `xml:"Master"`
 }

@@ -15,13 +15,12 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
 )
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-guestline/" + libraryVersion
+	userAgent      = "go-dkplus/" + libraryVersion
 	mediaType      = "text/xml"
 	charset        = "utf-8"
 )
@@ -302,9 +301,15 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		},
 	}
 
-	err = c.Unmarshal(httpResp.Body, &soapResponse)
+	soapError := SoapError{}
+
+	err = c.Unmarshal(httpResp.Body, &soapResponse, &soapError)
 	if err != nil {
 		return httpResp, err
+	}
+
+	if soapError.Body.Fault.FaultCode != "" || soapError.Body.Fault.FaultString != "" {
+		return httpResp, &ErrorResponse{Response: httpResp, Err: soapError}
 	}
 
 	// if len(errorResponse.Messages) > 0 {
@@ -411,11 +416,32 @@ func CheckResponse(r *http.Response) error {
 		return errors.WithStack(err)
 	}
 
-	if errorResponse.Code != 0 {
-		return errorResponse
-	}
-
 	return nil
+}
+
+// <?xml version="1.0" encoding="utf-8"?>
+// <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+//   <soap:Body>
+//     <soap:Fault>
+//       <faultcode>soap:Client</faultcode>
+//       <faultstring>Server was unable to read request. ---&gt; There is an error in XML document (5, 34). ---&gt; Input string was not in a correct format.</faultstring>
+//       <detail/>
+//     </soap:Fault>
+//   </soap:Body>
+// </soap:Envelope>
+
+type SoapError struct {
+	XMLName xml.Name `xml:"Envelope"`
+	Body    struct {
+		Fault struct {
+			FaultCode   string `xml:"faultcode"`
+			FaultString string `xml:"faultstring"`
+		} `xml:"Fault"`
+	} `xml:"Body"`
+}
+
+func (e SoapError) Error() string {
+	return fmt.Sprintf("%s: %s", e.Body.Fault.FaultCode, e.Body.Fault.FaultString)
 }
 
 type ErrorResponse struct {
@@ -423,35 +449,11 @@ type ErrorResponse struct {
 	Response *http.Response
 
 	// HTTP status code
-	Status             int                `json:"status"`
-	Code               int                `json:"code"`
-	Message            string             `json:"message"`
-	Link               string             `json:"link"`
-	DeveloperMessage   string             `json:"developerMessage"`
-	ValidationMessages ValidationMessages `json:"validationMessages"`
-	RequestID          string             `json:"requestId"`
-}
-
-type ValidationMessages []ValidationMessage
-
-type ValidationMessage struct {
-	Field   string `json:"field"`
-	Message string `json:"message"`
-	Path    string `json:"path"`
-	RootID  string `json:"rootId"`
+	Err error
 }
 
 func (r *ErrorResponse) Error() string {
-	var errs *multierror.Error
-	for _, m := range r.ValidationMessages {
-		e := errors.Errorf("%s: %s", m.Field, m.Message)
-		errs = multierror.Append(errs, e)
-	}
-
-	if errs == nil {
-		return ""
-	}
-	return errs.Error()
+	return r.Err.Error()
 }
 
 func checkContentType(response *http.Response) error {
