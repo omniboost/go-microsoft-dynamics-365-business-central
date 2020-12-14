@@ -3,6 +3,7 @@ module github.com/omniboost/go-dkplus
 go 1.15
 
 require (
+	github.com/Azure/go-ntlmssp v0.0.0-20180810175552-4a21cbd618b4
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/schema v0.0.0-20171211162101-9fa3b6af65dc
 	github.com/hashicorp/go-multierror v1.1.0

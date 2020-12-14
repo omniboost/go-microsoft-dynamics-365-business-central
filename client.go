@@ -1,8 +1,9 @@
-package guestline
+package dkplus
 
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -21,20 +22,20 @@ import (
 const (
 	libraryVersion = "0.0.1"
 	userAgent      = "go-dkplus/" + libraryVersion
-	mediaType      = "text/xml"
+	mediaType      = "application/json"
 	charset        = "utf-8"
 )
 
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "pmsws.eu.guestline.net",
-		Path:   "/RLXSoapRouter",
+		Host:   "api.dkplus.is",
+		Path:   "/api/v1",
 	}
 )
 
 // NewClient returns a new Exact Globe Client client
-func NewClient(httpClient *http.Client, siteID, interfaceID, operatorCode, password string) *Client {
+func NewClient(httpClient *http.Client, token string) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -42,10 +43,7 @@ func NewClient(httpClient *http.Client, siteID, interfaceID, operatorCode, passw
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetSiteID(siteID)
-	client.SetInterfaceID(interfaceID)
-	client.SetOperatorCode(operatorCode)
-	client.SetPassword(password)
+	client.SetToken(token)
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -64,22 +62,21 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	siteID       string
-	interfaceID  string
-	operatorCode string
-	password     string
-
-	sessionID string
+	token string
 
 	// User agent for client
 	userAgent string
 
-	mediaType string
-	charset   string
+	mediaType             string
+	charset               string
+	disallowUnknownFields bool
 
 	// Optional function called after every successful request made to the DO Clients
+	beforeRequestDo    BeforeRequestDoCallback
 	onRequestCompleted RequestCompletionCallback
 }
+
+type BeforeRequestDoCallback func(*http.Client, *http.Request, interface{})
 
 // RequestCompletionCallback defines the type of the request callback function
 type RequestCompletionCallback func(*http.Request, *http.Response)
@@ -96,36 +93,12 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) SiteID() string {
-	return c.siteID
+func (c Client) Token() string {
+	return c.token
 }
 
-func (c *Client) SetSiteID(siteID string) {
-	c.siteID = siteID
-}
-
-func (c Client) InterfaceID() string {
-	return c.interfaceID
-}
-
-func (c *Client) SetInterfaceID(interfaceID string) {
-	c.interfaceID = interfaceID
-}
-
-func (c Client) OperatorCode() string {
-	return c.operatorCode
-}
-
-func (c *Client) SetOperatorCode(operatorCode string) {
-	c.operatorCode = operatorCode
-}
-
-func (c Client) Password() string {
-	return c.password
-}
-
-func (c *Client) SetPassword(password string) {
-	c.password = password
+func (c *Client) SetToken(token string) {
+	c.token = token
 }
 
 func (c Client) BaseURL() url.URL {
@@ -158,6 +131,14 @@ func (c *Client) SetUserAgent(userAgent string) {
 
 func (c Client) UserAgent() string {
 	return userAgent
+}
+
+func (c *Client) SetDisallowUnknownFields(disallowUnknownFields bool) {
+	c.disallowUnknownFields = disallowUnknownFields
+}
+
+func (c *Client) SetBeforeRequestDo(fun BeforeRequestDoCallback) {
+	c.beforeRequestDo = fun
 }
 
 func (c *Client) GetEndpointURL(p string, pathParams PathParams) url.URL {
@@ -195,29 +176,10 @@ func (c *Client) GetEndpointURL(p string, pathParams PathParams) url.URL {
 }
 
 func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, error) {
-	// convert body struct to xml
+	// convert body struct to json
 	buf := new(bytes.Buffer)
 	if req.RequestBodyInterface() != nil {
-		soapRequest := RequestEnvelope{
-			Namespaces: []xml.Attr{
-				{Name: xml.Name{Space: "", Local: "xmlns:xsi"}, Value: "http://www.w3.org/2001/XMLSchema-instance"},
-				{Name: xml.Name{Space: "", Local: "xmlns:xsd"}, Value: "http://www.w3.org/2001/XMLSchema"},
-				{Name: xml.Name{Space: "", Local: "xmlns:soap"}, Value: "http://schemas.xmlsoap.org/soap/envelope/"},
-			},
-			// Header: Header{},
-			Body: Body{
-				ActionBody: req.RequestBodyInterface(),
-			},
-		}
-
-		enc := xml.NewEncoder(buf)
-		enc.Indent("", "  ")
-		err := enc.Encode(soapRequest)
-		if err != nil {
-			return nil, err
-		}
-
-		err = enc.Flush()
+		err := json.NewEncoder(buf).Encode(req.RequestBodyInterface())
 		if err != nil {
 			return nil, err
 		}
@@ -244,6 +206,7 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	r.Header.Add("Accept", c.MediaType())
 	r.Header.Add("User-Agent", c.UserAgent())
+	r.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token()))
 	// r.Header.Add("SOAPAction", fmt.Sprintf("http://tempuri.org/RLXSOAP19/RLXSOAP19/%s", req.SOAPAction()))
 
 	return r, nil
@@ -253,6 +216,10 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 // pointed to by v, or returned as an error if an Client error has occurred. If v implements the io.Writer interface,
 // the raw response will be written to v, without attempting to decode it.
 func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error) {
+	if c.beforeRequestDo != nil {
+		c.beforeRequestDo(c.http, req, body)
+	}
+
 	if c.debug == true {
 		dump, _ := httputil.DumpRequestOut(req, true)
 		log.Println(string(dump))
@@ -294,23 +261,14 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		return httpResp, err
 	}
 
-	soapResponse := ResponseEnvelope{
-		// Header: Header{},
-		Body: Body{
-			ActionBody: body,
-		},
-	}
-
-	soapError := SoapError{}
-
-	err = c.Unmarshal(httpResp.Body, &soapResponse, &soapError)
+	err = c.Unmarshal(httpResp.Body, body)
 	if err != nil {
 		return httpResp, err
 	}
 
-	if soapError.Body.Fault.FaultCode != "" || soapError.Body.Fault.FaultString != "" {
-		return httpResp, &ErrorResponse{Response: httpResp, Err: soapError}
-	}
+	// if soapError.Body.Fault.FaultCode != "" || soapError.Body.Fault.FaultString != "" {
+	// 	return httpResp, &ErrorResponse{Response: httpResp, Err: soapError}
+	// }
 
 	// if len(errorResponse.Messages) > 0 {
 	// 	return httpResp, errorResponse
@@ -332,7 +290,11 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	errs := []error{}
 	for _, v := range vv {
 		r := bytes.NewReader(b)
-		dec := xml.NewDecoder(r)
+		dec := json.NewDecoder(r)
+		if c.disallowUnknownFields {
+			dec.DisallowUnknownFields()
+		}
+
 		err := dec.Decode(v)
 		if err != nil {
 			errs = append(errs, err)
@@ -350,30 +312,6 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	}
 
 	return nil
-}
-
-func (c *Client) SessionID() (string, error) {
-	// fetch a new token if it isn't set already
-	if c.sessionID == "" {
-		var err error
-		c.sessionID, err = c.NewSessionID()
-		if err != nil {
-			return "", err
-		}
-	}
-
-	return c.sessionID, nil
-}
-
-func (c *Client) NewSessionID() (string, error) {
-	req := c.NewLoginRequest()
-	resp, err := req.Do()
-	if err != nil {
-		return "", err
-	}
-
-	return resp.SessionID, nil
-
 }
 
 // CheckResponse checks the Client response for errors, and returns them if

@@ -1,4 +1,4 @@
-package guestline_test
+package dkplus_test
 
 import (
 	"encoding/json"
@@ -6,9 +6,8 @@ import (
 	"testing"
 )
 
-func TestBookingSearch(t *testing.T) {
-	req := client.NewBookingSearchRequest()
-	req.RequestBody().Filters.BookRef = "BK001843"
+func TestGeneralLedgerAccountGet(t *testing.T) {
+	req := client.NewGeneralLedgerAccountGetRequest()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

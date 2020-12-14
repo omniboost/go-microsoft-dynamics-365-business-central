@@ -1,11 +1,14 @@
-package guestline_test
+package dkplus_test
 
 import (
+	"crypto/tls"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
 	"testing"
 
+	"github.com/Azure/go-ntlmssp"
 	guestline "github.com/omniboost/go-dkplus"
 )
 
@@ -17,10 +20,7 @@ func TestMain(m *testing.M) {
 	var err error
 
 	baseURLString := os.Getenv("BASE_URL")
-	siteID := os.Getenv("SITE_ID")
-	interfaceID := os.Getenv("INTERFACE_ID")
-	operatorCode := os.Getenv("OPERATOR_CODE")
-	password := os.Getenv("PASSWORD")
+	token := os.Getenv("TOKEN")
 	debug := os.Getenv("DEBUG")
 	var baseURL *url.URL
 
@@ -31,7 +31,7 @@ func TestMain(m *testing.M) {
 		}
 	}
 
-	client = guestline.NewClient(nil, siteID, interfaceID, operatorCode, password)
+	client = guestline.NewClient(nil, token)
 	if debug != "" {
 		client.SetDebug(true)
 	}
@@ -39,6 +39,20 @@ func TestMain(m *testing.M) {
 	if baseURL != nil {
 		client.SetBaseURL(*baseURL)
 	}
+
+	client.SetDisallowUnknownFields(true)
+	client.SetBeforeRequestDo(func(httpClient *http.Client, req *http.Request, body interface{}) {
+		tr := &http.Transport{
+			TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},
+			ForceAttemptHTTP2: false,
+		}
+
+		ntlmTransport := ntlmssp.Negotiator{
+			RoundTripper: tr,
+		}
+
+		httpClient.Transport = ntlmTransport
+	})
 
 	m.Run()
 }
