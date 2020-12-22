@@ -4,8 +4,8 @@ import "net/url"
 
 type Request interface {
 	Method() string
-	QueryParams() QueryParams
-	PathParams() PathParams
+	// QueryParams() QueryParams
+	PathParamsInterface() PathParams
 	RequestBodyInterface() interface{}
 	URL() *url.URL
 }

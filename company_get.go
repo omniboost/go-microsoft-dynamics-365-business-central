@@ -39,6 +39,7 @@ type CompanyGetQueryParams struct {
 func (p CompanyGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
 	params := url.Values{}
 
 	err := encoder.Encode(p, params)
@@ -49,7 +50,7 @@ func (p CompanyGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *CompanyGetRequest) QueryParams() QueryParams {
+func (r *CompanyGetRequest) QueryParams() *CompanyGetQueryParams {
 	return r.queryParams
 }
 
@@ -64,7 +65,11 @@ func (p *CompanyGetPathParams) Params() map[string]string {
 	return map[string]string{}
 }
 
-func (r *CompanyGetRequest) PathParams() PathParams {
+func (r *CompanyGetRequest) PathParams() *CompanyGetPathParams {
+	return r.pathParams
+}
+
+func (r *CompanyGetRequest) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 

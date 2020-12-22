@@ -13,3 +13,7 @@ func (d Date) MarshalSchema() string {
 type DateTime struct {
 	time.Time
 }
+
+func (d DateTime) MarshalSchema() string {
+	return d.Time.Format(time.RFC3339)
+}

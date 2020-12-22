@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -212,7 +211,7 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	return r, nil
 }
 
-// Do sends an Client request and returns the Client response. The Client response is xml decoded and stored in the value
+// Do sends an Client request and returns the Client response. The Client response is json decoded and stored in the value
 // pointed to by v, or returned as an error if an Client error has occurred. If v implements the io.Writer interface,
 // the raw response will be written to v, without attempting to decode it.
 func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error) {
@@ -261,18 +260,15 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		return httpResp, err
 	}
 
-	err = c.Unmarshal(httpResp.Body, body)
+	errResp := &ErrorResponse{Response: httpResp}
+	err = c.Unmarshal(httpResp.Body, body, errResp)
 	if err != nil {
 		return httpResp, err
 	}
 
-	// if soapError.Body.Fault.FaultCode != "" || soapError.Body.Fault.FaultString != "" {
-	// 	return httpResp, &ErrorResponse{Response: httpResp, Err: soapError}
-	// }
-
-	// if len(errorResponse.Messages) > 0 {
-	// 	return httpResp, errorResponse
-	// }
+	if errResp.Message != "" {
+		return httpResp, errResp
+	}
 
 	return httpResp, nil
 }
@@ -317,7 +313,7 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 // CheckResponse checks the Client response for errors, and returns them if
 // present. A response is considered an error if it has a status code outside
 // the 200 range. Client error responses are expected to have either no response
-// body, or a xml response body that maps to ErrorResponse. Any other response
+// body, or a json response body that maps to ErrorResponse. Any other response
 // body will be silently ignored.
 func CheckResponse(r *http.Response) error {
 	errorResponse := &ErrorResponse{Response: r}
@@ -348,50 +344,28 @@ func CheckResponse(r *http.Response) error {
 		return errors.New("response body is empty")
 	}
 
-	// convert xml to struct
-	err = xml.Unmarshal(data, &errorResponse)
+	// convert json to struct
+	err = json.Unmarshal(data, &errorResponse)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
+	if errorResponse.Message != "" {
+		return errorResponse
+	}
+
 	return nil
-}
-
-// <?xml version="1.0" encoding="utf-8"?>
-// <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-//   <soap:Body>
-//     <soap:Fault>
-//       <faultcode>soap:Client</faultcode>
-//       <faultstring>Server was unable to read request. ---&gt; There is an error in XML document (5, 34). ---&gt; Input string was not in a correct format.</faultstring>
-//       <detail/>
-//     </soap:Fault>
-//   </soap:Body>
-// </soap:Envelope>
-
-type SoapError struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Body    struct {
-		Fault struct {
-			FaultCode   string `xml:"faultcode"`
-			FaultString string `xml:"faultstring"`
-		} `xml:"Fault"`
-	} `xml:"Body"`
-}
-
-func (e SoapError) Error() string {
-	return fmt.Sprintf("%s: %s", e.Body.Fault.FaultCode, e.Body.Fault.FaultString)
 }
 
 type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	// HTTP status code
-	Err error
+	Message string `json:"Message"`
 }
 
 func (r *ErrorResponse) Error() string {
-	return r.Err.Error()
+	return r.Message
 }
 
 func checkContentType(response *http.Response) error {

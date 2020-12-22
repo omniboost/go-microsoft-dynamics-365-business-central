@@ -40,6 +40,7 @@ type GeneralLedgerAccountGetQueryParams struct {
 func (p GeneralLedgerAccountGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
 	params := url.Values{}
 
 	err := encoder.Encode(p, params)
@@ -65,7 +66,11 @@ func (p *GeneralLedgerAccountGetPathParams) Params() map[string]string {
 	return map[string]string{}
 }
 
-func (r *GeneralLedgerAccountGetRequest) PathParams() PathParams {
+func (r *GeneralLedgerAccountGetRequest) PathParams() *GeneralLedgerAccountGetPathParams {
+	return r.pathParams
+}
+
+func (r *GeneralLedgerAccountGetRequest) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 
