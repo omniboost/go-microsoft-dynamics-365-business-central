@@ -113,13 +113,15 @@ func (r *CustomerGetRequest) NewResponseBody() *CustomerGetResponseBody {
 	return &CustomerGetResponseBody{}
 }
 
-type CustomerGetResponseBody []struct {
-	Conditions struct {
-		CreditLimit   float64 `json:"CreditLimit"`
-		CreditMax     float64 `json:"CreditMax"`
-		DisableSale   bool    `json:"DisableSale"`
-		DisableRetail bool    `json:"DisableRetail"`
-	} `json:"Conditions"`
+type CustomerGetResponseBody []CustomerGetResponseBodyCustomer
+
+type CustomerGetResponseBodyCustomer struct {
+	// Conditions struct {
+	// 	CreditLimit   float64 `json:"CreditLimit"`
+	// 	CreditMax     float64 `json:"CreditMax"`
+	// 	DisableSale   bool    `json:"DisableSale"`
+	// 	DisableRetail bool    `json:"DisableRetail"`
+	// } `json:"Conditions"`
 	SendTo struct {
 		Printer          bool `json:"Printer"`
 		ClaimToPrinter   bool `json:"ClaimToPrinter"`

@@ -1,5 +1,7 @@
 package dkplus
 
+import "time"
+
 type VoucherType struct {
 	ID      int    `json:"id"`
 	Version int    `json:"version"`
@@ -503,9 +505,6 @@ type Employee struct {
 type Project struct {
 }
 
-type Product struct {
-}
-
 type Department struct {
 	ID               int    `json:"id"`
 	Version          int    `json:"version"`
@@ -820,4 +819,160 @@ type Category struct {
 	Number      string `json:"number"`
 	Description string `json:"description"`
 	Type        int    `json:"type"`
+}
+
+const (
+	SaleTypeDebit  SaleType = 0
+	SaleTypeCredit SaleType = 1
+)
+
+type SaleType int
+
+type File struct {
+	Name string
+	// Note json uses base64 array of byte
+	Content string
+}
+
+type Product struct {
+	ShowItemInWebShop        bool      `json:"ShowItemInWebShop"`
+	RecordID                 int       `json:"RecordID"`
+	ItemCode                 string    `json:"ItemCode"`
+	Description              string    `json:"Description"`
+	Description2             string    `json:"Description2"`
+	Inactive                 bool      `json:"Inactive"`
+	RecordCreated            string    `json:"RecordCreated"`
+	RecordModified           string    `json:"RecordModified"`
+	ObjectDate               time.Time `json:"ObjectDate"`
+	AliasItemCode            string    `json:"AliasItemCode"`
+	ItemClass                int       `json:"ItemClass"`
+	UnitCode                 string    `json:"UnitCode"`
+	Group                    string    `json:"Group"`
+	UnitQuantity             float64   `json:"UnitQuantity"`
+	NetWeight                float64   `json:"NetWeight"`
+	UnitVolume               float64   `json:"UnitVolume"`
+	TotalQuantityInWarehouse float64   `json:"TotalQuantityInWarehouse"`
+	PurchasePrice            float64   `json:"PurchasePrice"`
+	CurrencyCode             string    `json:"CurrencyCode"`
+	Exchange                 float64   `json:"Exchange"`
+	UnitPrice1               float64   `json:"UnitPrice1"`
+	Purchasefactor           float64   `json:"Purchasefactor"`
+	CostPrice                float64   `json:"CostPrice"`
+	ProfitRatio1             float64   `json:"ProfitRatio1"`
+	UnitPrice1WithTax        float64   `json:"UnitPrice1WithTax"`
+	UnitPrice2               float64   `json:"UnitPrice2"`
+	UnitPrice3WithTax        float64   `json:"UnitPrice3WithTax"`
+	AllowDiscount            bool      `json:"AllowDiscount"`
+	Discount                 float64   `json:"Discount"`
+	UnitPrice2WithTax        float64   `json:"UnitPrice2WithTax"`
+	UnitPrice3               float64   `json:"UnitPrice3"`
+	PropositionPrice         float64   `json:"PropositionPrice"`
+	PropositionDateTo        time.Time `json:"PropositionDateTo"`
+	ExtraDesc1               string    `json:"ExtraDesc1"`
+	ExtraDesc2               string    `json:"ExtraDesc2"`
+	IsVariation              bool      `json:"IsVariation"`
+	TaxPercent               float64   `json:"TaxPercent"`
+	SalesTaxCode             string    `json:"SalesTaxCode"`
+	SalesLedgerCode          string    `json:"SalesLedgerCode"`
+	PurchaseTaxCode          string    `json:"PurchaseTaxCode"`
+	PurchaseLedgerCode       string    `json:"PurchaseLedgerCode"`
+	AllowNegativeInventiry   bool      `json:"AllowNegativeInventiry"`
+	DiscountQuantity         float64   `json:"DiscountQuantity"`
+	MaxDiscountAllowed       float64   `json:"MaxDiscountAllowed"`
+	DefaultSaleQuantity      float64   `json:"DefaultSaleQuantity"`
+	ExtraFeeItemCode         string    `json:"ExtraFeeItemCode"`
+	CostMethod               int       `json:"CostMethod"`
+	Dim1                     string    `json:"Dim1"`
+	Dim2                     string    `json:"Dim2"`
+	Dim3                     string    `json:"Dim3"`
+	HasAttachments           bool      `json:"HasAttachments"`
+	HasBarcodes              bool      `json:"HasBarcodes"`
+	HasCurrencyPrices        bool      `json:"HasCurrencyPrices"`
+	HasUnits                 bool      `json:"HasUnits"`
+	HasAlternative           bool      `json:"HasAlternative"`
+	Barcodes                 []struct {
+		Barcode        string    `json:"Barcode"`
+		IsExtraBarcode bool      `json:"IsExtraBarcode"`
+		Modified       time.Time `json:"Modified"`
+		Quantity       float64   `json:"Quantity"`
+		SubGroup1      string    `json:"SubGroup1"`
+		SubGroup2      string    `json:"SubGroup2"`
+		UnitCode       string    `json:"UnitCode"`
+	} `json:"Barcodes"`
+	Attachments []struct {
+		ID        int       `json:"ID"`
+		Linked    time.Time `json:"Linked"`
+		MD5Hash   string    `json:"MD5Hash,omitempty"`
+		Name      string    `json:"Name"`
+		ShowOnWeb bool      `json:"ShowOnWeb"`
+		Size      int       `json:"Size"`
+	} `json:"Attachments"`
+	Categories []struct {
+		Description   string `json:"Description"`
+		ID            string `json:"ID"`
+		IsActive      bool   `json:"IsActive"`
+		SubCategories []struct {
+			Description string `json:"Description"`
+			ID          string `json:"ID"`
+		} `json:"SubCategories"`
+	} `json:"Categories"`
+	Warehouses []struct {
+		Warehouse            string        `json:"Warehouse"`
+		SubGroup1            string        `json:"SubGroup1"`
+		SubGroup2            string        `json:"SubGroup2"`
+		SubGroup3            string        `json:"SubGroup3"`
+		SubGroup4            string        `json:"SubGroup4"`
+		QuantityInStock      float64       `json:"QuantityInStock"`
+		MinimumStock         float64       `json:"MinimumStock"`
+		MaximumStock         float64       `json:"MaximumStock"`
+		LocationInWarehouse  string        `json:"LocationInWarehouse"`
+		QuantityOnBackOrders float64       `json:"QuantityOnBackOrders"`
+		QuantityPoOrders     float64       `json:"QuantityPoOrders"`
+		Modified             time.Time     `json:"Modified"`
+		Variations           []interface{} `json:"Variations"`
+	} `json:"Warehouses"`
+	CurrencyPrices []struct {
+		CurrencyCode string  `json:"CurrencyCode"`
+		Price1       float64 `json:"Price1"`
+		Price2       float64 `json:"Price2"`
+		Price3       float64 `json:"Price3"`
+	} `json:"CurrencyPrices"`
+	Units []struct {
+		DefaultSaleQuantity float64 `json:"DefaultSaleQuantity"`
+		NetWeight           float64 `json:"NetWeight"`
+		QuantityOnHand      float64 `json:"QuantityOnHand"`
+		UnitCode            string  `json:"UnitCode"`
+		UnitPrice           float64 `json:"UnitPrice"`
+		UnitPriceRatio      float64 `json:"UnitPriceRatio"`
+		UnitPriceWithTax    float64 `json:"UnitPriceWithTax"`
+		UnitQuantity        float64 `json:"UnitQuantity"`
+	} `json:"Units"`
+	Alternative []struct {
+		ItemCode string `json:"ItemCode"`
+	} `json:"Alternative"`
+	Changes []struct {
+		By     string `json:"By"`
+		Fields []struct {
+			Name  string      `json:"Name"`
+			Value interface{} `json:"Value"`
+		} `json:"Fields"`
+		Modified time.Time `json:"Modified"`
+	} `json:"Changes"`
+	Memos []struct {
+		Modified  time.Time `json:"Modified"`
+		PageName  string    `json:"PageName"`
+		PlainText string    `json:"PlainText"`
+		RecordID  int       `json:"RecordID"`
+	} `json:"Memos"`
+	Vendors []struct {
+		Description           string    `json:"Description"`
+		ItemCode              string    `json:"ItemCode"`
+		LastPurchasedDate     time.Time `json:"LastPurchasedDate"`
+		LastPurchasedPrice    float64   `json:"LastPurchasedPrice"`
+		LastPurchasedQuantity float64   `json:"LastPurchasedQuantity"`
+		Price                 float64   `json:"Price"`
+		PrimarySupplier       bool      `json:"PrimarySupplier"`
+		PurchasedDiscount     float64   `json:"PurchasedDiscount"`
+		Vendor                string    `json:"Vendor"`
+	} `json:"Vendors"`
 }

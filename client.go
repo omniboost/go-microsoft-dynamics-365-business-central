@@ -260,6 +260,10 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		return httpResp, err
 	}
 
+	if httpResp.ContentLength == 0 {
+		return httpResp, nil
+	}
+
 	errResp := &ErrorResponse{Response: httpResp}
 	err = c.Unmarshal(httpResp.Body, body, errResp)
 	if err != nil {
