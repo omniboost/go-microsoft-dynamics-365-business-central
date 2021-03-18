@@ -225,8 +225,9 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	r.Header.Add("Accept", c.MediaType())
 	r.Header.Add("User-Agent", c.UserAgent())
-	r.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token()))
-	// r.Header.Add("SOAPAction", fmt.Sprintf("http://tempuri.org/RLXSOAP19/RLXSOAP19/%s", req.SOAPAction()))
+	r.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.AccessToken()))
+	r.Header.Add("ipp-company-id", c.CompanyID())
+	r.Header.Add("ipp-application-type", c.ApplicationType())
 
 	return r, nil
 }

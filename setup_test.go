@@ -10,12 +10,12 @@ import (
 )
 
 var (
-	client *intacct.Client
+	client *vismanet.Client
 )
 
 func TestMain(m *testing.M) {
 	baseURLString := os.Getenv("BASE_URL")
-	acessToken := os.Getenv("ACCESS_TOKEN")
+	accessToken := os.Getenv("ACCESS_TOKEN")
 	companyID := os.Getenv("COMPANY_ID")
 	applicationType := os.Getenv("APPLICATION_TYPE")
 	debug := os.Getenv("DEBUG")

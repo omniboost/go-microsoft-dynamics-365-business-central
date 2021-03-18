@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-func TestGeneralLedgerAccountGet(t *testing.T) {
-	req := client.NewGeneralLedgerAccountGetRequest()
+func TestAccountGetAll(t *testing.T) {
+	req := client.NewAccountGetAll()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
