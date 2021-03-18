@@ -122,3 +122,17 @@ type Segment struct {
 	SegmentValue            string `json:"segmentValue"`
 	SegmentValueDescription string `json:"segmentValueDescription"`
 }
+
+type Ledgers []Ledger
+
+type Ledger struct {
+	InternalID           int    `json:"internalId"`
+	Number               string `json:"number"`
+	Description          string `json:"description"`
+	BalanceType          string `json:"balanceType"`
+	CurrencyID           string `json:"currencyId"`
+	ConsolidationSource  bool   `json:"consolidationSource"`
+	BranchAccounting     bool   `json:"branchAccounting"`
+	LastModifiedDateTime string `json:"lastModifiedDateTime"`
+	PostInterCompany     bool   `json:"postInterCompany"`
+}
