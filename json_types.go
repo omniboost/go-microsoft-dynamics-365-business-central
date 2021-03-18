@@ -1,4 +1,4 @@
-package dkplus
+package vismanet
 
 import "time"
 

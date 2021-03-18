@@ -1,4 +1,4 @@
-package dkplus_test
+package vismanet_test
 
 import (
 	"encoding/json"

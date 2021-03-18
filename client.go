@@ -1,4 +1,4 @@
-package dkplus
+package vismanet
 
 import (
 	"bytes"
@@ -20,7 +20,7 @@ import (
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-dkplus/" + libraryVersion
+	userAgent      = "go-vismanet/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
 )
@@ -28,13 +28,13 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "api.dkplus.is",
-		Path:   "/api/v1",
+		Host:   "integration.visma.net",
+		Path:   "/API/",
 	}
 )
 
 // NewClient returns a new Exact Globe Client client
-func NewClient(httpClient *http.Client, token string) *Client {
+func NewClient(httpClient *http.Client, accessToken, companyID, applicationType string) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -42,7 +42,9 @@ func NewClient(httpClient *http.Client, token string) *Client {
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetToken(token)
+	client.SetAccessToken(accessToken)
+	client.SetCompanyID(companyID)
+	client.SetApplicationType(applicationType)
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -61,7 +63,9 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	token string
+	accessToken     string
+	companyID       string
+	applicationType string
 
 	// User agent for client
 	userAgent string
@@ -92,12 +96,28 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) Token() string {
-	return c.token
+func (c Client) AccessToken() string {
+	return c.accessToken
 }
 
-func (c *Client) SetToken(token string) {
-	c.token = token
+func (c *Client) SetAccessToken(accessToken string) {
+	c.accessToken = accessToken
+}
+
+func (c Client) CompanyID() string {
+	return c.companyID
+}
+
+func (c *Client) SetCompanyID(companyID string) {
+	c.companyID = companyID
+}
+
+func (c Client) ApplicationType() string {
+	return c.applicationType
+}
+
+func (c *Client) SetApplicationType(applicationType string) {
+	c.applicationType = applicationType
 }
 
 func (c Client) BaseURL() url.URL {
