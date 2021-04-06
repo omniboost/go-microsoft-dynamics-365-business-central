@@ -317,7 +317,7 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 		}
 
 		err := dec.Decode(v)
-		if err != nil {
+		if err != nil && err != io.EOF {
 			errs = append(errs, err)
 		}
 
@@ -370,9 +370,11 @@ func CheckResponse(r *http.Response) error {
 	}
 
 	// convert json to struct
-	err = json.Unmarshal(data, &errorResponse)
-	if err != nil {
-		return errors.WithStack(err)
+	if len(data) != 0 {
+		err = json.Unmarshal(data, &errorResponse)
+		if err != nil {
+			return errors.WithStack(err)
+		}
 	}
 
 	if errorResponse.Message != "" {

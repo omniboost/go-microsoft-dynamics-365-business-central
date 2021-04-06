@@ -6,9 +6,8 @@ import (
 	"testing"
 )
 
-func TestJournalTransactionV2GetAll(t *testing.T) {
-	req := client.NewJournalTransactionV2GetAll()
-	req.QueryParams().PeriodID = "202103"
+func TestSalesOrderBasicV2Post(t *testing.T) {
+	req := client.NewSalesOrderBasicV2Post()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

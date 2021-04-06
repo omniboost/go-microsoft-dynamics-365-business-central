@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func TestJournalTransactionV2GetAll(t *testing.T) {
-	req := client.NewJournalTransactionV2GetAll()
-	req.QueryParams().PeriodID = "202103"
+func TestCustomerGetByCD(t *testing.T) {
+	req := client.NewCustomerGetByCD()
+	req.PathParams().CustomerCD = "202103"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
