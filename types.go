@@ -330,15 +330,16 @@ type InvoiceContact struct {
 	Phone1          ValueString `json:"phone1"`
 }
 
-type BillingAddress struct {
-	OverrideAddress ValueBool   `json:"overrideAddress"`
-	AddressLine1    ValueString `json:"addressLine1"`
-	AddressLine2    ValueString `json:"addressLine2"`
-	AddressLine3    ValueString `json:"addressLine3"`
-	PostalCode      ValueString `json:"postalCode"`
-	City            ValueString `json:"city"`
-	CountryID       ValueString `json:"countryId"`
-	County          ValueString `json:"county"`
+type BillingAddress Address
+
+type ValueAddress Address
+
+func (v ValueAddress) MarshalJSON() ([]byte, error) {
+	type alias ValueAddress
+	v2 := Value{
+		Value: alias(v),
+	}
+	return json.Marshal(v2)
 }
 
 type InvoiceLines []InvoiceLine
@@ -553,13 +554,14 @@ func (r CustomerPostBody) MarshalJSON() ([]byte, error) {
 }
 
 type Address struct {
-	AddressLine1 ValueString `json:"addressLine1"`
-	AddressLine2 ValueString `json:"addressLine2"`
-	AddressLine3 ValueString `json:"addressLine3"`
-	PostalCode   ValueString `json:"postalCode"`
-	City         ValueString `json:"city"`
-	CountryID    ValueString `json:"countryId"`
-	County       ValueString `json:"county"`
+	OverrideAddress ValueBool   `json:"overrideAddress"`
+	AddressLine1    ValueString `json:"addressLine1"`
+	AddressLine2    ValueString `json:"addressLine2"`
+	AddressLine3    ValueString `json:"addressLine3"`
+	PostalCode      ValueString `json:"postalCode"`
+	City            ValueString `json:"city"`
+	CountryID       ValueString `json:"countryId"`
+	County          ValueString `json:"county"`
 }
 
 func (a Address) MarshalJSON() ([]byte, error) {
