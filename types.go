@@ -257,6 +257,12 @@ func (t *Time) UnmarshalJSON(text []byte) (err error) {
 		return nil
 	}
 
+	// they use two different time formats
+	t.Time, err = time.Parse("2006-01-02T15:04:05", value)
+	if err == nil {
+		return nil
+	}
+
 	// try untill date format
 	t.Time, err = time.Parse("2006-01-02T15:04:05-07:00", value)
 	return
