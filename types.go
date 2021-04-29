@@ -159,7 +159,11 @@ func (v ValueString) MarshalJSON() ([]byte, error) {
 	v2 := Value{
 		Value: alias(v),
 	}
-	return json.Marshal(v2)
+	return omitempty.MarshalJSON(v2)
+}
+
+func (v ValueString) IsEmpty() bool {
+	return v == ""
 }
 
 type ValueBool bool
@@ -169,10 +173,22 @@ func (v ValueBool) MarshalJSON() ([]byte, error) {
 	v2 := Value{
 		Value: alias(v),
 	}
-	return json.Marshal(v2)
+	return omitempty.MarshalJSON(v2)
 }
 
 type ValueTime Time
+
+func (v ValueTime) MarshalJSON() ([]byte, error) {
+	type alias ValueTime
+	v2 := Value{
+		Value: alias(v),
+	}
+	return omitempty.MarshalJSON(v2)
+}
+
+func (v ValueTime) IsEmpty() bool {
+	return zero.IsZero(v)
+}
 
 // func (v *ValueTime) UnmarshalJSON(data []byte) error {
 // 	var value string
@@ -214,6 +230,10 @@ func (v ValueInt) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v2)
 }
 
+func (v ValueInt) IsEmpty() bool {
+	return v == 0
+}
+
 type ValueNumber float64
 
 func (v ValueNumber) MarshalJSON() ([]byte, error) {
@@ -222,6 +242,10 @@ func (v ValueNumber) MarshalJSON() ([]byte, error) {
 		Value: alias(v),
 	}
 	return json.Marshal(v2)
+}
+
+func (v ValueNumber) IsEmpty() bool {
+	return v == 0.0
 }
 
 type Value struct {
@@ -288,7 +312,7 @@ type Invoice struct {
 	CreditTermsID                      ValueString    `json:"creditTermsId,omitempty"`
 	CurrencyID                         ValueString    `json:"currencyId"`
 	CustomerRefNumber                  ValueString    `json:"customerRefNumber"`
-	CashDiscountDate                   ValueTime      `json:"cashDiscountDate"`
+	CashDiscountDate                   ValueTime      `json:"cashDiscountDate,omitempty"`
 	DocumentDueDate                    ValueTime      `json:"documentDueDate"`
 	ExternalReference                  ValueString    `json:"externalReference"`
 	CustomerProject                    ValueString    `json:"customerProject"`
@@ -302,7 +326,7 @@ type Invoice struct {
 	InvoiceLines                       InvoiceLines   `json:"invoiceLines"`
 	SendToAutoInvoice                  ValueBool      `json:"sendToAutoInvoice"`
 	CustomerVatZoneID                  ValueString    `json:"customerVatZoneId,omitempty"`
-	BillingAddress                     BillingAddress `json:"billingAddress"`
+	BillingAddress                     BillingAddress `json:"billingAddress,omitempty"`
 	InvoiceContact                     InvoiceContact `json:"invoiceContact,omitempty"`
 	StartDate                          ValueTime      `json:"startDate,omitempty"`
 	EndDate                            ValueTime      `json:"endDate,omitempty"`
@@ -313,7 +337,7 @@ type Invoice struct {
 	ReferenceNumber                    ValueString    `json:"referenceNumber"`
 	CustomerNumber                     ValueString    `json:"customerNumber"`
 	DocumentDate                       ValueTime      `json:"documentDate"`
-	OrigInvoiceDate                    ValueTime      `json:"origInvoiceDate"`
+	OrigInvoiceDate                    ValueTime      `json:"origInvoiceDate,omitempty"`
 	Hold                               ValueBool      `json:"hold"`
 	PostPeriod                         ValueString    `json:"postPeriod"`
 	FinancialPeriod                    ValueString    `json:"financialPeriod"`
@@ -328,6 +352,10 @@ type Invoice struct {
 	DontEmail                          ValueBool      `json:"dontEmail"`
 }
 
+func (i Invoice) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(i)
+}
+
 type InvoiceContact struct {
 	OverrideContact ValueBool   `json:"overrideContact"`
 	Name            ValueString `json:"name"`
@@ -336,7 +364,19 @@ type InvoiceContact struct {
 	Phone1          ValueString `json:"phone1"`
 }
 
+func (i InvoiceContact) IsEmpty() bool {
+	return zero.IsZero(i)
+}
+
 type BillingAddress Address
+
+func (a BillingAddress) IsEmpty() bool {
+	return zero.IsZero(a)
+}
+
+func (a BillingAddress) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(a)
+}
 
 type ValueAddress Address
 
@@ -345,7 +385,11 @@ func (v ValueAddress) MarshalJSON() ([]byte, error) {
 	v2 := Value{
 		Value: alias(v),
 	}
-	return json.Marshal(v2)
+	return omitempty.MarshalJSON(v2)
+}
+
+func (a ValueAddress) IsEmpty() bool {
+	return zero.IsZero(a)
 }
 
 type InvoiceLines []InvoiceLine
@@ -356,8 +400,8 @@ type InvoiceLine struct {
 	ItemType                   ValueString `json:"itemType"`
 	TypeOfWork                 ValueString `json:"typeOfWork"`
 	TaskID                     ValueString `json:"taskId,omitempty"`
-	StartDate                  ValueTime   `json:"startDate"`
-	EndDate                    ValueTime   `json:"endDate"`
+	StartDate                  ValueTime   `json:"startDate,omitempty"`
+	EndDate                    ValueTime   `json:"endDate,omitempty"`
 	Operation                  string      `json:"operation"`
 	InventoryNumber            ValueString `json:"inventoryNumber,omitempty"`
 	LineNumber                 ValueInt    `json:"lineNumber"`
@@ -378,10 +422,14 @@ type InvoiceLine struct {
 	Salesperson      ValueString `json:"salesperson,omitempty"`
 	DeferralSchedule ValueInt    `json:"deferralSchedule"`
 	DeferralCode     ValueString `json:"deferralCode,omitempty"`
-	TermStartDate    ValueTime   `json:"termStartDate"`
-	TermEndDate      ValueTime   `json:"termEndDate"`
+	TermStartDate    ValueTime   `json:"termStartDate,omitempty"`
+	TermEndDate      ValueTime   `json:"termEndDate,omitempty"`
 	Note             ValueString `json:"note"`
 	BranchNumber     ValueString `json:"branchNumber,omitempty"`
+}
+
+func (i InvoiceLine) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(i)
 }
 
 type RotRutDetails struct {
@@ -397,6 +445,10 @@ type RotRutDetails struct {
 		Amount     ValueNumber `json:"amount"`
 		Extra      ValueBool   `json:"extra"`
 	} `json:"distribution"`
+}
+
+func (r RotRutDetails) IsEmpty() bool {
+	return zero.IsZero(r)
 }
 
 type TaxDetailLines []TaxDetailLine
@@ -663,12 +715,12 @@ type DirectDebitLine struct {
 	ID                 string      `json:"id"`
 	MandateID          ValueString `json:"mandateId"`
 	MandateDescription ValueString `json:"mandateDescription"`
-	DateOfSignature    ValueTime   `json:"dateOfSignature"`
+	DateOfSignature    ValueTime   `json:"dateOfSignature,omitempty"`
 	IsDefault          ValueBool   `json:"isDefault"`
 	OneTime            ValueBool   `json:"oneTime"`
 	Bic                ValueString `json:"bic"`
 	Iban               ValueString `json:"iban"`
-	LastCollectionDate ValueTime   `json:"lastCollectionDate"`
+	LastCollectionDate ValueTime   `json:"lastCollectionDate,omitempty"`
 	MaxAmount          ValueInt    `json:"maxAmount"`
-	ExpirationDate     ValueTime   `json:"expirationDate"`
+	ExpirationDate     ValueTime   `json:"expirationDate,omitempty"`
 }
