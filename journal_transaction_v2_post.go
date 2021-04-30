@@ -108,7 +108,7 @@ type JournalTransactionV2PostBody struct {
 		SubAccount    []struct {
 			SegmentID    int    `json:"segmentId"`
 			SegmentValue string `json:"segmentValue"`
-		}
+		} `json:"subaccount"`
 		Project                ValueString `json:"project,omitempty"`
 		PorjectTask            ValueString `json:"projectTask,omitempty"`
 		ReferenceNumber        ValueString `json:"referenceNumber"`
