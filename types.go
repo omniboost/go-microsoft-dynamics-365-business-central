@@ -724,3 +724,71 @@ type DirectDebitLine struct {
 	MaxAmount          ValueInt    `json:"maxAmount"`
 	ExpirationDate     ValueTime   `json:"expirationDate,omitempty"`
 }
+
+type VATs []VAT
+
+type VAT struct {
+	VatCategoryID           string `json:"vatCategoryId"`
+	VatID                   string `json:"vatId"`
+	Description             string `json:"description"`
+	Type                    string `json:"type"`
+	DeductibleVat           bool   `json:"deductibleVat"`
+	ReverseVat              bool   `json:"reverseVat"`
+	StatisticalVat          bool   `json:"statisticalVat"`
+	PendingVat              bool   `json:"pendingVat"`
+	IncludeinVatExemptTotal bool   `json:"includeinVatExemptTotal"`
+	IncludeinVatTotal       bool   `json:"includeinVatTotal"`
+	EnterFromVatInvoice     bool   `json:"enterFromVatInvoice"`
+	CalculateOn             string `json:"calculateOn"`
+	CashDiscount            string `json:"cashDiscount"`
+	VatAgencyID             struct {
+		Number string `json:"number"`
+		Name   string `json:"name"`
+	} `json:"vatAgencyId"`
+	VismaXMLVatType      string `json:"vismaXmlVatType,omitempty"`
+	LastModifiedDateTime string `json:"lastModifiedDateTime"`
+	GlAccounts           struct {
+		VatPayableAccount struct {
+			Type        string `json:"type"`
+			Number      string `json:"number"`
+			Description string `json:"description"`
+		} `json:"vatPayableAccount"`
+		VatPayableSubaccount struct {
+			ID          string `json:"id"`
+			Description string `json:"description"`
+		} `json:"vatPayableSubaccount"`
+		VatClaimableAccount struct {
+			Type        string `json:"type"`
+			Number      string `json:"number"`
+			Description string `json:"description"`
+		} `json:"vatClaimableAccount"`
+		VatClaimableSubccount struct {
+			ID          string `json:"id"`
+			Description string `json:"description"`
+		} `json:"vatClaimableSubccount"`
+	} `json:"glAccounts"`
+	Schedules []struct {
+		StartDate         string  `json:"startDate"`
+		VatRate           float64 `json:"vatRate"`
+		MinTaxableAmt     float64 `json:"minTaxableAmt"`
+		MaxTaxableAmt     float64 `json:"maxTaxableAmt"`
+		ReportingGroup    string  `json:"reportingGroup"`
+		DeductibleVatRate float64 `json:"deductibleVatRate"`
+		GroupType         string  `json:"groupType"`
+	} `json:"schedules"`
+	Categories []struct {
+		VatCategoryID      string `json:"vatCategoryId"`
+		Description        string `json:"description"`
+		ExcludeListedTaxes bool   `json:"excludeListedTaxes"`
+	} `json:"categories"`
+	Zones []struct {
+		ID                 string `json:"id"`
+		Description        string `json:"description"`
+		DefaultVatCategory string `json:"defaultVatCategory"`
+	} `json:"zones"`
+	DefaultNonStockItem struct {
+		Number      string `json:"number"`
+		Description string `json:"description"`
+	} `json:"defaultNonStockItem,omitempty"`
+	EuReportCode string `json:"euReportCode,omitempty"`
+}
