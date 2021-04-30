@@ -286,13 +286,18 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 	}
 
 	errResp := &ErrorResponse{Response: httpResp}
-	err = c.Unmarshal(httpResp.Body, body, errResp)
+	exResp := &ExceptionResponse{Response: httpResp}
+	err = c.Unmarshal(httpResp.Body, body, errResp, exResp)
 	if err != nil {
 		return httpResp, err
 	}
 
 	if errResp.Message != "" {
 		return httpResp, errResp
+	}
+
+	if exResp.ExceptionMessage != "" {
+		return httpResp, exResp
 	}
 
 	return httpResp, nil
@@ -382,6 +387,21 @@ func CheckResponse(r *http.Response) error {
 	}
 
 	return nil
+}
+
+type ExceptionResponse struct {
+	// HTTP response that caused this error
+	Response *http.Response
+
+	ExceptionType      string `json:"ExceptionType"`
+	ExceptionMessage   string `json:"ExceptionMessage"`
+	ExceptionFaultCode string `json:"ExceptionFaultCode"`
+	ExceptionMessageID string `json:"ExceptionMessageID"`
+	ExceptionDetails   string `json:"ExceptionDetails"`
+}
+
+func (r *ExceptionResponse) Error() string {
+	return r.ExceptionMessage
 }
 
 type ErrorResponse struct {

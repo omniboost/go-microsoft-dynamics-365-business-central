@@ -827,3 +827,65 @@ type CustomerCreditNoteV2PostBodyLine struct {
 func (l CustomerCreditNoteV2PostBodyLine) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(l)
 }
+
+type Branches []Branch
+
+type Branch struct {
+	Number         string `json:"number"`
+	Name           string `json:"name"`
+	OrganizationID int    `json:"organizationId"`
+	IsMainBranch   bool   `json:"isMainBranch"`
+	MainAddress    struct {
+		AddressID    int    `json:"addressId"`
+		AddressLine1 string `json:"addressLine1"`
+		AddressLine2 string `json:"addressLine2"`
+		PostalCode   string `json:"postalCode"`
+		City         string `json:"city"`
+		Country      struct {
+			ID   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"country"`
+	} `json:"mainAddress,omitempty"`
+	MainContact struct {
+		ContactID int    `json:"contactId"`
+		Name      string `json:"name"`
+		Attention string `json:"attention"`
+		Email     string `json:"email"`
+	} `json:"mainContact,omitempty"`
+	DeliveryAddress struct {
+		AddressID    int    `json:"addressId"`
+		AddressLine1 string `json:"addressLine1"`
+		AddressLine2 string `json:"addressLine2"`
+		PostalCode   string `json:"postalCode"`
+		City         string `json:"city"`
+		Country      struct {
+			ID   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"country"`
+	} `json:"deliveryAddress,omitempty"`
+	DeliveryContact struct {
+		ContactID int    `json:"contactId"`
+		Name      string `json:"name"`
+		Attention string `json:"attention"`
+		Email     string `json:"email"`
+	} `json:"deliveryContact,omitempty"`
+	CorporateID       string `json:"corporateId"`
+	VatRegistrationID string `json:"vatRegistrationId,omitempty"`
+	DefaultCountry    struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	} `json:"defaultCountry"`
+	Currency struct {
+		ID          string `json:"id"`
+		Description string `json:"description"`
+	} `json:"currency"`
+	VatZone struct {
+		ID          string `json:"id"`
+		Description string `json:"description"`
+	} `json:"vatZone"`
+	LastModifiedDateTime string `json:"lastModifiedDateTime"`
+	Ledger               struct {
+		ID          string `json:"id"`
+		Description string `json:"description"`
+	} `json:"ledger"`
+}
