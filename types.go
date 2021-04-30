@@ -792,3 +792,38 @@ type VAT struct {
 	} `json:"defaultNonStockItem,omitempty"`
 	EuReportCode string `json:"euReportCode,omitempty"`
 }
+
+type CustomerCreditNoteV2PostBodyLines []CustomerCreditNoteV2PostBodyLine
+
+type CustomerCreditNoteV2PostBodyLine struct {
+	DiscountCode             ValueString `json:"discountCode,omitempty"`
+	TaskID                   ValueString `json:"taskId,omitempty"`
+	Operation                string      `json:"operation"`
+	InventoryNumber          ValueString `json:"inventoryNumber,omitempty"`
+	LineNumber               ValueInt    `json:"lineNumber"`
+	Description              ValueString `json:"description"`
+	Quantity                 ValueInt    `json:"quantity"`
+	UnitPriceInCurrency      ValueNumber `json:"unitPriceInCurrency"`
+	ManualAmountInCurrency   ValueNumber `json:"manualAmountInCurrency"`
+	AccountNumber            ValueString `json:"accountNumber"`
+	VATCodeID                ValueString `json:"vatCodeId"`
+	Uom                      ValueString `json:"uom,omitempty"`
+	DiscountPercent          ValueNumber `json:"discountPercent"`
+	DiscountAmountInCurrency ValueNumber `json:"discountAmountInCurrency"`
+	ManualDiscount           ValueBool   `json:"manualDiscount"`
+	Subaccount               []struct {
+		SegmentID    int    `json:"segmentId"`
+		SegmentValue string `json:"segmentValue"`
+	} `json:"subaccount"`
+	Salesperson      ValueString `json:"salesperson,omitempty"`
+	DeferralSchedule ValueInt    `json:"deferralSchedule,omitempty"`
+	DeferralCode     ValueString `json:"deferralCode,omitempty"`
+	TermStartDate    ValueTime   `json:"termStartDate,omitempty"`
+	TermEndDate      ValueTime   `json:"termEndDate,omitempty"`
+	Note             ValueString `json:"note,omitempty"`
+	BranchNumber     ValueString `json:"branchNumber,omitempty"`
+}
+
+func (l CustomerCreditNoteV2PostBodyLine) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(l)
+}

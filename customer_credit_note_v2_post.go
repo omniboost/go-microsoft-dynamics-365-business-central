@@ -86,40 +86,13 @@ func (r CustomerCreditNoteV2Post) NewRequestBody() CustomerCreditNoteV2PostBody 
 }
 
 type CustomerCreditNoteV2PostBody struct {
-	CurrencyID        ValueString `json:"currencyId"`
-	CustomerRefNumber ValueString `json:"customerRefNumber"`
-	ExternalReference ValueString `json:"externalReference"`
-	Contact           ValueInt    `json:"contact,omitempty"`
-	Project           ValueString `json:"project,omitempty"`
-	Lines             []struct {
-		DiscountCode             ValueString `json:"discountCode,omitempty"`
-		TaskID                   ValueString `json:"taskId,omitempty"`
-		Operation                string      `json:"operation"`
-		InventoryNumber          ValueString `json:"inventoryNumber,omitempty"`
-		LineNumber               ValueInt    `json:"lineNumber"`
-		Description              ValueString `json:"description"`
-		Quantity                 ValueInt    `json:"quantity"`
-		UnitPriceInCurrency      ValueNumber `json:"unitPriceInCurrency"`
-		ManualAmountInCurrency   ValueNumber `json:"manualAmountInCurrency"`
-		AccountNumber            ValueString `json:"accountNumber"`
-		VATCodeID                ValueString `json:"vatCodeId"`
-		Uom                      ValueString `json:"uom,omitempty"`
-		DiscountPercent          ValueNumber `json:"discountPercent"`
-		DiscountAmountInCurrency ValueNumber `json:"discountAmountInCurrency"`
-		ManualDiscount           ValueBool   `json:"manualDiscount"`
-		Subaccount               []struct {
-			SegmentID    int    `json:"segmentId"`
-			SegmentValue string `json:"segmentValue"`
-		} `json:"subaccount"`
-		Salesperson      ValueString `json:"salesperson,omitempty"`
-		DeferralSchedule ValueInt    `json:"deferralSchedule,omitempty"`
-		DeferralCode     ValueString `json:"deferralCode,omitempty"`
-		TermStartDate    ValueTime   `json:"termStartDate,omitempty"`
-		TermEndDate      ValueTime   `json:"termEndDate,omitempty"`
-		Note             ValueString `json:"note,omitempty"`
-		BranchNumber     ValueString `json:"branchNumber,omitempty"`
-	} `json:"lines"`
-	TaxDetails []struct {
+	CurrencyID        ValueString                       `json:"currencyId"`
+	CustomerRefNumber ValueString                       `json:"customerRefNumber"`
+	ExternalReference ValueString                       `json:"externalReference"`
+	Contact           ValueInt                          `json:"contact,omitempty"`
+	Project           ValueString                       `json:"project,omitempty"`
+	Lines             CustomerCreditNoteV2PostBodyLines `json:"lines"`
+	TaxDetails        []struct {
 		TaxID         ValueString `json:"taxId"`
 		TaxableAmount ValueNumber `json:"taxableAmount"`
 		VATAmount     ValueNumber `json:"vatAmount"`
@@ -131,7 +104,7 @@ type CustomerCreditNoteV2PostBody struct {
 		AmountPaid   ValueNumber `json:"amountPaid"`
 	} `json:"applicationLines"`
 	CustomerVATZoneID    ValueString  `json:"customerVatZoneId,omitempty"`
-	InvoiceAddress       ValueAddress `json:"invoiceAddress"`
+	InvoiceAddress       ValueAddress `json:"invoiceAddress,omitempty"`
 	InvoiceContact       Contact      `json:"invoiceContact,omitempty"`
 	OverrideNumberSeries ValueBool    `json:"overrideNumberSeries"`
 	SendToAutoInvoice    ValueBool    `json:"sendToAutoInvoice"`
@@ -153,7 +126,7 @@ type CustomerCreditNoteV2PostBody struct {
 	DontEmail            ValueBool    `json:"dontEmail"`
 }
 
-func (r *CustomerCreditNoteV2Post) MarshalJSON() ([]byte, error) {
+func (r CustomerCreditNoteV2PostBody) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(r)
 }
 
