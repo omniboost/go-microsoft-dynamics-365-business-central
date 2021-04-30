@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/omniboost/go-visma.net/omitempty"
 	"github.com/omniboost/go-visma.net/utils"
 )
 
@@ -137,7 +138,7 @@ type CustomerCreditNoteV2PostBody struct {
 	ReferenceNumber      ValueString  `json:"referenceNumber"`
 	CustomerNumber       ValueString  `json:"customerNumber"`
 	DocumentDate         ValueTime    `json:"documentDate"`
-	OrigInvoiceDate      ValueTime    `json:"origInvoiceDate"`
+	OrigInvoiceDate      ValueTime    `json:"origInvoiceDate,omitempty"`
 	Hold                 ValueBool    `json:"hold"`
 	PostPeriod           ValueString  `json:"postPeriod"`
 	FinancialPeriod      ValueString  `json:"financialPeriod"`
@@ -152,9 +153,9 @@ type CustomerCreditNoteV2PostBody struct {
 	DontEmail            ValueBool    `json:"dontEmail"`
 }
 
-// func (r *CustomerCreditNoteV2Post) MarshalJSON() ([]byte, error) {
-// 	return omitempty.MarshalJSON(r)
-// }
+func (r *CustomerCreditNoteV2Post) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(r)
+}
 
 func (r *CustomerCreditNoteV2Post) RequestBody() *CustomerCreditNoteV2PostBody {
 	return &r.requestBody
