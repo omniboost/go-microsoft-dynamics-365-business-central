@@ -116,7 +116,7 @@ type JournalTransactionV2PostBody struct {
 		DebitAmountInCurrency  ValueNumber     `json:"debitAmountInCurrency"`
 		CreditAmountInCurrency ValueNumber     `json:"creditAmountInCurrency"`
 		VATCodeID              ValueNullString `json:"vatCodeId"`
-		VATID                  ValueNullString `json:"vatId,omitempty"`
+		VATID                  ValueNullString `json:"vatId"`
 		Branch                 ValueString     `json:"branch,omitempty"`
 		UOM                    ValueString     `json:"UOM,omitempty"`
 		Quantity               ValueInt        `json:"quantity"`

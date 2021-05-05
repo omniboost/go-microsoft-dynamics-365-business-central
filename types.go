@@ -167,29 +167,22 @@ func (v ValueString) IsEmpty() bool {
 }
 
 type ValueNullString struct {
-	*string
+	*ValueString
 }
 
 func (v ValueNullString) MarshalJSON() ([]byte, error) {
-	type alias ValueNullString
-	v2 := Value{
-		Value: nil,
+	if v.ValueString == nil {
+		return json.Marshal(Value{Value: nil})
 	}
-
-	if v.string != nil {
-		v2 = Value{
-			Value: alias(v),
-		}
-	}
-	return omitempty.MarshalJSON(v2)
+	return json.Marshal(v.ValueString)
 }
 
 func (v *ValueNullString) UnmarshalJSON(data []byte) error {
-	return nil
+	return json.Unmarshal(data, &v.ValueString)
 }
 
 func (v ValueNullString) IsEmpty() bool {
-	return v.string == nil || *v.string == ""
+	return v.ValueString == nil || *v.ValueString == ""
 }
 
 type ValueBool bool
