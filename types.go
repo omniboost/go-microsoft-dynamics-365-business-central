@@ -414,26 +414,26 @@ func (a ValueAddress) IsEmpty() bool {
 type InvoiceLines []InvoiceLine
 
 type InvoiceLine struct {
-	DiscountCode               ValueString `json:"discountCode,omitempty"`
-	DomesticServicesDeductible ValueBool   `json:"domesticServicesDeductible"`
-	ItemType                   ValueString `json:"itemType"`
-	TypeOfWork                 ValueString `json:"typeOfWork"`
-	TaskID                     ValueString `json:"taskId,omitempty"`
-	StartDate                  ValueTime   `json:"startDate,omitempty"`
-	EndDate                    ValueTime   `json:"endDate,omitempty"`
-	Operation                  string      `json:"operation"`
-	InventoryNumber            ValueString `json:"inventoryNumber,omitempty"`
-	LineNumber                 ValueInt    `json:"lineNumber"`
-	Description                ValueString `json:"description"`
-	Quantity                   ValueInt    `json:"quantity"`
-	UnitPriceInCurrency        ValueNumber `json:"unitPriceInCurrency"`
-	ManualAmountInCurrency     ValueNumber `json:"manualAmountInCurrency"`
-	AccountNumber              ValueString `json:"accountNumber"`
-	VATCodeID                  ValueString `json:"vatCodeId,omitempty"`
-	UOM                        ValueString `json:"uom,omitempty"`
-	DiscountPercent            ValueNumber `json:"discountPercent"`
-	DiscountAmountInCurrency   ValueNumber `json:"discountAmountInCurrency"`
-	ManualDiscount             ValueBool   `json:"manualDiscount"`
+	DiscountCode               ValueString     `json:"discountCode,omitempty"`
+	DomesticServicesDeductible ValueBool       `json:"domesticServicesDeductible"`
+	ItemType                   ValueString     `json:"itemType"`
+	TypeOfWork                 ValueString     `json:"typeOfWork"`
+	TaskID                     ValueString     `json:"taskId,omitempty"`
+	StartDate                  ValueTime       `json:"startDate,omitempty"`
+	EndDate                    ValueTime       `json:"endDate,omitempty"`
+	Operation                  string          `json:"operation"`
+	InventoryNumber            ValueString     `json:"inventoryNumber,omitempty"`
+	LineNumber                 ValueInt        `json:"lineNumber"`
+	Description                ValueString     `json:"description"`
+	Quantity                   ValueInt        `json:"quantity"`
+	UnitPriceInCurrency        ValueNumber     `json:"unitPriceInCurrency"`
+	ManualAmountInCurrency     ValueNumber     `json:"manualAmountInCurrency"`
+	AccountNumber              ValueString     `json:"accountNumber"`
+	VATCodeID                  ValueNullString `json:"vatCodeId"`
+	UOM                        ValueString     `json:"uom,omitempty"`
+	DiscountPercent            ValueNumber     `json:"discountPercent"`
+	DiscountAmountInCurrency   ValueNumber     `json:"discountAmountInCurrency"`
+	ManualDiscount             ValueBool       `json:"manualDiscount"`
 	Subaccount                 []struct {
 		SegmentID    int    `json:"segmentId"`
 		SegmentValue string `json:"segmentValue"`
@@ -815,21 +815,21 @@ type VAT struct {
 type CustomerCreditNoteV2PostBodyLines []CustomerCreditNoteV2PostBodyLine
 
 type CustomerCreditNoteV2PostBodyLine struct {
-	DiscountCode             ValueString `json:"discountCode,omitempty"`
-	TaskID                   ValueString `json:"taskId,omitempty"`
-	Operation                string      `json:"operation"`
-	InventoryNumber          ValueString `json:"inventoryNumber,omitempty"`
-	LineNumber               ValueInt    `json:"lineNumber"`
-	Description              ValueString `json:"description"`
-	Quantity                 ValueInt    `json:"quantity"`
-	UnitPriceInCurrency      ValueNumber `json:"unitPriceInCurrency"`
-	ManualAmountInCurrency   ValueNumber `json:"manualAmountInCurrency"`
-	AccountNumber            ValueString `json:"accountNumber"`
-	VATCodeID                ValueString `json:"vatCodeId"`
-	UOM                      ValueString `json:"uom,omitempty"`
-	DiscountPercent          ValueNumber `json:"discountPercent"`
-	DiscountAmountInCurrency ValueNumber `json:"discountAmountInCurrency"`
-	ManualDiscount           ValueBool   `json:"manualDiscount"`
+	DiscountCode             ValueString     `json:"discountCode,omitempty"`
+	TaskID                   ValueString     `json:"taskId,omitempty"`
+	Operation                string          `json:"operation"`
+	InventoryNumber          ValueString     `json:"inventoryNumber,omitempty"`
+	LineNumber               ValueInt        `json:"lineNumber"`
+	Description              ValueString     `json:"description"`
+	Quantity                 ValueInt        `json:"quantity"`
+	UnitPriceInCurrency      ValueNumber     `json:"unitPriceInCurrency"`
+	ManualAmountInCurrency   ValueNumber     `json:"manualAmountInCurrency"`
+	AccountNumber            ValueString     `json:"accountNumber"`
+	VATCodeID                ValueNullString `json:"vatCodeId"`
+	UOM                      ValueString     `json:"uom,omitempty"`
+	DiscountPercent          ValueNumber     `json:"discountPercent"`
+	DiscountAmountInCurrency ValueNumber     `json:"discountAmountInCurrency"`
+	ManualDiscount           ValueBool       `json:"manualDiscount"`
 	Subaccount               []struct {
 		SegmentID    int    `json:"segmentId"`
 		SegmentValue string `json:"segmentValue"`
