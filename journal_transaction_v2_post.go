@@ -109,17 +109,17 @@ type JournalTransactionV2PostBody struct {
 			SegmentID    int    `json:"segmentId"`
 			SegmentValue string `json:"segmentValue"`
 		} `json:"subaccount"`
-		Project                ValueString `json:"project,omitempty"`
-		PorjectTask            ValueString `json:"projectTask,omitempty"`
-		ReferenceNumber        ValueString `json:"referenceNumber"`
-		TransactionDescription ValueString `json:"transactionDescription"`
-		DebitAmountInCurrency  ValueNumber `json:"debitAmountInCurrency"`
-		CreditAmountInCurrency ValueNumber `json:"creditAmountInCurrency"`
-		VATCodeID              ValueString `json:"vatCodeId,omitempty"`
-		VATID                  ValueString `json:"vatId,omitempty"`
-		Branch                 ValueString `json:"branch,omitempty"`
-		UOM                    ValueString `json:"UOM,omitempty"`
-		Quantity               ValueInt    `json:"quantity"`
+		Project                ValueString     `json:"project,omitempty"`
+		PorjectTask            ValueString     `json:"projectTask,omitempty"`
+		ReferenceNumber        ValueString     `json:"referenceNumber"`
+		TransactionDescription ValueString     `json:"transactionDescription"`
+		DebitAmountInCurrency  ValueNumber     `json:"debitAmountInCurrency"`
+		CreditAmountInCurrency ValueNumber     `json:"creditAmountInCurrency"`
+		VATCodeID              ValueNullString `json:"vatCodeId"`
+		VATID                  ValueNullString `json:"vatId,omitempty"`
+		Branch                 ValueString     `json:"branch,omitempty"`
+		UOM                    ValueString     `json:"UOM,omitempty"`
+		Quantity               ValueInt        `json:"quantity"`
 	} `json:"journalTransactionLines"`
 }
 

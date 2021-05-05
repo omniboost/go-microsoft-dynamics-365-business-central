@@ -166,6 +166,32 @@ func (v ValueString) IsEmpty() bool {
 	return v == ""
 }
 
+type ValueNullString struct {
+	*string
+}
+
+func (v ValueNullString) MarshalJSON() ([]byte, error) {
+	type alias ValueNullString
+	v2 := Value{
+		Value: nil,
+	}
+
+	if v.string != nil {
+		v2 = Value{
+			Value: alias(v),
+		}
+	}
+	return omitempty.MarshalJSON(v2)
+}
+
+func (v *ValueNullString) UnmarshalJSON(data []byte) error {
+	return nil
+}
+
+func (v ValueNullString) IsEmpty() bool {
+	return v.string == nil || *v.string == ""
+}
+
 type ValueBool bool
 
 func (v ValueBool) MarshalJSON() ([]byte, error) {
@@ -807,7 +833,7 @@ type CustomerCreditNoteV2PostBodyLine struct {
 	ManualAmountInCurrency   ValueNumber `json:"manualAmountInCurrency"`
 	AccountNumber            ValueString `json:"accountNumber"`
 	VATCodeID                ValueString `json:"vatCodeId"`
-	Uom                      ValueString `json:"uom,omitempty"`
+	UOM                      ValueString `json:"uom,omitempty"`
 	DiscountPercent          ValueNumber `json:"discountPercent"`
 	DiscountAmountInCurrency ValueNumber `json:"discountAmountInCurrency"`
 	ManualDiscount           ValueBool   `json:"manualDiscount"`
