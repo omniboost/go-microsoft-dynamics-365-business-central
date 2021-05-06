@@ -8,7 +8,7 @@ import (
 
 func TestCustomerGetByCD(t *testing.T) {
 	req := client.NewCustomerGetByCD()
-	req.PathParams().CustomerCD = "202103"
+	req.PathParams().CustomerCD = "M131848"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

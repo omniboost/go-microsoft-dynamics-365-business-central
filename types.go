@@ -827,8 +827,8 @@ type CustomerCreditNoteV2PostBodyLine struct {
 	AccountNumber            ValueString     `json:"accountNumber"`
 	VATCodeID                ValueNullString `json:"vatCodeId"`
 	UOM                      ValueString     `json:"uom,omitempty"`
-	DiscountPercent          ValueNumber     `json:"discountPercent"`
-	DiscountAmountInCurrency ValueNumber     `json:"discountAmountInCurrency"`
+	DiscountPercent          ValueNumber     `json:"discountPercent,omitempty"`
+	DiscountAmountInCurrency ValueNumber     `json:"discountAmountInCurrency,omitempty"`
 	ManualDiscount           ValueBool       `json:"manualDiscount"`
 	Subaccount               []struct {
 		SegmentID    int    `json:"segmentId"`

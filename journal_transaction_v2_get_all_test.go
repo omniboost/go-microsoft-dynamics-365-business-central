@@ -8,7 +8,7 @@ import (
 
 func TestJournalTransactionV2GetAll(t *testing.T) {
 	req := client.NewJournalTransactionV2GetAll()
-	req.QueryParams().PeriodID = "202103"
+	req.QueryParams().PeriodID = "202104"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

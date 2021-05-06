@@ -87,7 +87,7 @@ func (r CustomerCreditNoteV2Post) NewRequestBody() CustomerCreditNoteV2PostBody 
 
 type CustomerCreditNoteV2PostBody struct {
 	CurrencyID        ValueString                       `json:"currencyId"`
-	CustomerRefNumber ValueString                       `json:"customerRefNumber"`
+	CustomerRefNumber ValueString                       `json:"customerRefNumber,omitempty"`
 	ExternalReference ValueString                       `json:"externalReference"`
 	Contact           ValueInt                          `json:"contact,omitempty"`
 	Project           ValueString                       `json:"project,omitempty"`
@@ -96,13 +96,13 @@ type CustomerCreditNoteV2PostBody struct {
 		TaxID         ValueString `json:"taxId"`
 		TaxableAmount ValueNumber `json:"taxableAmount"`
 		VATAmount     ValueNumber `json:"vatAmount"`
-	} `json:"taxDetails"`
+	} `json:"taxDetails,omitempty"`
 	ApplicationLines []struct {
 		Operation    string      `json:"operation"`
 		DocumentType ValueString `json:"documentType"`
 		RefNbr       ValueString `json:"refNbr"`
 		AmountPaid   ValueNumber `json:"amountPaid"`
-	} `json:"applicationLines"`
+	} `json:"applicationLines,omitempty"`
 	CustomerVATZoneID    ValueString  `json:"customerVatZoneId,omitempty"`
 	InvoiceAddress       ValueAddress `json:"invoiceAddress,omitempty"`
 	InvoiceContact       Contact      `json:"invoiceContact,omitempty"`

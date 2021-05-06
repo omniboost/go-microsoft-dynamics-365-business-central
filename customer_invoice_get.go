@@ -3,7 +3,6 @@ package vismanet
 import (
 	"net/http"
 	"net/url"
-	"strconv"
 
 	"github.com/omniboost/go-visma.net/utils"
 )
@@ -59,12 +58,12 @@ func (r CustomerInvoiceGet) NewPathParams() *CustomerInvoiceGetPathParams {
 }
 
 type CustomerInvoiceGetPathParams struct {
-	InvoiceNumber int `schema:"invoice_number"`
+	InvoiceNumber string `schema:"invoice_number"`
 }
 
 func (p *CustomerInvoiceGetPathParams) Params() map[string]string {
 	return map[string]string{
-		"invoice_number": strconv.Itoa(p.InvoiceNumber),
+		"invoice_number": p.InvoiceNumber,
 	}
 }
 
