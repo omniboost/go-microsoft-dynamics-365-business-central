@@ -623,7 +623,7 @@ type CustomerPostBody struct {
 	// 	AttributeID    ValueString `json:"attributeId"`
 	// 	AttributeValue ValueString `json:"attributeValue"`
 	// } `json:"attributeLines"`
-	// OverrideNumberSeries ValueBool `json:"overrideNumberSeries"`
+	OverrideNumberSeries ValueBool `json:"overrideNumberSeries"`
 }
 
 func (r CustomerPostBody) MarshalJSON() ([]byte, error) {
