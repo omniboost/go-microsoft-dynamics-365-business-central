@@ -1,19 +1,19 @@
-package vismanet_test
+package vismaonline_test
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"testing"
 )
 
 func TestCustomerInvoiceGet(t *testing.T) {
 	req := client.NewCustomerInvoiceGet()
-	req.PathParams().InvoiceNumber = "RBB202151765"
+	req.PathParams().InvoiceNumber = "04M202218279"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
 	}
 
 	b, _ := json.MarshalIndent(resp, "", "  ")
-	log.Println(string(b))
+	fmt.Println(string(b))
 }

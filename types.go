@@ -1,4 +1,4 @@
-package vismanet
+package vismaonline
 
 import (
 	"encoding/json"
@@ -330,13 +330,13 @@ type Invoice struct {
 	PaymentMethodID                    ValueString    `json:"paymentMethodId,omitempty"`
 	CreditTermsID                      ValueString    `json:"creditTermsId,omitempty"`
 	CurrencyID                         ValueString    `json:"currencyId"`
-	CustomerRefNumber                  ValueString    `json:"customerRefNumber"`
+	CustomerRefNumber                  ValueString    `json:"customerRefNumber,omitempty"`
 	CashDiscountDate                   ValueTime      `json:"cashDiscountDate,omitempty"`
 	DocumentDueDate                    ValueTime      `json:"documentDueDate"`
 	ExternalReference                  ValueString    `json:"externalReference"`
-	CustomerProject                    ValueString    `json:"customerProject"`
-	ExchangeRate                       ValueInt       `json:"exchangeRate"`
-	DomesticServicesDeductibleDocument ValueBool      `json:"domesticServicesDeductibleDocument"`
+	CustomerProject                    ValueString    `json:"customerProject,omitempty"`
+	ExchangeRate                       ValueInt       `json:"exchangeRate,omitempty"`
+	DomesticServicesDeductibleDocument ValueBool      `json:"domesticServicesDeductibleDocument,omitempty"`
 	RotRutDetails                      RotRutDetails  `json:"rotRutDetails,omitempty"`
 	PaymentReference                   ValueString    `json:"paymentReference,omitempty"`
 	Contact                            ValueInt       `json:"contact,omitempty"`
@@ -349,9 +349,9 @@ type Invoice struct {
 	InvoiceContact                     InvoiceContact `json:"invoiceContact,omitempty"`
 	StartDate                          ValueTime      `json:"startDate,omitempty"`
 	EndDate                            ValueTime      `json:"endDate,omitempty"`
-	AccountingCostRef                  ValueString    `json:"accountingCostRef"`
-	OriginatorDocRef                   ValueString    `json:"originatorDocRef"`
-	ContractDocRef                     ValueString    `json:"contractDocRef"`
+	AccountingCostRef                  ValueString    `json:"accountingCostRef,omitempty"`
+	OriginatorDocRef                   ValueString    `json:"originatorDocRef,omitempty"`
+	ContractDocRef                     ValueString    `json:"contractDocRef,omitempty"`
 	OverrideNumberSeries               ValueBool      `json:"overrideNumberSeries"`
 	ReferenceNumber                    ValueString    `json:"referenceNumber"`
 	CustomerNumber                     ValueString    `json:"customerNumber"`
@@ -415,9 +415,9 @@ type InvoiceLines []InvoiceLine
 
 type InvoiceLine struct {
 	DiscountCode               ValueString     `json:"discountCode,omitempty"`
-	DomesticServicesDeductible ValueBool       `json:"domesticServicesDeductible"`
+	DomesticServicesDeductible ValueBool       `json:"domesticServicesDeductible,omitempty"`
 	ItemType                   ValueString     `json:"itemType"`
-	TypeOfWork                 ValueString     `json:"typeOfWork"`
+	TypeOfWork                 ValueString     `json:"typeOfWork,omitempty"`
 	TaskID                     ValueString     `json:"taskId,omitempty"`
 	StartDate                  ValueTime       `json:"startDate,omitempty"`
 	EndDate                    ValueTime       `json:"endDate,omitempty"`
@@ -429,17 +429,17 @@ type InvoiceLine struct {
 	UnitPriceInCurrency        ValueNumber     `json:"unitPriceInCurrency"`
 	ManualAmountInCurrency     ValueNumber     `json:"manualAmountInCurrency"`
 	AccountNumber              ValueString     `json:"accountNumber"`
-	VATCodeID                  ValueNullString `json:"vatCodeId"`
+	VATCodeID                  ValueNullString `json:"vatCodeId,omitempty"`
 	UOM                        ValueString     `json:"uom,omitempty"`
-	DiscountPercent            ValueNumber     `json:"discountPercent"`
-	DiscountAmountInCurrency   ValueNumber     `json:"discountAmountInCurrency"`
-	ManualDiscount             ValueBool       `json:"manualDiscount"`
+	DiscountPercent            ValueNumber     `json:"discountPercent,omitempty"`
+	DiscountAmountInCurrency   ValueNumber     `json:"discountAmountInCurrency,omitempty"`
+	ManualDiscount             ValueBool       `json:"manualDiscount,omitempty"`
 	Subaccount                 []struct {
 		SegmentID    int    `json:"segmentId"`
 		SegmentValue string `json:"segmentValue"`
-	} `json:"subaccount"`
+	} `json:"subaccount,omitempty"`
 	Salesperson      ValueString `json:"salesperson,omitempty"`
-	DeferralSchedule ValueInt    `json:"deferralSchedule"`
+	DeferralSchedule ValueInt    `json:"deferralSchedule,omitempty"`
 	DeferralCode     ValueString `json:"deferralCode,omitempty"`
 	TermStartDate    ValueTime   `json:"termStartDate,omitempty"`
 	TermEndDate      ValueTime   `json:"termEndDate,omitempty"`
@@ -907,4 +907,21 @@ type Branch struct {
 		ID          string `json:"id"`
 		Description string `json:"description"`
 	} `json:"ledger"`
+}
+
+type FinancialPeriods []FinancialPeriod
+
+type FinancialPeriod struct {
+	Year                        int    `json:"year"`
+	Period                      string `json:"period"`
+	StartDate                   string `json:"startDate"`
+	EndDate                     string `json:"endDate"`
+	Description                 string `json:"description"`
+	Active                      bool   `json:"active"`
+	ClosedInSupplierLedger      bool   `json:"closedInSupplierLedger"`
+	ClosedInCustomerLedger      bool   `json:"closedInCustomerLedger"`
+	ClosedInInventoryManagement bool   `json:"closedInInventoryManagement"`
+	ClosedInGeneralLedger       bool   `json:"closedInGeneralLedger"`
+	ClosedInCashManagement      bool   `json:"closedInCashManagement"`
+	ClosedInFixedAssets         bool   `json:"closedInFixedAssets"`
 }

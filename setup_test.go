@@ -1,4 +1,4 @@
-package vismanet_test
+package vismaonline_test
 
 import (
 	"log"
@@ -6,11 +6,11 @@ import (
 	"os"
 	"testing"
 
-	vismanet "github.com/omniboost/go-visma.net"
+	vismaonline "github.com/omniboost/go-visma.net"
 )
 
 var (
-	client *vismanet.Client
+	client *vismaonline.Client
 )
 
 func TestMain(m *testing.M) {
@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 	applicationType := os.Getenv("APPLICATION_TYPE")
 	debug := os.Getenv("DEBUG")
 
-	client = vismanet.NewClient(nil, accessToken, companyID, applicationType)
+	client = vismaonline.NewClient(nil, accessToken, companyID, applicationType)
 	if debug != "" {
 		client.SetDebug(true)
 	}

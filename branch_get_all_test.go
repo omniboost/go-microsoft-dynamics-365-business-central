@@ -1,8 +1,8 @@
-package vismanet_test
+package vismaonline_test
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"testing"
 )
 
@@ -14,5 +14,5 @@ func TestBranchGetAll(t *testing.T) {
 	}
 
 	b, _ := json.MarshalIndent(resp, "", "  ")
-	log.Println(string(b))
+	fmt.Println(string(b))
 }

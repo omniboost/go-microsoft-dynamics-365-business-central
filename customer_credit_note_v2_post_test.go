@@ -1,4 +1,4 @@
-package vismanet_test
+package vismaonline_test
 
 import (
 	"encoding/json"

@@ -1,4 +1,4 @@
-package vismanet
+package vismaonline
 
 import "time"
 

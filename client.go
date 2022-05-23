@@ -1,4 +1,4 @@
-package vismanet
+package vismaonline
 
 import (
 	"bytes"
@@ -20,7 +20,7 @@ import (
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-vismanet/" + libraryVersion
+	userAgent      = "go-vismaonline/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
 )
