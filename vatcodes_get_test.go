@@ -2,18 +2,17 @@ package vismaonline_test
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"testing"
 )
 
-func TestCustomerGetByCD(t *testing.T) {
-	req := client.NewCustomerGetByCD()
-	req.PathParams().CustomerCD = "M131848"
+func TestVatcodesGet(t *testing.T) {
+	req := client.NewVatcodesGet()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
 	}
 
 	b, _ := json.MarshalIndent(resp, "", "  ")
-	log.Println(string(b))
+	fmt.Println(string(b))
 }

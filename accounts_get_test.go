@@ -2,17 +2,17 @@ package vismaonline_test
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"testing"
 )
 
-func TestJournalTransactionV2Post(t *testing.T) {
-	req := client.NewJournalTransactionV2Post()
+func TestAccountsGet(t *testing.T) {
+	req := client.NewAccountsGet()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
 	}
 
 	b, _ := json.MarshalIndent(resp, "", "  ")
-	log.Println(string(b))
+	fmt.Println(string(b))
 }

@@ -34,7 +34,7 @@ var (
 )
 
 // NewClient returns a new Exact Globe Client client
-func NewClient(httpClient *http.Client, accessToken, companyID, applicationType string) *Client {
+func NewClient(httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -42,9 +42,6 @@ func NewClient(httpClient *http.Client, accessToken, companyID, applicationType 
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetAccessToken(accessToken)
-	client.SetCompanyID(companyID)
-	client.SetApplicationType(applicationType)
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -63,9 +60,6 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	accessToken     string
-	companyID       string
-	applicationType string
 
 	// User agent for client
 	userAgent string
@@ -94,30 +88,6 @@ func (c Client) Debug() bool {
 
 func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
-}
-
-func (c Client) AccessToken() string {
-	return c.accessToken
-}
-
-func (c *Client) SetAccessToken(accessToken string) {
-	c.accessToken = accessToken
-}
-
-func (c Client) CompanyID() string {
-	return c.companyID
-}
-
-func (c *Client) SetCompanyID(companyID string) {
-	c.companyID = companyID
-}
-
-func (c Client) ApplicationType() string {
-	return c.applicationType
-}
-
-func (c *Client) SetApplicationType(applicationType string) {
-	c.applicationType = applicationType
 }
 
 func (c Client) BaseURL() url.URL {
@@ -225,9 +195,6 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	r.Header.Add("Accept", c.MediaType())
 	r.Header.Add("User-Agent", c.UserAgent())
-	r.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.AccessToken()))
-	r.Header.Add("ipp-company-id", c.CompanyID())
-	r.Header.Add("ipp-application-type", c.ApplicationType())
 
 	return r, nil
 }
