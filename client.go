@@ -28,8 +28,8 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "integration.visma.net",
-		Path:   "/API/",
+		Host:   "eaccountingapi.vismaonline.com",
+		Path:   "/v2/",
 	}
 )
 
@@ -253,18 +253,13 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 	}
 
 	errResp := &ErrorResponse{Response: httpResp}
-	exResp := &ExceptionResponse{Response: httpResp}
-	err = c.Unmarshal(httpResp.Body, body, errResp, exResp)
+	err = c.Unmarshal(httpResp.Body, body, errResp)
 	if err != nil {
 		return httpResp, err
 	}
 
-	if errResp.Message != "" {
+	if errResp.Error() != "" {
 		return httpResp, errResp
-	}
-
-	if exResp.ExceptionMessage != "" {
-		return httpResp, exResp
 	}
 
 	return httpResp, nil
@@ -349,7 +344,7 @@ func CheckResponse(r *http.Response) error {
 		}
 	}
 
-	if errorResponse.Message != "" {
+	if errorResponse.Error() != "" {
 		return errorResponse
 	}
 
@@ -375,11 +370,17 @@ type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	Message string `json:"Message"`
+	ErrorCode             int         `json:"ErrorCode"`
+	DeveloperErrorMessage string      `json:"DeveloperErrorMessage"`
+	ErrorID               string      `json:"ErrorId"`
+	Errors                interface{} `json:"Errors"`
 }
 
 func (r *ErrorResponse) Error() string {
-	return r.Message
+	if r.ErrorCode != 0 || r.DeveloperErrorMessage != "" {
+		return fmt.Sprintf("%s (%d)", r.DeveloperErrorMessage, r.ErrorCode)
+	}
+	return ""
 }
 
 func checkContentType(response *http.Response) error {

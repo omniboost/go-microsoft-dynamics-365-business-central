@@ -11,6 +11,7 @@ import (
 	null "gopkg.in/guregu/null.v3"
 
 	"github.com/gorilla/schema"
+	"github.com/omniboost/go-vismaonline/odata"
 )
 
 var (
@@ -104,5 +105,11 @@ func NewSchemaEncoder() *schema.Encoder {
 
 	encoder.RegisterEncoder(null.Float{}, encodeNullFloat)
 	encoder.RegisterEncoder(null.Bool{}, encodeNullBool)
+	encoder.RegisterEncoder(&odata.Expand{}, EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(&odata.Filter{}, EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(&odata.Select{}, EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(&odata.Top{}, EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(&odata.OrderBy{}, EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(&odata.Skip{}, EncodeSchemaMarshaler)
 	return encoder
 }

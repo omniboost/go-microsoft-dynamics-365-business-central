@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-visma.net/utils"
+	"github.com/omniboost/go-vismaonline/utils"
 )
 
 func (c *Client) NewCompanysettingsGet() CompanysettingsGet {

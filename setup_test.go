@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	vismaonline "github.com/omniboost/go-visma.net"
+	vismaonline "github.com/omniboost/go-vismaonline"
 	"golang.org/x/oauth2"
 )
 

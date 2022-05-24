@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-visma.net/utils"
+	"github.com/omniboost/go-vismaonline/utils"
 )
 
 func (c *Client) NewVatcodesGet() VatcodesGet {
@@ -106,7 +106,7 @@ func (r *VatcodesGet) NewResponseBody() *VatcodesGetResponseBody {
 
 type VatcodesGetResponseBody struct {
 	Meta Meta     `json:"Meta"`
-	Data Vatcodes `json:"Data"`
+	Data VATCodes `json:"Data"`
 }
 
 func (r *VatcodesGet) URL() *url.URL {
