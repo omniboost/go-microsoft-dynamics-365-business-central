@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/omniboost/go-vismaonline/odata"
 	"github.com/omniboost/go-vismaonline/utils"
 )
 
@@ -30,10 +31,23 @@ type VouchersGet struct {
 }
 
 func (r VouchersGet) NewQueryParams() *VouchersGetQueryParams {
-	return &VouchersGetQueryParams{}
+	selectFields, _ := utils.Fields(&Customer{})
+	expandFields := []string{}
+	return &VouchersGetQueryParams{
+		Select: odata.NewSelect(selectFields),
+		Expand: odata.NewExpand(expandFields),
+		Filter: odata.NewFilter(),
+		Top:    odata.NewTop(),
+		Skip:   odata.NewSkip(),
+	}
 }
 
 type VouchersGetQueryParams struct {
+	Select *odata.Select `schema:"$select,omitempty"`
+	Expand *odata.Expand `schema:"$expand,omitempty"`
+	Filter *odata.Filter `schema:"$filter,omitempty"`
+	Top    *odata.Top    `schema:"$top,omitempty"`
+	Skip   *odata.Skip   `schema:"$skip,omitempty"`
 }
 
 func (p VouchersGetQueryParams) ToURLValues() (url.Values, error) {
@@ -50,7 +64,7 @@ func (p VouchersGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *VouchersGet) QueryParams() QueryParams {
+func (r *VouchersGet) QueryParams() *VouchersGetQueryParams {
 	return r.queryParams
 }
 

@@ -431,3 +431,24 @@ func (r CustomerInvoiceRow) MarshalJSON() ([]byte, error) {
 func (r CustomerInvoiceRow) IsEmpty() bool {
 	return zero.IsZero(r)
 }
+
+type CustomerLedgerItems []CustomerLedgerItem
+
+type CustomerLedgerItem struct {
+	CurrencyCode                   string   `json:"CurrencyCode"`
+	CurrencyRate                   float64  `json:"CurrencyRate"`
+	CurrencyRateUnit               float64  `json:"CurrencyRateUnit"`
+	CustomerID                     string   `json:"CustomerId"`
+	DueDate                        Date     `json:"DueDate"`
+	ID                             string   `json:"Id,omitempty"`
+	InvoiceDate                    Date     `json:"InvoiceDate"`
+	InvoiceNumber                  int      `json:"InvoiceNumber"`
+	IsCreditInvoice                bool     `json:"IsCreditInvoice"`
+	PaymentReferenceNumber         string   `json:"PaymentReferenceNumber"`
+	RemainingAmountInvoiceCurrency float64  `json:"RemainingAmountInvoiceCurrency"`
+	RoundingsAmountInvoiceCurrency float64  `json:"RoundingsAmountInvoiceCurrency"`
+	TotalAmountInvoiceCurrency     float64  `json:"TotalAmountInvoiceCurrency"`
+	VATAmountInvoiceCurrency       float64  `json:"VATAmountInvoiceCurrency"`
+	VoucherID                      string   `json:"VoucherId"`
+	ModifiedUTC                    DateTime `json:"ModifiedUtc,omitempty"`
+}
