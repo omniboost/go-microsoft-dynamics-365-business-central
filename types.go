@@ -126,7 +126,7 @@ type Voucher struct {
 	ID                    string      `json:"Id,omitempty,omitempty"`
 	VoucherDate           Date        `json:"VoucherDate,omitempty"`
 	VoucherText           string      `json:"VoucherText,omitempty"`
-	Rows                  VoucherRows `json:"Rows"`
+	Rows                  VoucherRows `json:"Rows,omitempty"`
 	NumberAndNumberSeries string      `json:"NumberAndNumberSeries,omitempty"`
 	NumberSeries          string      `json:"NumberSeries,omitempty"`
 	Attachments           interface{} `json:"Attachments,omitempty"`
@@ -449,6 +449,15 @@ type CustomerLedgerItem struct {
 	RoundingsAmountInvoiceCurrency float64  `json:"RoundingsAmountInvoiceCurrency"`
 	TotalAmountInvoiceCurrency     float64  `json:"TotalAmountInvoiceCurrency"`
 	VATAmountInvoiceCurrency       float64  `json:"VATAmountInvoiceCurrency"`
-	VoucherID                      string   `json:"VoucherId"`
+	VoucherID                      string   `json:"VoucherId,omitempty"`
 	ModifiedUTC                    DateTime `json:"ModifiedUtc,omitempty"`
+	Voucher                        Voucher  `json:"Voucher,omitempty"`
+}
+
+func (i CustomerLedgerItem) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(i)
+}
+
+func (i CustomerLedgerItem) IsEmpty() bool {
+	return zero.IsZero(i)
 }
