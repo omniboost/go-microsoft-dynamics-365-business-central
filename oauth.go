@@ -1,4 +1,4 @@
-package vismaonline
+package poweroffice
 
 import (
 	"golang.org/x/oauth2"
@@ -18,8 +18,8 @@ func NewOauth2Config() *Oauth2Config {
 			ClientSecret: "",
 			Scopes:       []string{},
 			Endpoint: oauth2.Endpoint{
-				AuthURL:   "https://identity.vismaonline.com/connect/authorize",
-				TokenURL:  "https://identity.vismaonline.com/connect/token",
+				AuthURL:   "https://identity.poweroffice.com/connect/authorize",
+				TokenURL:  "https://identity.poweroffice.com/connect/token",
 				AuthStyle: oauth2.AuthStyleInHeader,
 			},
 		},

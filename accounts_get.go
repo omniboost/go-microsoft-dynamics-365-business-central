@@ -1,10 +1,10 @@
-package vismaonline
+package poweroffice
 
 import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-vismaonline/utils"
+	"github.com/omniboost/go-poweroffice/utils"
 )
 
 func (c *Client) NewAccountsGet() AccountsGet {

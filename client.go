@@ -1,4 +1,4 @@
-package vismaonline
+package poweroffice
 
 import (
 	"bytes"
@@ -20,7 +20,7 @@ import (
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-vismaonline/" + libraryVersion
+	userAgent      = "go-poweroffice/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
 )
@@ -28,7 +28,7 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "eaccountingapi.vismaonline.com",
+		Host:   "eaccountingapi.poweroffice.com",
 		Path:   "/v2/",
 	}
 )

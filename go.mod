@@ -1,4 +1,4 @@
-module github.com/omniboost/go-vismaonline
+module github.com/omniboost/go-poweroffice
 
 go 1.18
 

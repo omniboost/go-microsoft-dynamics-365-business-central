@@ -1,4 +1,4 @@
-package vismaonline_test
+package poweroffice_test
 
 import (
 	"encoding/json"

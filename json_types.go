@@ -1,4 +1,4 @@
-package vismaonline
+package poweroffice
 
 import (
 	"encoding/json"

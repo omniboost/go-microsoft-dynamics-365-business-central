@@ -1,8 +1,8 @@
-package vismaonline
+package poweroffice
 
 import (
 	"github.com/cydev/zero"
-	"github.com/omniboost/go-vismaonline/omitempty"
+	"github.com/omniboost/go-poweroffice/omitempty"
 )
 
 type Meta struct {

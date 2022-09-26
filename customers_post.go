@@ -1,11 +1,11 @@
-package vismaonline
+package poweroffice
 
 import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-vismaonline/omitempty"
-	"github.com/omniboost/go-vismaonline/utils"
+	"github.com/omniboost/go-poweroffice/omitempty"
+	"github.com/omniboost/go-poweroffice/utils"
 )
 
 func (c *Client) NewCustomersPost() CustomersPost {

@@ -1,4 +1,4 @@
-package vismaonline_test
+package poweroffice_test
 
 import (
 	"context"
@@ -7,12 +7,12 @@ import (
 	"os"
 	"testing"
 
-	vismaonline "github.com/omniboost/go-vismaonline"
+	poweroffice "github.com/omniboost/go-poweroffice"
 	"golang.org/x/oauth2"
 )
 
 var (
-	client *vismaonline.Client
+	client *poweroffice.Client
 )
 
 func TestMain(m *testing.M) {
@@ -23,7 +23,7 @@ func TestMain(m *testing.M) {
 	tokenURL := os.Getenv("TOKEN_URL")
 	debug := os.Getenv("DEBUG")
 
-	oauthConfig := vismaonline.NewOauth2Config()
+	oauthConfig := poweroffice.NewOauth2Config()
 	oauthConfig.ClientID = clientID
 	oauthConfig.ClientSecret = clientSecret
 
@@ -39,7 +39,7 @@ func TestMain(m *testing.M) {
 	// get http client with automatic oauth logic
 	httpClient := oauthConfig.Client(context.Background(), token)
 
-	client = vismaonline.NewClient(httpClient)
+	client = poweroffice.NewClient(httpClient)
 	if debug != "" {
 		client.SetDebug(true)
 	}
