@@ -28,8 +28,8 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "eaccountingapi.poweroffice.com",
-		Path:   "/v2/",
+		Host:   "api.poweroffice.net",
+		Path:   "",
 	}
 )
 

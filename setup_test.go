@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	poweroffice "github.com/omniboost/go-poweroffice"
-	"golang.org/x/oauth2"
 )
 
 var (
@@ -19,7 +18,7 @@ func TestMain(m *testing.M) {
 	baseURL := os.Getenv("BASE_URL")
 	clientID := os.Getenv("CLIENT_ID")
 	clientSecret := os.Getenv("CLIENT_SECRET")
-	refreshToken := os.Getenv("REFRESH_TOKEN")
+	// refreshToken := os.Getenv("REFRESH_TOKEN")
 	tokenURL := os.Getenv("TOKEN_URL")
 	debug := os.Getenv("DEBUG")
 
@@ -27,17 +26,8 @@ func TestMain(m *testing.M) {
 	oauthConfig.ClientID = clientID
 	oauthConfig.ClientSecret = clientSecret
 
-	// set alternative token url
-	if tokenURL != "" {
-		oauthConfig.Endpoint.TokenURL = tokenURL
-	}
-
-	token := &oauth2.Token{
-		RefreshToken: refreshToken,
-	}
-
 	// get http client with automatic oauth logic
-	httpClient := oauthConfig.Client(context.Background(), token)
+	httpClient := oauthConfig.Client(context.Background())
 
 	client = poweroffice.NewClient(httpClient)
 	if debug != "" {
@@ -50,6 +40,12 @@ func TestMain(m *testing.M) {
 			log.Fatal(err)
 		}
 		client.SetBaseURL(*u)
+		oauthConfig.SetBaseURL(u)
+	}
+
+	// set alternative token url
+	if tokenURL != "" {
+		oauthConfig.TokenURL = tokenURL
 	}
 
 	client.SetDisallowUnknownFields(true)

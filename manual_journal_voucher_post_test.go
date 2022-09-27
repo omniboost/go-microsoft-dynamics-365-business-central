@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-func TestTermsofpaymentsGet(t *testing.T) {
-	req := client.NewTermsofpaymentsGet()
+func TestManualJournalVoucherPost(t *testing.T) {
+	req := client.NewManualJournalVoucherPost()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
