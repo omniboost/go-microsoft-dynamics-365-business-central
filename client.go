@@ -351,36 +351,29 @@ func CheckResponse(r *http.Response) error {
 	return nil
 }
 
-type ExceptionResponse struct {
-	// HTTP response that caused this error
-	Response *http.Response
-
-	ExceptionType      string `json:"ExceptionType"`
-	ExceptionMessage   string `json:"ExceptionMessage"`
-	ExceptionFaultCode string `json:"ExceptionFaultCode"`
-	ExceptionMessageID string `json:"ExceptionMessageID"`
-	ExceptionDetails   string `json:"ExceptionDetails"`
-}
-
-func (r *ExceptionResponse) Error() string {
-	return r.ExceptionMessage
-}
-
 type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	ErrorCode             int         `json:"ErrorCode"`
-	DeveloperErrorMessage string      `json:"DeveloperErrorMessage"`
-	ErrorID               string      `json:"ErrorId"`
-	Errors                interface{} `json:"Errors"`
+	// {
+	//   "success": false,
+	//   "validation": {
+	// 	"errorLogReference": "bwsz2zfx35c-1019150739",
+	// 	"summary": "Accrual from date is invalidAccrual to date is invalid",
+	// 	"exception": "AggregatedValidation"
+	//   }
+	// }
+
+	Success    bool `json:"success"`
+	Validation struct {
+		ErrorLogReference string `json:"errorLogReference"`
+		Summary           string `json:"summary"`
+		Exception         string `json:"exception"`
+	} `json:"validation"`
 }
 
 func (r *ErrorResponse) Error() string {
-	if r.ErrorCode != 0 || r.DeveloperErrorMessage != "" {
-		return fmt.Sprintf("%s (%d)", r.DeveloperErrorMessage, r.ErrorCode)
-	}
-	return ""
+	return r.Validation.Summary
 }
 
 func checkContentType(response *http.Response) error {

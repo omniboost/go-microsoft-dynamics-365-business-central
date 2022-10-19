@@ -1,5 +1,10 @@
 package poweroffice
 
+import (
+	"github.com/cydev/zero"
+	"github.com/omniboost/go-poweroffice/omitempty"
+)
+
 type VATCodes []VATCode
 
 type VATCode struct {
@@ -183,4 +188,644 @@ type ManualJournalVoucherLine struct {
 }
 
 type VatReturnSpecification struct {
+}
+
+type OutgoingInvoiceListItems []OutgoingInvoiceListItem
+
+type OutgoingInvoiceListItem struct {
+	// Gets the remaining amount to be paid on this invoice. This field will
+	// only have a value on sent or paid invoices and is shown in the client's
+	// default currency code.
+	Balance float64 `json:"Balance"`
+	// Gets the code of the BrandingTheme to be used when sending this invoice.
+	BrandingThemeCode string `json:"BrandingThemeCode"`
+	// Gets the cid. This field will only have a value on sent invoices. (Norwegian: KID)
+	CID string `json:"Cid"`
+	// The ContactGroup name. Is set if the invoice is a group invoice.
+	ContactGroup string `json:"ContactGroup"`
+	// The ContactGroup Id. Is set if the invoice is a group invoice. It is not
+	// possible to set GoApi.Invoices.OutgoingInvoiceListItem.CustomerCode and
+	// ContactGroupId on the same invoice.
+	ContactGroupId int `json:"ContactGroupId"`
+	// Gets the contract number.
+	ContractNo string `json:"ContractNo"`
+	// Gets the date this entity was created.
+	CreatedDate Date `json:"CreatedDate"`
+	// Gets the currency code of the outgoing invoice.
+	CurrencyCode string `json:"CurrencyCode"`
+	// Gets an normalized (always base 1) currency exchange rate.
+	CurrencyExchangeRate float64 `json:"CurrencyExchangeRate"`
+	// Gets the code of the Customer that this invoice should be or was
+	// delivered to. It is not possible to set
+	// GoApi.Invoices.OutgoingInvoiceListItem.ContactGroupId and CustomerCode on
+	// the same invoice.
+	CustomerCode int `json:"CustomerCode"`
+	// Gets the customer email address. On sent invoices this field will contain
+	// the email the invoice was delivered to if the delivery type was
+	// GoApi.Common.InvoiceDeliveryType.PdfByEmail .
+	CustomerEmail string `json:"CustomerEmail"`
+	// Gets the customer reference.
+	CustomerReference string `json:"CustomerReference"`
+	// Gets the custom matching reference. This value will be matched with
+	// vouchers with same CustomMatchingReference after posting.
+	CustomMatchingReference string `json:"CustomMatchingReference"`
+	// Gets the external DebtCollectionCase status associated with this invoice.
+	DebtCollectionCaseStatus DebtCollectionCaseStatus `json:"DebtCollectionCaseStatus"`
+	// Gets the external DebtCollectionCase code.
+	DebtCollectionCode string `json:"DebtCollectionCode"`
+	// Gets the delivery address' Address1 that was set on the invoice when it
+	// was sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddress1 string `json:"DeliveryAddress1"`
+	// Gets the delivery address Address2 that was set on the invoice when it
+	// was sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddress2 string `json:"DeliveryAddress2"`
+	// Gets the delivery address City that was set on the invoice when it was
+	// sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddressCity string `json:"DeliveryAddressCity"`
+	// Gets the delivery address CountryCode that was set on the invoice when it
+	// was sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddressCountryCode string `json:"DeliveryAddressCountryCode"`
+	// Gets the delivery Address identifier.
+	DeliveryAddressID int `json:"DeliveryAddressId"`
+	// Gets the delivery address ZipCode that was set on the invoice when it was
+	// sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddressZipCode string `json:"DeliveryAddressZipCode"`
+	// Gets the delivery term of the invoice.
+	DeliveryTerm string `json:"DeliveryTerm"`
+	// Gets code of the Department this invoice is from.
+	DepartmentCode string `json:"DepartmentCode"`
+	// Gets the code of the CustomDimensionValue 1 this invoice is for.
+	Dim1Code string `json:"Dim1Code"`
+	// Gets the code of the CustomDimensionValue 2 this invoice is for.
+	Dim2Code string `json:"Dim2Code"`
+	// Gets the code of the CustomDimensionValue 3 this invoice is for.
+	Dim3Code string `json:"Dim3Code"`
+	// Gets the document no (invoice number). This field will only have a value
+	// on sent invoices.
+	DocumentNo string `json:"DocumentNo"`
+	// Gets the due date.
+	DueDate Date `json:"DueDate"`
+	// Gets the expected due date.
+	ExpectedDueDate Date `json:"ExpectedDueDate"`
+	// Gets ExternalImportReference. Can be used to correlate/duplicate check
+	// invoices. Must be a unique value for a given client. Max length is 50
+	// characters.
+	ExternalImportReference string `json:"ExternalImportReference"`
+	// Gets the identifier. This identifier is unique and assigned by
+	// PowerOffice Go when a new entity is saved.
+	ID string `json:"Id"`
+	// Gets the imported order no. This was set as the order number in the
+	// external system when the outgoing invoice was created.
+	ImportedOrderNo int `json:"ImportedOrderNo"`
+	// Gets the internal debt collection status associated with this invoice.
+	InvoiceDebtCollectionStatus DebtCollectionStatus `json:"InvoiceDebtCollectionStatus"`
+	// Gets the invoice delivery date.
+	InvoiceDeliveryDate Date `json:"InvoiceDeliveryDate"`
+	// Gets the type of the invoice delivery. This is the means of delivery that
+	// was used when the invoice was delivered by PowerOffice Go.
+	InvoiceDeliveryType InvoiceDeliveryType `json:"InvoiceDeliveryType"`
+	// Gets the invoice number in number format. Available only for sent and
+	// posted invoices.
+	InvoiceNo int `json:"InvoiceNo"`
+	// Get current delivery invoice status. When true the invoice is under
+	// delivery.
+	IsInvoiceBeingProcessed bool `json:"IsInvoiceBeingProcessed"`
+	// Gets the last changed date.
+	LastChanged Date `json:"LastChanged"`
+	// If invoice delivery fails this property will contain the last error
+	// message.
+	LastErrorMessage string `json:"LastErrorMessage"`
+	// Gets the net amount of the invoice. This is calculated from the lines of
+	// the outgoing invoice.
+	NetAmount float64 `json:"NetAmount"`
+	// Gets the order date.
+	OrderDate Date `json:"OrderDate"`
+	// Gets the order no. This value is auto generated when saving a new
+	// OutgoingInvoice.
+	OrderNo int `json:"OrderNo"`
+	// Gets code of the Employee that is the sales person on this outgoing
+	// invoice.
+	OurReferenceEmployeeCode int `json:"OurReferenceEmployeeCode"`
+	// Gets the payment terms. This is the number of days until the invoice is
+	// due after sending.
+	PaymentTerms int `json:"PaymentTerms"`
+	// Gets the code of the Project this invoice is for.
+	ProjectCode string `json:"ProjectCode"`
+	// Gets the purchase order no.
+	PurchaseOrderNo string `json:"PurchaseOrderNo"`
+	// Gets the related DocumentNo linking the original invoice. Can be used
+	// when creating credit notes. If set on a credit note, this credit note
+	// will be matched with an invoice with the provided InvoiceNo / DocumentNo
+	// when the credit note is posted.
+	RelatedDocumentNo string `json:"RelatedDocumentNo"`
+	// Gets the date the invoice was sent in Go. Only available for invoices
+	// sent from Go. Blank if the invoice was posted to Go using an import of
+	// the voucher.
+	SentDate Date `json:"SentDate"`
+	// Gets or sets the OutgoingInvoiceStatus .
+	Status OutgoingInvoiceStatus `json:"Status"`
+	// Gets the total amount of the invoice. This is calculated from the lines
+	// of the outgoing invoice.
+	TotalAmount float64 `json:"TotalAmount"`
+	// Gets the voucher date.
+	VoucherDate Date `json:"VoucherDate"`
+	// Gets the voucher number the invoice have. Only avaialble for sent invoices.
+	VoucherNo int `json:"VoucherNo"`
+}
+
+type DebtCollectionCaseStatus int
+
+type DebtCollectionStatus int
+
+type InvoiceDeliveryType int
+
+type OutgoingInvoiceStatus int
+
+type OutgoingInvoice struct {
+	// Gets the remaining amount to be paid on this invoice. This field will
+	// only have a value on sent or paid invoices and is shown in the client's
+	// default currency code.
+	Balance float64 `json:"Balance,omitempty"`
+	// Gets or sets the code of the branding theme to be used when sending this
+	// invoice.
+	BrandingThemeCode string `json:"BrandingThemeCode,omitempty"`
+	// Gets the cid. This field will only have a value on sent invoices.
+	// (Norwegian: KID)
+	Cid string `json:"Cid,omitempty"`
+	// The contact group name. Will be returned from PowerOffice Go if
+	// GoApi.Invoices.OutgoingInvoice.ContactGroupId is set
+	ContactGroup string `json:"ContactGroup,omitempty"`
+	// The contact group Id. Is set if the invoice is a group invoice. Set this
+	// to a valid ContactGroup identifier if the invoice is a group invoice. It
+	// is not possible to set GoApi.Invoices.OutgoingInvoice.CustomerCode and
+	// ContactGroupId on the same invoice.
+	ContactGroupID int `json:"ContactGroupId,omitempty"`
+	// Gets or sets the contract no.
+	ContractNo string `json:"ContractNo,omitempty"`
+	// Gets the date this entity was created.
+	CreatedDate Date `json:"CreatedDate,omitempty"`
+	// Gets or sets the currency code of the outgoing invoice.
+	CurrencyCode string `json:"CurrencyCode,omitempty"`
+	// Gets or sets an normalized (always base 1) currency exchange rate.
+	CurrencyExchangeRate float64 `json:"CurrencyExchangeRate,omitempty"`
+	// Gets or sets the code of the Customer that this invoice should be
+	// delivered to. It is not possible to set
+	// GoApi.Invoices.OutgoingInvoice.ContactGroupId and CustomerCode on the
+	// same invoice.
+	CustomerCode int `json:"CustomerCode,omitempty"`
+	// Gets the customer email address. On sent invoices this field will contain
+	// the email the invoice was delivered to if the delivery type was
+	// GoApi.Common.InvoiceDeliveryType.PdfByEmail .
+	CustomerEmail string `json:"CustomerEmail,omitempty"`
+	// Gets or sets the customer reference.
+	CustomerReference string `json:"CustomerReference,omitempty"`
+	// Gets or sets the customer reference contact person id. This property will
+	// be used instead of CustomerReference if provided. The customer must have
+	// a contact person with this ID created to use this property.
+	CustomerReferenceContactPersonID int `json:"CustomerReferenceContactPersonId,omitempty"`
+	// Gets or sets the custom matching reference. This value will be matched
+	// with the sub ledger entries on vouchers with same CustomMatchingReference
+	// after posting.
+	CustomMatchingReference string `json:"CustomMatchingReference,omitempty"`
+	// Gets the external DebtCollectionCase status associated with this invoice.
+	DebtCollectionCaseStatus DebtCollectionCaseStatus `json:"DebtCollectionCaseStatus,omitempty"`
+	// Gets the external DebtCollectionCase code.
+	DebtCollectionCode string `json:"DebtCollectionCode,omitempty"`
+	// Gets the delivery address' Address1 that was set on the invoice when it
+	// was sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddress1 string `json:"DeliveryAddress1,omitempty"`
+	// Gets the delivery address Address2 that was set on the invoice when it
+	// was sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddress2 string `json:"DeliveryAddress2,omitempty"`
+	// Gets the delivery address City that was set on the invoice when it was
+	// sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddressCity string `json:"DeliveryAddressCity,omitempty"`
+	// Gets the delivery address CountryCode that was set on the invoice when it
+	// was sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddressCountryCode string `json:"DeliveryAddressCountryCode,omitempty"`
+	// Gets or sets the delivery address identifier.
+	DeliveryAddressID int `json:"DeliveryAddressId,omitempty"`
+	// Gets the delivery address ZipCode that was set on the invoice when it was
+	// sent. Will only have a value on invoices with
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent ,
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid and
+	// GoApi.Invoices.OutgoingInvoiceStatus.Archived .
+	DeliveryAddressZipCode string `json:"DeliveryAddressZipCode,omitempty"`
+	// Gets or sets the delivery date.
+	DeliveryDate Date `json:"DeliveryDate,omitempty"`
+	// Gets or set the terms of delivery of the invoice.
+	DeliveryTerm string `json:"DeliveryTerm,omitempty"`
+	// Gets or sets code of the Department this invoice is for. This code will
+	// be inherited on all OutgoingInvoiceLines unless "-1" (no department) is
+	// specified.
+	DepartmentCode string `json:"DepartmentCode,omitempty"`
+	// Gets the code of the CustomDimensionValue 1 this invoice is for.
+	Dim1Code string `json:"Dim1Code,omitempty"`
+	// Gets the code of the CustomDimensionValue 2 this invoice is for.
+	Dim2Code string `json:"Dim2Code,omitempty"`
+	// Gets the code of the CustomDimensionValue 3 this invoice is for.
+	Dim3Code string `json:"Dim3Code,omitempty"`
+	// Gets the document no (invoice number). This field will only have a value
+	// on sent invoices.
+	DocumentNo string `json:"DocumentNo,omitempty"`
+	// Gets the due date. This is the due date on the invoice that was sent from
+	// PowerOffice Go and will only have a value on sent invoices.
+	DueDate Date `json:"DueDate,omitempty"`
+	// Gets the expected due date. This is the date when the invoice is expected
+	// to be paid by a customer. In essence this is an override of
+	// GoApi.Invoices.OutgoingInvoice.DueDate , that is set by a user in
+	// PowerOffice Go after the invoice has been delivered. This field will only
+	// have a value on sent invoices.
+	ExpectedDueDate Date `json:"ExpectedDueDate,omitempty"`
+	// Gets or sets an external import reference. Can be used to
+	// correlate/duplicate check invoices. Must be a unique value for a given
+	// client, exception will be thrown if an OutgoingInvoice with equal import
+	// reference exists. Max length is 50 characters.
+	ExternalImportReference string `json:"ExternalImportReference,omitempty"`
+	// Gets the identifier. This identifier is unique and assigned by
+	// PowerOffice Go when a new entity is saved, and should be provided when an
+	// entity should be edited. If this identifier is not provided, PowerOffice
+	// Go will try to create a new entity.
+	ID string `json:"Id,omitempty"`
+	// Gets or sets the imported order no. This should be set as the order
+	// number in the external system.
+	ImportedOrderNo int `json:"ImportedOrderNo,omitempty"`
+	// Gets the internal debt collection status associated with this invoice.
+	InvoiceDebtCollectionStatus DebtCollectionStatus `json:"InvoiceDebtCollectionStatus,omitempty"`
+	// Gets the type of the invoice delivery. This is the means of delivery that
+	// was used when the invoice was delivered by PowerOffice Go.
+	InvoiceDeliveryType InvoiceDeliveryType `json:"InvoiceDeliveryType,omitempty"`
+	// Gets the invoice number in number format. Available only for sent and
+	// posted invoices.
+	InvoiceNo int `json:"InvoiceNo,omitempty"`
+	// Get current delivery invoice status. When true the invoice is under
+	// delivery.
+	IsInvoiceBeingProcessed bool `json:"IsInvoiceBeingProcessed,omitempty"`
+	// Gets the last changed date.
+	LastChanged Date `json:"LastChanged,omitempty"`
+	// If invoice delivery fails this property will contain the last error
+	// message.
+	LastErrorMessage string `json:"LastErrorMessage,omitempty"`
+	// Gets the net amount of the invoice. This is calculated from the
+	// GoApi.Invoices.OutgoingInvoice.OutgoingInvoiceLines .
+	NetAmount float64 `json:"NetAmount,omitempty"`
+	// Gets or sets the order date.
+	OrderDate Date `json:"OrderDate,omitempty"`
+	// Gets the order no. This value is auto generated when saving a new
+	// OutgoingInvoice.
+	OrderNo int `json:"OrderNo,omitempty"`
+	// Gets or sets code of the Employee that is the sales person on this
+	// outgoing invoice.
+	OurReferenceEmployeeCode int `json:"OurReferenceEmployeeCode,omitempty"`
+	// Gets the outgoing invoice lines ( OutgoingInvoiceLine . Trying to add
+	// more then 10000 lines to an OutgoingInvoice will throw an exception when
+	// saving.
+	OutgoingInvoiceLines OutgoingInvoiceLines `json:"OutgoingInvoiceLines,omitempty"`
+	// Gets or sets the payment terms. This is the number of days until the
+	// invoice is due after sending.
+	PaymentTerms int `json:"PaymentTerms,omitempty"`
+	// Gets or sets the code of the Project this invoice is for. This code will
+	// be inherited on all OutgoingInvoiceLines unless "-1" (no project) is
+	// specified.
+	ProjectCode string `json:"ProjectCode,omitempty"`
+	// Gets or sets the purchase order no.
+	PurchaseOrderNo string `json:"PurchaseOrderNo,omitempty"`
+	// Gets or sets the related DocumentNo linking the original invoice. Can be
+	// used when creating credit notes. If set on a credit note, this credit
+	// note will be matched with an invoice with the provided InvoiceNo /
+	// DocumentNo when the credit note is posted.
+	RelatedDocumentNo string `json:"RelatedDocumentNo,omitempty"`
+	// Gets the date the invoice was sent in Go. Only available for invoices
+	// sent from Go. Blank if the invoice was posted to Go using an import of
+	// the voucher.
+	SentDate Date `json:"SentDate,omitempty"`
+	// Gets or sets the status. Invoices can only be set to status
+	// GoApi.Invoices.OutgoingInvoiceStatus.Draft or
+	// GoApi.Invoices.OutgoingInvoiceStatus.Approved . Defaults to
+	// GoApi.Invoices.OutgoingInvoiceStatus.Draft .
+	Status OutgoingInvoiceStatus `json:"Status,omitempty"`
+	// Gets the total amount of the invoice. This is calculated from the
+	// GoApi.Invoices.OutgoingInvoice.OutgoingInvoiceLines .
+	TotalAmount float64 `json:"TotalAmount,omitempty"`
+	// Gets the voucher date. This is the date when the invoice was sent from
+	// PowerOffice Go and will only have a value on sent invoices.
+	VoucherDate Date `json:"VoucherDate,omitempty"`
+	// Gets the voucher number the invoice have. Only avaialble for sent
+	// invoices.
+	VoucherNo int `json:"VoucherNo,omitempty"`
+}
+
+type OutgoingInvoiceLines []OutgoingInvoiceLine
+
+type OutgoingInvoiceLine struct {
+	// Gets or sets if GoApi.Invoices.OutgoingInvoiceLine.Accrual is used to
+	// enable accrual of the invoice. (Norwegian: Periodisering)
+	Accrual Accrual `json:"Accrual,omitempty"`
+	// Gets or sets code of the Department this line is for. By default the
+	// DepartmentCode in the head (OutgoingInvoice) will be inherited and used
+	// when this is null. Use "-1" to set "No department".
+	DepartmentCode string `json:"DepartmentCode,omitempty"`
+	// Gets or sets the description.
+	Description string `json:"Description,omitempty"`
+	// Gets the code of the CustomDimensionValue 1 this line is for.
+	Dim1Code string `json:"Dim1Code,omitempty"`
+	// Gets the code of the CustomDimensionValue 2 this line is for.
+	Dim2Code string `json:"Dim2Code,omitempty"`
+	// Gets the code of the CustomDimensionValue 3 this line is for.
+	Dim3Code string `json:"Dim3Code,omitempty"`
+	// Gets or sets the discount. The value must be between 0 and 1. I.e. 0.5 =
+	// 50% discount. Can also be used to add a premium in percent of the sales
+	// price (usually markup) by having negative number. Negative numbers can be
+	// between -10 and 0.
+	DiscountPercent float64 `json:"DiscountPercent,omitempty"`
+	//
+	ExemptVat bool `json:"ExemptVat,omitempty"`
+	// Gets or sets an external import line reference. Can be used to
+	// correlate/duplicate check invoice lines. Must be a unique value for a
+	// given client, exception will be thrown if an OutgoingInvoiceLine with
+	// equal import reference exists for the same invoice. Max length is 50
+	// characters.
+	ExternalImportLineReference string `json:"ExternalImportLineReference,omitempty"`
+	// Gets the identifier. This identifier is unique and assigned by
+	// PowerOffice Go when a new entity is saved, and should be provided when an
+	// entity should be edited. If this identifier is not provided, PowerOffice
+	// Go will try to create a new entity. Important notice: When the
+	// OutgoingInvoice status goes from Draft or Approved to a posted invoice
+	// (status Sent, Paid or Archived). The draft invoice is copied over to a
+	// posted invoice, causing the Id to change.
+	ID int `json:"Id,omitempty"`
+	// Flag indicating if a line should be deleted from the invoice when calling
+	// the save method. This property should be used when deleting lines.
+	IsDeleted bool `json:"IsDeleted,omitempty"`
+	// Gets or sets the type of the line. When adding invoice lines to the
+	// OutgoingInvoice , the types supported are
+	// GoApi.Common.VoucherLineType.Normal ,
+	// GoApi.Common.VoucherLineType.Summary and
+	// GoApi.Common.VoucherLineType.Text .
+	LineType VoucherLineType `json:"LineType,omitempty"`
+	// Gets the net amount. This is calculated by PowerOffice Go using the
+	// quantity, product price (or overridden unit price) and discount, not
+	// including value added tax (VAT).
+	NetAmount float64 `json:"NetAmount,omitempty"`
+	// Gets or sets the code of the Product . Must be provided on lines that
+	// affects the result (lines that are of GoApi.Common.VoucherLineType.Normal
+	// ).
+	ProductCode string `json:"ProductCode,omitempty"`
+	// Gets or sets the code of the Project this line is for. By default the
+	// ProjectCode in the head (OutgoingInvoice) will be inherited and used when
+	// this is null. Use "-1" to set "No project".
+	ProjectCode string `json:"ProjectCode,omitempty"`
+	// Gets or sets the quantity.
+	Quantity float64 `json:"Quantity,omitempty"`
+	// Gets the code of the GeneralLedgerAccount that will be used for posting
+	// the revenue from the product when the invoice is sent if the customer is
+	// exempt VAT, or the line has ExemptVat set to true. The usual application
+	// in Go is that the alternative sales account is used for vat free sales
+	// with code 5. The alternative sales account can, however, be used with an
+	// account with vat in order to alternate between different vat codes on the
+	// product. This applies to all outgoing invoices with OutgoingInvoiceStatus
+	// GoApi.Invoices.OutgoingInvoiceStatus.Draft or
+	// GoApi.Invoices.OutgoingInvoiceStatus.Approved . Lines on invoices that
+	// are posted (has OutgoingInvoiceStatus
+	// GoApi.Invoices.OutgoingInvoiceStatus.Sent or
+	// GoApi.Invoices.OutgoingInvoiceStatus.Paid .), this property will contain
+	// the actual account that was used to post the revenue.
+	SalesAccount int `json:"SalesAccount,omitempty"`
+	// Gets or sets code of the Employee that is the sales person on this line.
+	SalesPersonEmployeeCode int `json:"SalesPersonEmployeeCode,omitempty"`
+	// Gets or sets the sort order. Can be used to specify the order of the
+	// lines on the invoice.
+	SortOrder int `json:"SortOrder,omitempty"`
+	// Gets the total amount. This is calculated by PowerOffice Go using the
+	// quantity, product price (or overridden unit price) and discount,
+	// including value added tax (VAT).
+	TotalAmount float64 `json:"TotalAmount,omitempty"`
+	// Gets or sets the overridden unit cost price for this Product . If this is
+	// not provided, the unit cost price on the product will be set.
+	UnitCost float64 `json:"UnitCost,omitempty"`
+	// Gets or sets the unit of measure. This is an Oasis compatible
+	// unit-of-measure code. This property is deprecated. Use
+	// GoApi.Invoices.OutgoingInvoiceLine.UnitOfMeasureCode . If both
+	// GoApi.Invoices.OutgoingInvoiceLine.UnitOfMeasure and
+	// GoApi.Invoices.OutgoingInvoiceLine.UnitOfMeasureCode is set,
+	// GoApi.Invoices.OutgoingInvoiceLine.UnitOfMeasureCode will be used.
+	UnitOfMeasure string `json:"UnitOfMeasure,omitempty"`
+	// Gets or sets the unit of measure. This is an Oasis compatible
+	// unit-of-measure code.
+	UnitOfMeasureCode UnitOfMeasureCode `json:"UnitOfMeasureCode,omitempty"`
+	// Gets or sets the overridden unit price for this Product before discount.
+	// If this is not provided, the unit price on the product will be set.
+	UnitPrice int `json:"UnitPrice,omitempty"`
+	// Gets the code of the VatCode . (Norwegian: MVA-kode)
+	VATCode string `json:"VatCode,omitempty"`
+	// Gets the code of the GeneralLedgerAccount that will be used for posting the revenue from the product when the invoice is sent if the customer is exempt VAT. This applies to all outgoing invoices with OutgoingInvoiceStatus GoApi.Invoices.OutgoingInvoiceStatus.Draft or GoApi.Invoices.OutgoingInvoiceStatus.Approved . Lines on invoices that are posted (has OutgoingInvoiceStatus GoApi.Invoices.OutgoingInvoiceStatus.Sent or GoApi.Invoices.OutgoingInvoiceStatus.Paid .), this property will contain the actual account that was used to post the revenue.
+	VatExemptSalesAccount int `json:"VatExemptSalesAccount,omitempty"`
+	// Gets the rate of the VatCode .
+	VATRate float64 `json:"VatRate,omitempty"`
+	// Gets or sets the VatReturnSpecification . Entries that are vat reportable
+	// might report vat return specifications from 2022. If not provided, the
+	// line will use the vat returns specification that is default on the
+	// account of the product if there is any, otherwise
+	// GoApi.Common.VatReturnSpecification.None .
+	VatReturnSpecification VatReturnSpecification `json:"VatReturnSpecification,omitempty"`
+}
+
+func (l OutgoingInvoiceLine) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(l)
+}
+
+func (l OutgoingInvoiceLine) IsEmpty() bool {
+	return zero.IsZero(l)
+}
+
+type Accrual struct {
+	// The code of the GeneralLedgerAccount used for keeping accrual balance. (Norwegian: Balansekonto)
+	BalanceAccountCode int `json:"BalanceAccountCode,omitempty"`
+	// Start date of accrual. If the invoice is a RecurringInvoice , NumOfMonths should be used instead.
+	FromDate Date `json:"FromDate,omitempty"`
+	// States if accrual is active or not.
+	IsActive bool `json:"IsActive,omitempty"`
+	// Used by recurring invoice to specify the number of months the invoice should be accrued over. This property will only be used if the accrual is on a line that is on a RecurringInvoice
+	NumOfMonths int `json:"NumOfMonths,omitempty"`
+	// The code of the GeneralLedgerAccount used for posting the result. (Norwegian: Resultatkonto)
+	ResultAccountCode int `json:"ResultAccountCode,omitempty"`
+	// End date of accrual. If the invoice is a RecurringInvoice , NumOfMonths should be used instead.
+	ToDate Date `json:"ToDate,omitempty"`
+}
+
+func (a Accrual) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(a)
+}
+
+func (a Accrual) IsEmpty() bool {
+	return zero.IsZero(a)
+}
+
+type VoucherLineType int
+
+type UnitOfMeasureCode int
+
+type Customers []Customer
+
+type Customer struct {
+	// Gets or sets the code.
+	Code int `json:"Code,omitempty"`
+	// Gets or sets the contact groups. This collection will contain the names of all the ContactGroup the party is associated with. If the collection is provided a contact group that does not exist, the contact group will be created when saving.
+	ContactGroups []string `json:"ContactGroups,omitempty"`
+	// Gets or sets id of the primary ContactPerson on the party.
+	ContactPersonID int `json:"ContactPersonId,omitempty"`
+	// Gets the creation date.
+	CreatedDate Date `json:"CreatedDate,omitempty"`
+	// Gets the if of the Import that created this party.
+	CreatedFromImportJournalID string `json:"CreatedFromImportJournalId,omitempty"`
+	// Gets or sets the currency code.
+	CurrencyCode string `json:"CurrencyCode,omitempty"`
+	// Gets date when contact first became a customer
+	CustomerCreatedDate Date `json:"CustomerCreatedDate,omitempty"`
+	// Gets or sets the date of birth.
+	DateOfBirth Date `json:"DateOfBirth,omitempty"`
+	// Gets or set the delivery term.
+	DeliveryTerm string `json:"DeliveryTerm,omitempty"`
+	// Gets or sets the code of the Department this customer belongs to.
+	DepartmentCode string `json:"DepartmentCode,omitempty"`
+	// Gets or sets the fixed discount percent for this customer, this value should be between 0 and 100. Can also be used to add a premium in percent of the sales price (usually markup) by having negative number. Negative numbers can be between -1000 and 0.
+	DiscountPercent float64 `json:"DiscountPercent,omitempty"`
+	// Gets or sets a value indicating whether or not to add late payment fees when sending reminders to this customer.
+	DoNotAddLatePaymentFees bool `json:"DoNotAddLatePaymentFees,omitempty"`
+	// Gets or sets a value indicating whether or not to add late payment interest when sending reminders to this customer.
+	DoNotAddLatePaymentInterest bool `json:"DoNotAddLatePaymentInterest,omitempty"`
+	// Gets or sets the email address.
+	EmailAddress string `json:"EmailAddress,omitempty"`
+	// Gets or sets the external code. If this entity is imported with a number outside the number range for this type of party, this field will contain the imported original number. This number has precedence over GoApi.Party.Party.Code when choosing which entity to use when importing files through the import service. I.e. when importing OutgoingInvoices on the import service on a customer with Code 10000 - the import will choose the customer with ExternalCode 10000 over the customer with Code 10000.
+	ExternalCode int `json:"ExternalCode,omitempty"`
+	// Gets or sets an external import reference that is unique within the account type (Customer, Supplier, Employee). It can be edited by any integration - at any time. Max length is 50 characters.
+	ExternalImportReference string `json:"ExternalImportReference,omitempty"`
+	// Gets or sets the first name.
+	FirstName string `json:"FirstName,omitempty"`
+	// Gets or sets the hourly rate to use when billing time to the Customer.
+	HourlyRate float64 `json:"HourlyRate,omitempty"`
+	// Gets the identifier. This identifier is unique and assigned by PowerOffice Go when a new entity is saved, and should be provided when an entity should be edited. If this identifier is not provided, PowerOffice Go will try to create a new entity.
+	ID int `json:"Id,omitempty"`
+	// Gets or sets the international ID country code. Country code is given in ISO 3166-1 alfa-2 standard (Two characters).
+	InternationalIdCountryCode string `json:"InternationalIdCountryCode,omitempty"`
+	// Gets or sets the international ID number. For privacy reasons queries returns "hidden" if this field has a value and null if it's empty.
+	InternationalIDNumber string `json:"InternationalIdNumber,omitempty"`
+	// Gets or sets the international ID type.
+	InternationalIdType InternationalIdType `json:"InternationalIdType,omitempty"`
+	// Gets or sets the code of the BrandingTheme used when sending invoices to this customer. If NULL, the clients default branding theme will be used.
+	InvoiceBrandingThemeCode string `json:"InvoiceBrandingThemeCode,omitempty"`
+	// Gets or sets how invoices should be delivered to the customer.
+	InvoiceDeliveryType InvoiceDeliveryType `json:"InvoiceDeliveryType,omitempty"`
+	// Gets or sets the invoice email address.
+	InvoiceEmailAddress string `json:"InvoiceEmailAddress,omitempty"`
+	// Gets or sets the invoice email CC address.
+	InvoiceEmailAddressCC string `json:"InvoiceEmailAddressCC,omitempty"`
+	// Gets IsActive on Customer and Supplier. This property reflects if an entity is currently a Customer and/or Supplier, depending on the endpoint queried.
+	IsActive bool `json:"IsActive,omitempty"`
+	// Gets or sets a value indicating whether this party is archived (is inactive)
+	IsArchived bool `json:"IsArchived,omitempty"`
+	// Gets or sets a value indicating whether this party is a private person.
+	IsPerson bool `json:"IsPerson,omitempty"`
+	// Gets or sets a value indicating whether this customer is vat free. Sales against the customer will use the alternative sales account on the product or product group when posting the revenue if this is set to true.
+	IsVatFree bool `json:"IsVatFree,omitempty"`
+	// Gets the last changed date.
+	LastChanged Date `json:"LastChanged,omitempty"`
+	// Gets or sets the last name.
+	LastName string `json:"LastName,omitempty"`
+	// Gets or sets the legal name.
+	LegalName string `json:"LegalName,omitempty"`
+	// Gets or sets the mail/postal address.
+	MailAddress Address `json:"MailAddress,omitempty"`
+	// Gets or sets the name.
+	Name string `json:"Name,omitempty"`
+	// Gets or sets how notice of debt collection should be delivered to the customer.
+	NoticeOfDebtCollectionDeliveryType InvoiceDeliveryType `json:"NoticeOfDebtCollectionDeliveryType,omitempty"`
+	// Gets or sets the code of the Employee of the sales person handling this customer (Our reference).
+	OurReferenceEmployeeCode int `json:"OurReferenceEmployeeCode,omitempty"`
+	// Gets or sets the payment terms. This is the default number of days after an invoice sent to this customer is due.
+	PaymentTerms int `json:"PaymentTerms,omitempty"`
+	// Gets or sets the phone number.
+	PhoneNumber string `json:"PhoneNumber,omitempty"`
+	// Gets or sets the how reminders should be delivered to the customer.
+	ReminderDeliveryType InvoiceDeliveryType `json:"ReminderDeliveryType,omitempty"`
+	// Gets or sets the reminder email address. Used if ReminderDeliveryType and/or NoticeOfDebtCollectionDeliveryType uses email.
+	ReminderEmailAddress string `json:"ReminderEmailAddress,omitempty"`
+	// Gets or sets a value indicating whether International ID should be reported to Altinn.
+	ReportInternationalId bool `json:"ReportInternationalId,omitempty"`
+	// Gets or sets a value indicating whether to send reminders for this customer or not.
+	SendReminders bool `json:"SendReminders,omitempty"`
+	// Gets or sets when the customer or supplier first became a contact.
+	Since Date `json:"Since,omitempty"`
+	// Sets the social security number. For privacy reasons queries returns "hidden" if this field has a value and null if it's empty.
+	SocialSecurityNumber string `json:"SocialSecurityNumber,omitempty"`
+	// Gets or sets the street address. This field is Obsolete but still exists due to backward compability. Use StreetAddresses instead. If this entity does not have any street addresses, but has a mail address. This property will contain the GoApi.Party.Party.MailAddress . and GoApi.Party.Party.StreetAddresses will be an empty collection.
+	StreetAddress Address `json:"StreetAddress,omitempty"`
+	// Gets or sets the street addresses. Take note here that the full collection of street addresses must exist when updating this property. For instance if the supplier has two addresses in PowerOffice Go, and the API only provides one of them in this property, the other one will be deleted.
+	StreetAddresses Addresses `json:"StreetAddresses,omitempty"`
+	// Sets the id to the SubledgerNumberSeries the party should be applied to when creating it.
+	SubledgerNumberSeriesID string `json:"SubledgerNumberSeriesId,omitempty"`
+	// Gets or sets a value indicating whether invoices to this customers should be transferred to a debt collection agency after it's due.
+	TransferToDebtCollectionAgency bool `json:"TransferToDebtCollectionAgency,omitempty"`
+	// Gets or sets a value indicating whether it's specified that invoices to this customer should use factoring.
+	UseFactoring bool `json:"UseFactoring,omitempty"`
+	// Gets or sets whether invoice fee will be used when invoicing the customer. Relevant only if the client use invoice fee.
+	UseInvoiceFee bool `json:"UseInvoiceFee,omitempty"`
+	// Gets or sets the vat number (Organization number).
+	VATNumber string `json:"VatNumber,omitempty"`
+	// Gets or sets the website URL.
+	WebsiteUrl string `json:"WebsiteUrl,omitempty"`
+}
+
+type InternationalIdType int
+
+type Addresses []Address
+
+type Address struct {
+	// Gets or sets the first address line. This is usually used for street name or postal box.
+	Address1 string `json:"Address1,omitempty"`
+	// Gets or sets the second address line. Used for additional specifications of the address.
+	Address2 string `json:"Address2,omitempty"`
+	// Gets or sets the third address line. This property is no longer in use and will be removed on a later date.
+	Address3 string `json:"Address3,omitempty"`
+	// Gets or sets the city.
+	City string `json:"City,omitempty"`
+	// Gets or sets the ISO 3166-1 alfa-2 country code (Two characters)
+	CountryCode string `json:"CountryCode,omitempty"`
+	// Get or sets the external code - can be used to reference the address in the external system
+	ExternalCode string `json:"ExternalCode,omitempty"`
+	// Gets or sets the identifier. This identifier is unique and assigned by PowerOffice Go when a new entity is saved, and should be provided when an entity should be edited. If this identifier is not provided, PowerOffice Go will try to create a new entity.
+	ID int `json:"Id,omitempty"`
+	// Flag indicating whether or not this address is the primary delivery address. Primary delivery address will be suggested as the delivery address when creating new invoices.
+	IsPrimary bool `json:"IsPrimary,omitempty"`
+	// Gets or sets the last changed date (DateTimeOffset).
+	LastChanged Date `json:"LastChanged,omitempty"`
+	// Gets or sets the zip code (postal code).
+	ZipCode string `json:"ZipCode,omitempty"`
 }

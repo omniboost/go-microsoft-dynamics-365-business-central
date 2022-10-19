@@ -45,6 +45,11 @@ func (d *Date) UnmarshalJSON(text []byte) (err error) {
 		return nil
 	}
 
+	d.Time, err = time.Parse("2006-01-02T15:04:05 -07:00", value)
+	if err == nil {
+		return nil
+	}
+
 	d.Time, err = time.Parse("2006-01-02T15:04:05", value)
 	return err
 }
