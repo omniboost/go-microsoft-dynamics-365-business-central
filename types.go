@@ -829,3 +829,38 @@ type Address struct {
 	// Gets or sets the zip code (postal code).
 	ZipCode string `json:"ZipCode,omitempty"`
 }
+
+type GeneralLedgerAccounts []GeneralLedgerAccount
+
+type GeneralLedgerAccount struct {
+	// Gets or sets the code. This is a required property when creating new general ledger accounts and the value has to be in the range 1000-9999.
+	Code int `json:"Code"`
+	// Gets the created from import journal identifier. If the account was created from an import, this property will contain the ID of the Import that created this account.
+	CreatedFromImportJournalID string `json:"CreatedFromImportJournalId"`
+	// Gets or sets the currency code.
+	CurrencyCode string `json:"CurrencyCode"`
+	// Gets or sets the code of the Department associated with this account.
+	DepartmentCode string `json:"DepartmentCode"`
+	// Gets the identifier. This identifier is unique and assigned by PowerOffice Go when a new entity is saved, and should be provided when an entity should be edited. If this identifier is not provided, PowerOffice Go will try to create a new entity.
+	ID int `json:"Id"`
+	// Gets or sets a value indicating whether this instance is active. Accounts that are not active will not be shown to users.
+	IsActive bool `json:"IsActive"`
+	// Gets or sets a value indicating whether Department is required when posting an accounting entry on this account.
+	IsDepartmentRequired bool `json:"IsDepartmentRequired"`
+	// Gets or sets a value indicating whether Project is required when posting an accounting entry on this account.
+	IsProjectRequired bool `json:"IsProjectRequired"`
+	// Gets or sets a value indicating whether vat code is locked after posting an accounting entry to this account.
+	IsVatCodeLockedAfterPosting bool `json:"IsVatCodeLockedAfterPosting"`
+	// Gets the last changed date.
+	LastChanged Date `json:"LastChanged"`
+	// Gets or sets the name. Required property when creating new general ledger accounts.
+	Name string `json:"Name"`
+	// Gets or sets the code of the Project associated with this account.
+	ProjectCode string `json:"ProjectCode"`
+	// Gets or sets the code of the default VatCode that should be used on this account. (Norwegian: MVA-kode)
+	VATCode string `json:"VatCode"`
+	// VatReturnSpecification 	Gets or sets the vat return specification
+	VATReturnSpecification VATReturnSpecification `json:"VatReturnSpecification"`
+}
+
+type VATReturnSpecification int
