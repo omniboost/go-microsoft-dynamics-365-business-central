@@ -642,7 +642,7 @@ type OutgoingInvoiceLine struct {
 	UnitOfMeasureCode UnitOfMeasureCode `json:"UnitOfMeasureCode,omitempty"`
 	// Gets or sets the overridden unit price for this Product before discount.
 	// If this is not provided, the unit price on the product will be set.
-	UnitPrice int `json:"UnitPrice,omitempty"`
+	UnitPrice float64 `json:"UnitPrice,omitempty"`
 	// Gets the code of the VatCode . (Norwegian: MVA-kode)
 	VATCode string `json:"VatCode,omitempty"`
 	// Gets the code of the GeneralLedgerAccount that will be used for posting the revenue from the product when the invoice is sent if the customer is exempt VAT. This applies to all outgoing invoices with OutgoingInvoiceStatus GoApi.Invoices.OutgoingInvoiceStatus.Draft or GoApi.Invoices.OutgoingInvoiceStatus.Approved . Lines on invoices that are posted (has OutgoingInvoiceStatus GoApi.Invoices.OutgoingInvoiceStatus.Sent or GoApi.Invoices.OutgoingInvoiceStatus.Paid .), this property will contain the actual account that was used to post the revenue.
