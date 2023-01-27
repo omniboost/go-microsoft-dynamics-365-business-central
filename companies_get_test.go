@@ -6,8 +6,10 @@ import (
 	"testing"
 )
 
-func TestLocationsGet(t *testing.T) {
-	req := client.NewLocationsGet()
+func TestCompaniesGet(t *testing.T) {
+	req := client.NewCompaniesGet()
+	req.PathParams().EnvironmentName = "DG_Sandbox001"
+	req.PathParams().EnvironmentName = "production"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

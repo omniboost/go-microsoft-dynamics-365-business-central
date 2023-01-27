@@ -1,4 +1,4 @@
-module github.com/omniboost/go-poweroffice
+module github.com/omniboost/go-microsoft-dynamics-365-business-central
 
 go 1.18
 

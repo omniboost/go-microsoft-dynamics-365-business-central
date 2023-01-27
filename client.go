@@ -1,4 +1,4 @@
-package poweroffice
+package central
 
 import (
 	"bytes"
@@ -20,7 +20,7 @@ import (
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-poweroffice/" + libraryVersion
+	userAgent      = "go-microsoft-dynamics-365-business-central/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
 )
@@ -355,25 +355,14 @@ type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	// {
-	//   "success": false,
-	//   "validation": {
-	// 	"errorLogReference": "bwsz2zfx35c-1019150739",
-	// 	"summary": "Accrual from date is invalidAccrual to date is invalid",
-	// 	"exception": "AggregatedValidation"
-	//   }
-	// }
-
-	Success    bool `json:"success"`
-	Validation struct {
-		ErrorLogReference string `json:"errorLogReference"`
-		Summary           string `json:"summary"`
-		Exception         string `json:"exception"`
-	} `json:"validation"`
+	Err struct {
+		Code    string `json:"code"`
+		Message string `json:"message"`
+	} `json:"error"`
 }
 
 func (r *ErrorResponse) Error() string {
-	return r.Validation.Summary
+	return fmt.Sprintf("%s: %s", r.Err.Code, r.Err.Message)
 }
 
 func checkContentType(response *http.Response) error {

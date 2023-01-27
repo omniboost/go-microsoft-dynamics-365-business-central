@@ -1,39 +1,36 @@
-package poweroffice
+package central
 
 import (
-	"net/url"
-	"strings"
+	"time"
 
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
 )
 
-const ()
+const (
+	// scope                = "*"
+	oauthStateString     = ""
+	authorizationTimeout = 60 * time.Second
+	tokenTimeout         = 5 * time.Second
+)
 
 type Oauth2Config struct {
-	clientcredentials.Config
+	oauth2.Config
+	APIKey string
 }
 
 func NewOauth2Config() *Oauth2Config {
 	config := &Oauth2Config{
-		Config: clientcredentials.Config{
+		Config: oauth2.Config{
+			RedirectURL:  "",
 			ClientID:     "",
 			ClientSecret: "",
-			Scopes:       []string{},
-			TokenURL:     BaseURL.String() + "/OAuth/Token",
-			AuthStyle:    oauth2.AuthStyleInHeader,
+			// Scopes:       []string{"https://graph.microsoft.com/.default", "openid", "offline_access", "https://api.businesscentral.dynamics.com/.default"},
+			Scopes: []string{"openid", "offline_access", "profile"},
+			Endpoint: oauth2.Endpoint{
+				TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+			},
 		},
 	}
 
 	return config
-}
-
-func (c *Oauth2Config) SetBaseURL(baseURL *url.URL) {
-	// Strip trailing slash
-	baseURL.Path = strings.TrimSuffix(baseURL.Path, "/")
-
-	// These are not registered in the oauth library by default
-	oauth2.RegisterBrokenAuthHeaderProvider(baseURL.String())
-
-	c.Config.TokenURL = baseURL.String() + "/OAuth/Token"
 }

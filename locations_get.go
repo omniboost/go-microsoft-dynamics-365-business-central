@@ -1,10 +1,10 @@
-package poweroffice
+package central
 
 import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-poweroffice/utils"
+	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
 
 func (c *Client) NewLocationsGet() LocationsGet {
@@ -105,13 +105,20 @@ func (r *LocationsGet) NewResponseBody() *LocationsGetResponseBody {
 }
 
 type LocationsGetResponseBody struct {
-	Data    Locations `json:"data"`
-	Success bool      `json:"success"`
-	Count   int       `json:"count"`
+	Value []struct {
+		AadTenantID       string `json:"aadTenantId"`
+		ApplicationFamily string `json:"applicationFamily"`
+		Type              string `json:"type"`
+		Name              string `json:"name"`
+		CountryCode       string `json:"countryCode"`
+		WebServiceURL     string `json:"webServiceUrl"`
+		WebClientLoginURL string `json:"webClientLoginUrl"`
+	} `json:"value"`
 }
 
 func (r *LocationsGet) URL() *url.URL {
-	u := r.client.GetEndpointURL("/Location", r.PathParams())
+	u := r.client.GetEndpointURL("/environments/v1.1", r.PathParams())
+	// u := r.client.GetEndpointURL("", r.PathParams())
 	return &u
 }
 

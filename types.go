@@ -1,8 +1,8 @@
-package poweroffice
+package central
 
 import (
 	"github.com/cydev/zero"
-	"github.com/omniboost/go-poweroffice/omitempty"
+	"github.com/omniboost/go-microsoft-dynamics-365-business-central/omitempty"
 )
 
 type VATCodes []VATCode

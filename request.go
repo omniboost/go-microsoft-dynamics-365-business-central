@@ -1,4 +1,4 @@
-package poweroffice
+package central
 
 import "net/url"
 

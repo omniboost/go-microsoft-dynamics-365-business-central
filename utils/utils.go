@@ -11,7 +11,7 @@ import (
 	null "gopkg.in/guregu/null.v3"
 
 	"github.com/gorilla/schema"
-	"github.com/omniboost/go-poweroffice/odata"
+	"github.com/omniboost/go-microsoft-dynamics-365-business-central/odata"
 )
 
 var (
