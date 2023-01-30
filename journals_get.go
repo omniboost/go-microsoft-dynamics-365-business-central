@@ -3,8 +3,8 @@ package central
 import (
 	"net/http"
 	"net/url"
-	"time"
 
+	"github.com/omniboost/go-microsoft-dynamics-365-business-central/odata"
 	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
 
@@ -31,10 +31,21 @@ type JournalsGet struct {
 }
 
 func (r JournalsGet) NewQueryParams() *JournalsGetQueryParams {
-	return &JournalsGetQueryParams{}
+	selectFields, _ := utils.Fields(&Journal{})
+	return &JournalsGetQueryParams{
+		Select: odata.NewSelect(selectFields),
+		Filter: odata.NewFilter(),
+		Top:    odata.NewTop(),
+		Skip:   odata.NewSkip(),
+	}
 }
 
 type JournalsGetQueryParams struct {
+	// @TODO: check if this an OData struct or something
+	Select *odata.Select `schema:"$select,omitempty"`
+	Filter *odata.Filter `schema:"$filter,omitempty"`
+	Top    *odata.Top    `schema:"$top,omitempty"`
+	Skip   *odata.Skip   `schema:"$skip,omitempty"`
 }
 
 func (p JournalsGetQueryParams) ToURLValues() (url.Values, error) {
@@ -51,7 +62,7 @@ func (p JournalsGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *JournalsGet) QueryParams() QueryParams {
+func (r *JournalsGet) QueryParams() *JournalsGetQueryParams {
 	return r.queryParams
 }
 
@@ -111,17 +122,8 @@ func (r *JournalsGet) NewResponseBody() *JournalsGetResponseBody {
 }
 
 type JournalsGetResponseBody struct {
-	OdataContext string `json:"@odata.context"`
-	Value        []struct {
-		OdataEtag              string    `json:"@odata.etag"`
-		ID                     string    `json:"id"`
-		Code                   string    `json:"code"`
-		DisplayName            string    `json:"displayName"`
-		TemplateDisplayName    string    `json:"templateDisplayName"`
-		LastModifiedDateTime   time.Time `json:"lastModifiedDateTime"`
-		BalancingAccountID     string    `json:"balancingAccountId"`
-		BalancingAccountNumber string    `json:"balancingAccountNumber"`
-	} `json:"value"`
+	OdataContext string   `json:"@odata.context"`
+	Value        Journals `json:"value"`
 }
 
 func (r *JournalsGet) URL() *url.URL {

@@ -3,8 +3,8 @@ package central
 import (
 	"net/http"
 	"net/url"
-	"time"
 
+	"github.com/omniboost/go-microsoft-dynamics-365-business-central/odata"
 	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
 
@@ -31,10 +31,21 @@ type AccountsGet struct {
 }
 
 func (r AccountsGet) NewQueryParams() *AccountsGetQueryParams {
-	return &AccountsGetQueryParams{}
+	selectFields, _ := utils.Fields(&Account{})
+	return &AccountsGetQueryParams{
+		Select: odata.NewSelect(selectFields),
+		Filter: odata.NewFilter(),
+		Top:    odata.NewTop(),
+		Skip:   odata.NewSkip(),
+	}
 }
 
 type AccountsGetQueryParams struct {
+	// @TODO: check if this an OData struct or something
+	Select *odata.Select `schema:"$select,omitempty"`
+	Filter *odata.Filter `schema:"$filter,omitempty"`
+	Top    *odata.Top    `schema:"$top,omitempty"`
+	Skip   *odata.Skip   `schema:"$skip,omitempty"`
 }
 
 func (p AccountsGetQueryParams) ToURLValues() (url.Values, error) {
@@ -51,7 +62,7 @@ func (p AccountsGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *AccountsGet) QueryParams() QueryParams {
+func (r *AccountsGet) QueryParams() *AccountsGetQueryParams {
 	return r.queryParams
 }
 
@@ -111,20 +122,8 @@ func (r *AccountsGet) NewResponseBody() *AccountsGetResponseBody {
 }
 
 type AccountsGetResponseBody struct {
-	OdataContext string `json:"@odata.context"`
-	Value        []struct {
-		OdataEtag            string    `json:"@odata.etag"`
-		ID                   string    `json:"id"`
-		Number               string    `json:"number"`
-		DisplayName          string    `json:"displayName"`
-		Category             string    `json:"category"`
-		SubCategory          string    `json:"subCategory"`
-		Blocked              bool      `json:"blocked"`
-		AccountType          string    `json:"accountType"`
-		DirectPosting        bool      `json:"directPosting"`
-		NetChange            float64   `json:"netChange"`
-		LastModifiedDateTime time.Time `json:"lastModifiedDateTime"`
-	} `json:"value"`
+	OdataContext string   `json:"@odata.context"`
+	Value        Accounts `json:"value"`
 }
 
 func (r *AccountsGet) URL() *url.URL {

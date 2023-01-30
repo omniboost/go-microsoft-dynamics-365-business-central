@@ -3,13 +3,15 @@ package central_test
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
 )
 
 func TestJournalsGet(t *testing.T) {
 	req := client.NewJournalsGet()
-	req.PathParams().EnvironmentName = "production"
-	req.PathParams().CompanyID = "7da8c511-282d-ec11-8f46-0022485628fc"
+	req.PathParams().EnvironmentName = os.Getenv("ENVIRONMENT_NAME")
+	req.PathParams().CompanyID = os.Getenv("COMPANY_ID")
+	req.QueryParams().Filter.Set("code eq 'JV'")
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

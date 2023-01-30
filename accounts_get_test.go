@@ -3,13 +3,15 @@ package central_test
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
 )
 
 func TestAccountsGet(t *testing.T) {
 	req := client.NewAccountsGet()
-	req.PathParams().EnvironmentName = "DG_Sandbox001"
-	req.PathParams().CompanyID = "5dfedb69-2021-ec11-8f46-00224856209b"
+	req.PathParams().EnvironmentName = os.Getenv("ENVIRONMENT_NAME")
+	req.PathParams().CompanyID = os.Getenv("COMPANY_ID")
+	req.QueryParams().Filter.Set("displayName eq 'TOTAL NON OPERATING INCOME & EXPENSES'")
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
