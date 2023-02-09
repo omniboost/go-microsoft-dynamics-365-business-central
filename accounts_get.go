@@ -98,6 +98,10 @@ func (r *AccountsGet) Method() string {
 	return r.method
 }
 
+func (r *AccountsGet) Headers() http.Header {
+	return r.headers
+}
+
 func (r AccountsGet) NewRequestBody() AccountsGetBody {
 	return AccountsGetBody{}
 }

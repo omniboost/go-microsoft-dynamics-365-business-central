@@ -7,9 +7,11 @@ import (
 	"testing"
 )
 
-func TestCompaniesGet(t *testing.T) {
-	req := client.NewCompaniesGet()
+func TestJournalLinesPost(t *testing.T) {
+	req := client.NewJournalLinesPost()
 	req.PathParams().EnvironmentName = os.Getenv("ENVIRONMENT_NAME")
+	req.PathParams().CompanyID = os.Getenv("COMPANY_ID")
+	req.PathParams().JournalID = "61e3d254-9913-ec11-86bc-000d3ac818b6"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

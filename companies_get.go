@@ -3,7 +3,6 @@ package central
 import (
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
@@ -85,6 +84,10 @@ func (r *CompaniesGet) Method() string {
 	return r.method
 }
 
+func (r *CompaniesGet) Headers() http.Header {
+	return r.headers
+}
+
 func (r CompaniesGet) NewRequestBody() CompaniesGetBody {
 	return CompaniesGetBody{}
 }
@@ -109,19 +112,8 @@ func (r *CompaniesGet) NewResponseBody() *CompaniesGetResponseBody {
 }
 
 type CompaniesGetResponseBody struct {
-	OdataContext string `json:"@odata.context"`
-	Value        []struct {
-		ID                string    `json:"id"`
-		SystemVersion     string    `json:"systemVersion"`
-		Timestamp         int       `json:"timestamp"`
-		Name              string    `json:"name"`
-		DisplayName       string    `json:"displayName"`
-		BusinessProfileID string    `json:"businessProfileId"`
-		SystemCreatedAt   time.Time `json:"systemCreatedAt"`
-		SystemCreatedBy   string    `json:"systemCreatedBy"`
-		SystemModifiedAt  time.Time `json:"systemModifiedAt"`
-		SystemModifiedBy  string    `json:"systemModifiedBy"`
-	} `json:"value"`
+	OdataContext string    `json:"@odata.context"`
+	Value        Companies `json:"value"`
 }
 
 func (r *CompaniesGet) URL() *url.URL {

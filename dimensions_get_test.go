@@ -7,9 +7,11 @@ import (
 	"testing"
 )
 
-func TestCompaniesGet(t *testing.T) {
-	req := client.NewCompaniesGet()
+func TestDimensionsGet(t *testing.T) {
+	req := client.NewDimensionsGet()
 	req.PathParams().EnvironmentName = os.Getenv("ENVIRONMENT_NAME")
+	req.PathParams().CompanyID = os.Getenv("COMPANY_ID")
+	// req.QueryParams().Filter.Set("code eq 'JV'")
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

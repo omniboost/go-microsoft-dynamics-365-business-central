@@ -87,6 +87,10 @@ func (r *CustomersGet) Method() string {
 	return r.method
 }
 
+func (r *CustomersGet) Headers() http.Header {
+	return r.headers
+}
+
 func (r CustomersGet) NewRequestBody() CustomersGetBody {
 	return CustomersGetBody{}
 }

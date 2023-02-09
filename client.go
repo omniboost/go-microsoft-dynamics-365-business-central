@@ -28,7 +28,7 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "api.poweroffice.net",
+		Host:   "api.businesscentral.dynamics.com",
 		Path:   "",
 	}
 )
@@ -191,6 +191,7 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 		r = r.WithContext(ctx)
 	}
 
+	r.Header = req.Headers()
 	// set other headers
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	r.Header.Add("Accept", c.MediaType())
@@ -233,36 +234,60 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		log.Println(string(dump))
 	}
 
-	// check if the response isn't an error
-	err = CheckResponse(httpResp)
+	b, err := ioutil.ReadAll(httpResp.Body)
 	if err != nil {
 		return httpResp, err
 	}
+	httpResp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
 
-	// check the provided interface parameter
-	if httpResp == nil {
-		return httpResp, nil
+	err = c.CheckResponse(httpResp)
+	if err != nil {
+		return httpResp, err
 	}
 
 	if body == nil {
-		return httpResp, err
-	}
-
-	if httpResp.ContentLength == 0 {
 		return httpResp, nil
 	}
 
-	errResp := &ErrorResponse{Response: httpResp}
-	err = c.Unmarshal(httpResp.Body, body, errResp)
+	err = c.Unmarshal(ioutil.NopCloser(bytes.NewBuffer(b)), body)
 	if err != nil {
-		return httpResp, err
-	}
-
-	if errResp.Error() != "" {
-		return httpResp, errResp
+		return nil, err
 	}
 
 	return httpResp, nil
+}
+
+func (c *Client) CheckResponse(resp *http.Response) error {
+	// check if the response isn't an error
+	err := CheckContentType(resp)
+	if err != nil {
+		return err
+	}
+
+	// check the provided interface parameter
+	if resp == nil {
+		return nil
+	}
+
+	if resp.ContentLength == 0 {
+		return nil
+	}
+
+	errResp := &ErrorResponse{Response: resp}
+
+	old := c.disallowUnknownFields
+	c.disallowUnknownFields = false
+	err = c.Unmarshal(resp.Body, errResp)
+	c.disallowUnknownFields = old
+	if err != nil {
+		return nil
+	}
+
+	if errResp.Error() != "" {
+		return errResp
+	}
+
+	return nil
 }
 
 func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
@@ -302,12 +327,12 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	return nil
 }
 
-// CheckResponse checks the Client response for errors, and returns them if
+// CheckContentType checks the Client response for errors, and returns them if
 // present. A response is considered an error if it has a status code outside
 // the 200 range. Client error responses are expected to have either no response
 // body, or a json response body that maps to ErrorResponse. Any other response
 // body will be silently ignored.
-func CheckResponse(r *http.Response) error {
+func CheckContentType(r *http.Response) error {
 	errorResponse := &ErrorResponse{Response: r}
 
 	// Don't check content-lenght: a created response, for example, has no body
@@ -362,7 +387,10 @@ type ErrorResponse struct {
 }
 
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%s: %s", r.Err.Code, r.Err.Message)
+	if r.Err.Code != "" || r.Err.Message != "" {
+		return fmt.Sprintf("%s: %s", r.Err.Code, r.Err.Message)
+	}
+	return ""
 }
 
 func checkContentType(response *http.Response) error {

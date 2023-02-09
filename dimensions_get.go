@@ -8,8 +8,8 @@ import (
 	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
 
-func (c *Client) NewJournalsGet() JournalsGet {
-	r := JournalsGet{
+func (c *Client) NewDimensionsGet() DimensionsGet {
+	r := DimensionsGet{
 		client:  c,
 		method:  http.MethodGet,
 		headers: http.Header{},
@@ -21,18 +21,18 @@ func (c *Client) NewJournalsGet() JournalsGet {
 	return r
 }
 
-type JournalsGet struct {
+type DimensionsGet struct {
 	client      *Client
-	queryParams *JournalsGetQueryParams
-	pathParams  *JournalsGetPathParams
+	queryParams *DimensionsGetQueryParams
+	pathParams  *DimensionsGetPathParams
 	method      string
 	headers     http.Header
-	requestBody JournalsGetBody
+	requestBody DimensionsGetBody
 }
 
-func (r JournalsGet) NewQueryParams() *JournalsGetQueryParams {
-	selectFields, _ := utils.Fields(&Journal{})
-	return &JournalsGetQueryParams{
+func (r DimensionsGet) NewQueryParams() *DimensionsGetQueryParams {
+	selectFields, _ := utils.Fields(&Dimension{})
+	return &DimensionsGetQueryParams{
 		Select: odata.NewSelect(selectFields),
 		Filter: odata.NewFilter(),
 		Top:    odata.NewTop(),
@@ -40,7 +40,7 @@ func (r JournalsGet) NewQueryParams() *JournalsGetQueryParams {
 	}
 }
 
-type JournalsGetQueryParams struct {
+type DimensionsGetQueryParams struct {
 	// @TODO: check if this an OData struct or something
 	Select *odata.Select `schema:"$select,omitempty"`
 	Filter *odata.Filter `schema:"$filter,omitempty"`
@@ -48,7 +48,7 @@ type JournalsGetQueryParams struct {
 	Skip   *odata.Skip   `schema:"$skip,omitempty"`
 }
 
-func (p JournalsGetQueryParams) ToURLValues() (url.Values, error) {
+func (p DimensionsGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
@@ -62,81 +62,81 @@ func (p JournalsGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *JournalsGet) QueryParams() *JournalsGetQueryParams {
+func (r *DimensionsGet) QueryParams() *DimensionsGetQueryParams {
 	return r.queryParams
 }
 
-func (r JournalsGet) NewPathParams() *JournalsGetPathParams {
-	return &JournalsGetPathParams{}
+func (r DimensionsGet) NewPathParams() *DimensionsGetPathParams {
+	return &DimensionsGetPathParams{}
 }
 
-type JournalsGetPathParams struct {
+type DimensionsGetPathParams struct {
 	EnvironmentName string `schema:"environmentName"`
 	CompanyID       string `schema:"companyID"`
 }
 
-func (p *JournalsGetPathParams) Params() map[string]string {
+func (p *DimensionsGetPathParams) Params() map[string]string {
 	return map[string]string{
 		"environmentName": p.EnvironmentName,
 		"companyID":       p.CompanyID,
 	}
 }
 
-func (r *JournalsGet) PathParams() *JournalsGetPathParams {
+func (r *DimensionsGet) PathParams() *DimensionsGetPathParams {
 	return r.pathParams
 }
 
-func (r *JournalsGet) PathParamsInterface() PathParams {
+func (r *DimensionsGet) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 
-func (r *JournalsGet) SetMethod(method string) {
+func (r *DimensionsGet) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *JournalsGet) Method() string {
+func (r *DimensionsGet) Method() string {
 	return r.method
 }
 
-func (r *JournalsGet) Headers() http.Header {
+func (r *DimensionsGet) Headers() http.Header {
 	return r.headers
 }
 
-func (r JournalsGet) NewRequestBody() JournalsGetBody {
-	return JournalsGetBody{}
+func (r DimensionsGet) NewRequestBody() DimensionsGetBody {
+	return DimensionsGetBody{}
 }
 
-type JournalsGetBody struct {
+type DimensionsGetBody struct {
 }
 
-func (r *JournalsGet) RequestBody() *JournalsGetBody {
+func (r *DimensionsGet) RequestBody() *DimensionsGetBody {
 	return nil
 }
 
-func (r *JournalsGet) RequestBodyInterface() interface{} {
+func (r *DimensionsGet) RequestBodyInterface() interface{} {
 	return nil
 }
 
-func (r *JournalsGet) SetRequestBody(body JournalsGetBody) {
+func (r *DimensionsGet) SetRequestBody(body DimensionsGetBody) {
 	r.requestBody = body
 }
 
-func (r *JournalsGet) NewResponseBody() *JournalsGetResponseBody {
-	return &JournalsGetResponseBody{}
+func (r *DimensionsGet) NewResponseBody() *DimensionsGetResponseBody {
+	return &DimensionsGetResponseBody{}
 }
 
-type JournalsGetResponseBody struct {
-	OdataContext string   `json:"@odata.context"`
-	Value        Journals `json:"value"`
+type DimensionsGetResponseBody struct {
+	OdataContext string     `json:"@odata.context"`
+	Value        Dimensions `json:"value"`
 }
 
-func (r *JournalsGet) URL() *url.URL {
-	u := r.client.GetEndpointURL("/v2.0/{{.environmentName}}/api/v2.0/companies({{.companyID}})/journals", r.PathParams())
+func (r *DimensionsGet) URL() *url.URL {
+	u := r.client.GetEndpointURL("/v2.0/{{.environmentName}}/api/v2.0/companies({{.companyID}})/dimensions", r.PathParams())
 	// u := r.client.GetEndpointURL("", r.PathParams())
 	return &u
 }
 
-func (r *JournalsGet) Do() (JournalsGetResponseBody, error) {
+func (r *DimensionsGet) Do() (DimensionsGetResponseBody, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {

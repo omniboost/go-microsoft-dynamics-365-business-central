@@ -69,3 +69,44 @@ func (d DateTime) MarshalSchema() string {
 func (d DateTime) IsEmpty() bool {
 	return zero.IsZero(d)
 }
+
+type Time struct {
+	time.Time
+}
+
+func (t Time) IsEmpty() bool {
+	return t.Time.IsZero()
+}
+
+func (d Time) MarshalSchema() string {
+	return d.Time.Format(time.RFC3339)
+}
+
+func (dt Time) MarshalJSON() ([]byte, error) {
+	if dt.Time.IsZero() {
+		return json.Marshal(nil)
+	}
+
+	return json.Marshal(dt.Time.Format("2006-01-02T15:04:05"))
+}
+
+func (dt *Time) UnmarshalJSON(text []byte) (err error) {
+	var value string
+	err = json.Unmarshal(text, &value)
+	if err != nil {
+		return err
+	}
+
+	if value == "" {
+		return nil
+	}
+
+	// first try standard date
+	dt.Time, err = time.Parse(time.RFC3339, value)
+	if err == nil {
+		return nil
+	}
+
+	dt.Time, err = time.Parse("2006-01-02T15:04:05", value)
+	return err
+}

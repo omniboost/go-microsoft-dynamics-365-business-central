@@ -7,11 +7,12 @@ import (
 	"testing"
 )
 
-func TestJournalLinesGet(t *testing.T) {
-	req := client.NewJournalLinesGet()
+func TestDimensionValuesGet(t *testing.T) {
+	req := client.NewDimensionValuesGet()
 	req.PathParams().EnvironmentName = os.Getenv("ENVIRONMENT_NAME")
 	req.PathParams().CompanyID = os.Getenv("COMPANY_ID")
-	req.PathParams().JournalID = "61e3d254-9913-ec11-86bc-000d3ac818b6"
+	req.PathParams().DimensionID = "b7eb4f33-068b-ed11-aad6-000d3abcd607"
+	// req.QueryParams().Filter.Set("code eq 'JV'")
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

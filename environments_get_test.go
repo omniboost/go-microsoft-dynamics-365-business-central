@@ -3,13 +3,11 @@ package central_test
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"testing"
 )
 
-func TestCompaniesGet(t *testing.T) {
-	req := client.NewCompaniesGet()
-	req.PathParams().EnvironmentName = os.Getenv("ENVIRONMENT_NAME")
+func TestEnvironmentsGet(t *testing.T) {
+	req := client.NewEnvironmentsGet()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

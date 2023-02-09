@@ -1,9 +1,13 @@
 package central
 
-import "net/url"
+import (
+	"net/http"
+	"net/url"
+)
 
 type Request interface {
 	Method() string
+	Headers() http.Header
 	// QueryParams() QueryParams
 	PathParamsInterface() PathParams
 	RequestBodyInterface() interface{}

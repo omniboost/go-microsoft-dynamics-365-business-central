@@ -7,10 +7,10 @@ import (
 	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
 
-func (c *Client) NewJournalLinesGet() JournalLinesGet {
-	r := JournalLinesGet{
+func (c *Client) NewJournalLinesPost() JournalLinesPost {
+	r := JournalLinesPost{
 		client:  c,
-		method:  http.MethodGet,
+		method:  http.MethodPost,
 		headers: http.Header{},
 	}
 
@@ -20,23 +20,23 @@ func (c *Client) NewJournalLinesGet() JournalLinesGet {
 	return r
 }
 
-type JournalLinesGet struct {
+type JournalLinesPost struct {
 	client      *Client
-	queryParams *JournalLinesGetQueryParams
-	pathParams  *JournalLinesGetPathParams
+	queryParams *JournalLinesPostQueryParams
+	pathParams  *JournalLinesPostPathParams
 	method      string
 	headers     http.Header
-	requestBody JournalLinesGetBody
+	requestBody JournalLinesPostBody
 }
 
-func (r JournalLinesGet) NewQueryParams() *JournalLinesGetQueryParams {
-	return &JournalLinesGetQueryParams{}
+func (r JournalLinesPost) NewQueryParams() *JournalLinesPostQueryParams {
+	return &JournalLinesPostQueryParams{}
 }
 
-type JournalLinesGetQueryParams struct {
+type JournalLinesPostQueryParams struct {
 }
 
-func (p JournalLinesGetQueryParams) ToURLValues() (url.Values, error) {
+func (p JournalLinesPostQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
@@ -50,21 +50,21 @@ func (p JournalLinesGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *JournalLinesGet) QueryParams() QueryParams {
+func (r *JournalLinesPost) QueryParams() QueryParams {
 	return r.queryParams
 }
 
-func (r JournalLinesGet) NewPathParams() *JournalLinesGetPathParams {
-	return &JournalLinesGetPathParams{}
+func (r JournalLinesPost) NewPathParams() *JournalLinesPostPathParams {
+	return &JournalLinesPostPathParams{}
 }
 
-type JournalLinesGetPathParams struct {
+type JournalLinesPostPathParams struct {
 	EnvironmentName string `schema:"environmentName"`
 	CompanyID       string `schema:"companyID"`
 	JournalID       string `schema:"journalID"`
 }
 
-func (p *JournalLinesGetPathParams) Params() map[string]string {
+func (p *JournalLinesPostPathParams) Params() map[string]string {
 	return map[string]string{
 		"environmentName": p.EnvironmentName,
 		"companyID":       p.CompanyID,
@@ -72,61 +72,62 @@ func (p *JournalLinesGetPathParams) Params() map[string]string {
 	}
 }
 
-func (r *JournalLinesGet) PathParams() *JournalLinesGetPathParams {
+func (r *JournalLinesPost) PathParams() *JournalLinesPostPathParams {
 	return r.pathParams
 }
 
-func (r *JournalLinesGet) PathParamsInterface() PathParams {
+func (r *JournalLinesPost) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 
-func (r *JournalLinesGet) SetMethod(method string) {
+func (r *JournalLinesPost) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *JournalLinesGet) Method() string {
+func (r *JournalLinesPost) Method() string {
 	return r.method
 }
 
-func (r *JournalLinesGet) Headers() http.Header {
+func (r *JournalLinesPost) Headers() http.Header {
 	return r.headers
 }
 
-func (r JournalLinesGet) NewRequestBody() JournalLinesGetBody {
-	return JournalLinesGetBody{}
+func (r JournalLinesPost) NewRequestBody() JournalLinesPostBody {
+	return JournalLinesPostBody{}
 }
 
-type JournalLinesGetBody struct {
+type JournalLinesPostBody struct {
+	JournalLine
 }
 
-func (r *JournalLinesGet) RequestBody() *JournalLinesGetBody {
-	return nil
+func (r *JournalLinesPost) RequestBody() *JournalLinesPostBody {
+	return &r.requestBody
 }
 
-func (r *JournalLinesGet) RequestBodyInterface() interface{} {
-	return nil
+func (r *JournalLinesPost) RequestBodyInterface() interface{} {
+	return r.requestBody
 }
 
-func (r *JournalLinesGet) SetRequestBody(body JournalLinesGetBody) {
+func (r *JournalLinesPost) SetRequestBody(body JournalLinesPostBody) {
 	r.requestBody = body
 }
 
-func (r *JournalLinesGet) NewResponseBody() *JournalLinesGetResponseBody {
-	return &JournalLinesGetResponseBody{}
+func (r *JournalLinesPost) NewResponseBody() *JournalLinesPostResponseBody {
+	return &JournalLinesPostResponseBody{}
 }
 
-type JournalLinesGetResponseBody struct {
+type JournalLinesPostResponseBody struct {
 	OdataContext string       `json:"@odata.context"`
 	Value        JournalLines `json:"value"`
 }
 
-func (r *JournalLinesGet) URL() *url.URL {
+func (r *JournalLinesPost) URL() *url.URL {
 	u := r.client.GetEndpointURL("/v2.0/{{.environmentName}}/api/v2.0/companies({{.companyID}})/journals({{.journalID}})/journalLines", r.PathParams())
 	// u := r.client.GetEndpointURL("", r.PathParams())
 	return &u
 }
 
-func (r *JournalLinesGet) Do() (JournalLinesGetResponseBody, error) {
+func (r *JournalLinesPost) Do() (JournalLinesPostResponseBody, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {

@@ -7,8 +7,8 @@ import (
 	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
 
-func (c *Client) NewLocationsGet() LocationsGet {
-	r := LocationsGet{
+func (c *Client) NewEnvironmentsGet() EnvironmentsGet {
+	r := EnvironmentsGet{
 		client:  c,
 		method:  http.MethodGet,
 		headers: http.Header{},
@@ -20,23 +20,23 @@ func (c *Client) NewLocationsGet() LocationsGet {
 	return r
 }
 
-type LocationsGet struct {
+type EnvironmentsGet struct {
 	client      *Client
-	queryParams *LocationsGetQueryParams
-	pathParams  *LocationsGetPathParams
+	queryParams *EnvironmentsGetQueryParams
+	pathParams  *EnvironmentsGetPathParams
 	method      string
 	headers     http.Header
-	requestBody LocationsGetBody
+	requestBody EnvironmentsGetBody
 }
 
-func (r LocationsGet) NewQueryParams() *LocationsGetQueryParams {
-	return &LocationsGetQueryParams{}
+func (r EnvironmentsGet) NewQueryParams() *EnvironmentsGetQueryParams {
+	return &EnvironmentsGetQueryParams{}
 }
 
-type LocationsGetQueryParams struct {
+type EnvironmentsGetQueryParams struct {
 }
 
-func (p LocationsGetQueryParams) ToURLValues() (url.Values, error) {
+func (p EnvironmentsGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
@@ -50,61 +50,65 @@ func (p LocationsGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *LocationsGet) QueryParams() QueryParams {
+func (r *EnvironmentsGet) QueryParams() QueryParams {
 	return r.queryParams
 }
 
-func (r LocationsGet) NewPathParams() *LocationsGetPathParams {
-	return &LocationsGetPathParams{}
+func (r EnvironmentsGet) NewPathParams() *EnvironmentsGetPathParams {
+	return &EnvironmentsGetPathParams{}
 }
 
-type LocationsGetPathParams struct {
+type EnvironmentsGetPathParams struct {
 }
 
-func (p *LocationsGetPathParams) Params() map[string]string {
+func (p *EnvironmentsGetPathParams) Params() map[string]string {
 	return map[string]string{}
 }
 
-func (r *LocationsGet) PathParams() *LocationsGetPathParams {
+func (r *EnvironmentsGet) PathParams() *EnvironmentsGetPathParams {
 	return r.pathParams
 }
 
-func (r *LocationsGet) PathParamsInterface() PathParams {
+func (r *EnvironmentsGet) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 
-func (r *LocationsGet) SetMethod(method string) {
+func (r *EnvironmentsGet) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *LocationsGet) Method() string {
+func (r *EnvironmentsGet) Method() string {
 	return r.method
 }
 
-func (r LocationsGet) NewRequestBody() LocationsGetBody {
-	return LocationsGetBody{}
+func (r *EnvironmentsGet) Headers() http.Header {
+	return r.headers
 }
 
-type LocationsGetBody struct {
+func (r EnvironmentsGet) NewRequestBody() EnvironmentsGetBody {
+	return EnvironmentsGetBody{}
 }
 
-func (r *LocationsGet) RequestBody() *LocationsGetBody {
+type EnvironmentsGetBody struct {
+}
+
+func (r *EnvironmentsGet) RequestBody() *EnvironmentsGetBody {
 	return nil
 }
 
-func (r *LocationsGet) RequestBodyInterface() interface{} {
+func (r *EnvironmentsGet) RequestBodyInterface() interface{} {
 	return nil
 }
 
-func (r *LocationsGet) SetRequestBody(body LocationsGetBody) {
+func (r *EnvironmentsGet) SetRequestBody(body EnvironmentsGetBody) {
 	r.requestBody = body
 }
 
-func (r *LocationsGet) NewResponseBody() *LocationsGetResponseBody {
-	return &LocationsGetResponseBody{}
+func (r *EnvironmentsGet) NewResponseBody() *EnvironmentsGetResponseBody {
+	return &EnvironmentsGetResponseBody{}
 }
 
-type LocationsGetResponseBody struct {
+type EnvironmentsGetResponseBody struct {
 	Value []struct {
 		AadTenantID       string `json:"aadTenantId"`
 		ApplicationFamily string `json:"applicationFamily"`
@@ -116,13 +120,13 @@ type LocationsGetResponseBody struct {
 	} `json:"value"`
 }
 
-func (r *LocationsGet) URL() *url.URL {
+func (r *EnvironmentsGet) URL() *url.URL {
 	u := r.client.GetEndpointURL("/environments/v1.1", r.PathParams())
 	// u := r.client.GetEndpointURL("", r.PathParams())
 	return &u
 }
 
-func (r *LocationsGet) Do() (LocationsGetResponseBody, error) {
+func (r *EnvironmentsGet) Do() (EnvironmentsGetResponseBody, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
