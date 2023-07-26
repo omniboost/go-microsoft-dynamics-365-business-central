@@ -8,8 +8,8 @@ import (
 	"github.com/omniboost/go-microsoft-dynamics-365-business-central/utils"
 )
 
-func (c *Client) NewCustomersGet() CustomersGet {
-	r := CustomersGet{
+func (c *Client) NewSalesInvoicesGet() SalesInvoicesGet {
+	r := SalesInvoicesGet{
 		client:  c,
 		method:  http.MethodGet,
 		headers: http.Header{},
@@ -21,18 +21,18 @@ func (c *Client) NewCustomersGet() CustomersGet {
 	return r
 }
 
-type CustomersGet struct {
+type SalesInvoicesGet struct {
 	client      *Client
-	queryParams *CustomersGetQueryParams
-	pathParams  *CustomersGetPathParams
+	queryParams *SalesInvoicesGetQueryParams
+	pathParams  *SalesInvoicesGetPathParams
 	method      string
 	headers     http.Header
-	requestBody CustomersGetBody
+	requestBody SalesInvoicesGetBody
 }
 
-func (r CustomersGet) NewQueryParams() *CustomersGetQueryParams {
-	selectFields, _ := utils.Fields(&Customer{})
-	return &CustomersGetQueryParams{
+func (r SalesInvoicesGet) NewQueryParams() *SalesInvoicesGetQueryParams {
+	selectFields, _ := utils.Fields(&SalesInvoice{})
+	return &SalesInvoicesGetQueryParams{
 		Select: odata.NewSelect(selectFields),
 		Filter: odata.NewFilter(),
 		Top:    odata.NewTop(),
@@ -40,7 +40,7 @@ func (r CustomersGet) NewQueryParams() *CustomersGetQueryParams {
 	}
 }
 
-type CustomersGetQueryParams struct {
+type SalesInvoicesGetQueryParams struct {
 	// @TODO: check if this an OData struct or something
 	Select *odata.Select `schema:"$select,omitempty"`
 	Filter *odata.Filter `schema:"$filter,omitempty"`
@@ -48,7 +48,7 @@ type CustomersGetQueryParams struct {
 	Skip   *odata.Skip   `schema:"$skip,omitempty"`
 }
 
-func (p CustomersGetQueryParams) ToURLValues() (url.Values, error) {
+func (p SalesInvoicesGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
@@ -62,81 +62,81 @@ func (p CustomersGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *CustomersGet) QueryParams() *CustomersGetQueryParams {
+func (r *SalesInvoicesGet) QueryParams() *SalesInvoicesGetQueryParams {
 	return r.queryParams
 }
 
-func (r CustomersGet) NewPathParams() *CustomersGetPathParams {
-	return &CustomersGetPathParams{}
+func (r SalesInvoicesGet) NewPathParams() *SalesInvoicesGetPathParams {
+	return &SalesInvoicesGetPathParams{}
 }
 
-type CustomersGetPathParams struct {
+type SalesInvoicesGetPathParams struct {
 	EnvironmentName string `schema:"environmentName"`
 	CompanyID       string `schema:"companyID"`
 }
 
-func (p *CustomersGetPathParams) Params() map[string]string {
+func (p *SalesInvoicesGetPathParams) Params() map[string]string {
 	return map[string]string{
 		"environmentName": p.EnvironmentName,
 		"companyID":       p.CompanyID,
 	}
 }
 
-func (r *CustomersGet) PathParams() *CustomersGetPathParams {
+func (r *SalesInvoicesGet) PathParams() *SalesInvoicesGetPathParams {
 	return r.pathParams
 }
 
-func (r *CustomersGet) PathParamsInterface() PathParams {
+func (r *SalesInvoicesGet) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 
-func (r *CustomersGet) SetMethod(method string) {
+func (r *SalesInvoicesGet) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *CustomersGet) Method() string {
+func (r *SalesInvoicesGet) Method() string {
 	return r.method
 }
 
-func (r *CustomersGet) Headers() http.Header {
+func (r *SalesInvoicesGet) Headers() http.Header {
 	return r.headers
 }
 
-func (r CustomersGet) NewRequestBody() CustomersGetBody {
-	return CustomersGetBody{}
+func (r SalesInvoicesGet) NewRequestBody() SalesInvoicesGetBody {
+	return SalesInvoicesGetBody{}
 }
 
-type CustomersGetBody struct {
+type SalesInvoicesGetBody struct {
 }
 
-func (r *CustomersGet) RequestBody() *CustomersGetBody {
+func (r *SalesInvoicesGet) RequestBody() *SalesInvoicesGetBody {
 	return nil
 }
 
-func (r *CustomersGet) RequestBodyInterface() interface{} {
+func (r *SalesInvoicesGet) RequestBodyInterface() interface{} {
 	return nil
 }
 
-func (r *CustomersGet) SetRequestBody(body CustomersGetBody) {
+func (r *SalesInvoicesGet) SetRequestBody(body SalesInvoicesGetBody) {
 	r.requestBody = body
 }
 
-func (r *CustomersGet) NewResponseBody() *CustomersGetResponseBody {
-	return &CustomersGetResponseBody{}
+func (r *SalesInvoicesGet) NewResponseBody() *SalesInvoicesGetResponseBody {
+	return &SalesInvoicesGetResponseBody{}
 }
 
-type CustomersGetResponseBody struct {
-	OdataContext string `json:"@odata.context"`
-	Value        Customers `json:"value"`
+type SalesInvoicesGetResponseBody struct {
+	OdataContext string       `json:"@odata.context"`
+	Value        SalesInvoices `json:"value"`
 }
 
-func (r *CustomersGet) URL() *url.URL {
-	u := r.client.GetEndpointURL("/v2.0/{{.environmentName}}/api/v2.0/companies({{.companyID}})/customers", r.PathParams())
+func (r *SalesInvoicesGet) URL() *url.URL {
+	u := r.client.GetEndpointURL("/v2.0/{{.environmentName}}/api/v2.0/companies({{.companyID}})/salesInvoices", r.PathParams())
 	// u := r.client.GetEndpointURL("", r.PathParams())
 	return &u
 }
 
-func (r *CustomersGet) Do() (CustomersGetResponseBody, error) {
+func (r *SalesInvoicesGet) Do() (SalesInvoicesGetResponseBody, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
@@ -153,3 +153,4 @@ func (r *CustomersGet) Do() (CustomersGetResponseBody, error) {
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
 }
+

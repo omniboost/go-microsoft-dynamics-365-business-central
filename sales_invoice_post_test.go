@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-func TestTaxGroupsGet(t *testing.T) {
-	req := client.NewTaxGroupsGet()
+func TestSalesInvoicesPost(t *testing.T) {
+	req := client.NewSalesInvoicePost()
 	req.PathParams().EnvironmentName = os.Getenv("ENVIRONMENT_NAME")
 	req.PathParams().CompanyID = os.Getenv("COMPANY_ID")
 	resp, err := req.Do()
@@ -19,3 +19,4 @@ func TestTaxGroupsGet(t *testing.T) {
 	b, _ := json.MarshalIndent(resp, "", "  ")
 	fmt.Println(string(b))
 }
+
